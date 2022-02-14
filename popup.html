@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="popup.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+    
+    <script src="favourites.js" defer></script>
+    <script src="groups.js" defer></script>
+    <script src="tabs.js" defer></script>
+    <script src="popup.js" defer></script>
+    <script src="selectables.js"></script>
+</head>
+  <body>
+    
+    <div id="app">
+
+    <!-- <div id="create-group-modal">
+      <div id="worning-icon">!</div>
+      <p>The group allready exists!</p>
+      <div id="create-group-buttons">
+        <button id="append-tabs-btn">Append tabs</button>
+        <button id="override-group-name-btn">Override group</button>
+        <button id="change-group-name-btn">Change name</button>
+      </div>
+    </div> -->
+
+    <header>
+      <button id="go-to-tabs-btn" class="selected-section" title="Opened tabs"></button>
+      <button id="go-to-groups-btn" title="Groups"></button>
+      <button id="go-to-favourites-btn" title="Favourites"></button>
+      <button id="go-to-settings-btn" title="Settings"></button>
+    </header>
+
+    <main>
+      <section id="current-tabs">
+        <nav>
+          <div class="navigation">
+            <div>
+              <button id="expand-all-hosts-btn">Expand</button>
+            </div>
+            <div>
+              <button id="colapse-all-hosts-btn">Collapse</button>
+            </div>
+            <div>
+              <button id="show-duplicates-btn" >Show duplicates</button>
+            </div>
+            <div id="close-selected-container">
+              <button id="close-selected-btn" disabled>Close</button>
+            </div>
+            <div>
+              <button id="create-group-btn" disabled>Save</button>
+            </div>
+          </div>
+          <div id="search-container">
+            <div id="selected-tabs-counter" class="selected-counter">
+              <span></span>
+            </div>
+
+            <input type="text" id="search-input" class="search-input" placeholder="Search">
+
+            <div id="search-header">
+              <input type="checkbox" id="expand-select-group">
+              <label for="expand-select-group" id="select-group-label">Select group</label>
+              <div id="select-group-container">
+                  <div id="inputs">
+                      
+                  </div>
+                  <button id="confirm-saving-tabs-btn" disabled>Save</button>
+                  <div id="create-new-group-section">
+                      <input type="checkbox" id="create-new-group-btn">
+                      <label for="create-new-group-btn">+ New group</label>
+                      <div>
+                          <input type="text" id="new-group-name-input" placeholder="Group name">
+                          <button id="confirm-group-creation-btn" disabled>Create</button>
+                      </div>
+                  </div>
+                  
+              </div>
+          </div>
+          </div>
+        </nav>
+
+        <ul class="outer-list" id="main-list"></ul>
+        <p id="no-results-info">No results</p>
+
+      </section>
+
+      <section id="groups-section">
+        <nav>
+          <div class="navigation">
+            <div>
+              <button id="expand-all-groups-btn">Expand</button>
+            </div>
+            <div>
+              <button id="collapse-all-groups-btn">Collapse</button>
+            </div>
+            <div>
+              <button>Create group</button>
+            </div>
+            <div>
+              <button id="remove-selected-btn" disabled>Remove selected</button>
+            </div>
+          </div>
+          <div id="search-container">
+            <div id="selected-groups-counter" class="selected-counter">
+              <span></span>
+            </div>
+
+            <input type="text" class="search-input" placeholder="Search">
+          </div>
+          
+        </nav>
+
+        <ul class="outer-list" id="groups-list"></ul>
+      </section>
+
+      <section id="favourites-section">
+        <nav>
+          <div class="navigation">
+            <button id="favourites-list-btn">List</button>
+            <button id="favourites-x3-btn">x3</button>
+            <button id="favourites-x4-btn">x4</button>
+            <button id="favourites-x5-btn">x5</button>
+          </div>
+        </nav>
+        
+
+        <div id="dragables-container">
+
+        </div>
+      </section>
+      <section id="settings-section">
+        Settings
+      </section>
+    </main>  
+  </div>
+  </body>
+</html>

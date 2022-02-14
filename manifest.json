@@ -1,0 +1,10 @@
+{
+  "name": "Tabs manager",
+  "description": "Manage your tabs easly.",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": ["storage", "activeTab", "scripting", "tabs", "tabGroups"],
+  "action": {
+    "default_popup": "popup.html"
+  }
+}
