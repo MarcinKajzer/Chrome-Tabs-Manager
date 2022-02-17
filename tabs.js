@@ -2,7 +2,7 @@
 //..................EXISTING ELEMENTS HOOKS.....................
 //..............................................................
 
-let hostsContainer = document.getElementById("main-list");
+let hostsContainer = document.getElementById("all-windows");
 
 let expandAllHostsBtn = document.getElementById("expand-all-hosts-btn");
 let colapseAllHostsBtn = document.getElementById("colapse-all-hosts-btn");
@@ -17,7 +17,11 @@ let createGroupBtn = document.getElementById("create-group-btn");
 
 let showDuplicatesBtn = document.getElementById("show-duplicates-btn")
 
-let allHostsCheckboxes = document.getElementById("main-list").getElementsByClassName("inner-list-checkbox");
+let pinnedWindowsSection = document.getElementById("pinned-windows-section")
+let pinnedWindowsContainer = document.getElementById("all-pinned-windows")
+
+let allHostsCheckboxes = hostsContainer.getElementsByClassName("inner-list-checkbox");
+let allPinedHostsCheckboxes = pinnedWindowsContainer.getElementsByClassName("inner-list-checkbox");
 
 //..............................................................
 //...........................FUNCTIONS..........................
@@ -116,9 +120,83 @@ function hideGroupSelection(){
     selectedGroups = [];
 }
 
-async function buildTabs() {
+function buildWindows(){
+    buildTabs(groupedWindows.filter(x => x.focused)[0], null, groupedWindows.length > 1)
 
-    for (const [host, hostTabs] of Object.entries(groupedTabs)) {
+    let index = 2;
+    for(let window of groupedWindows.filter(x => !x.focused)){
+        buildTabs(window, index, true);
+        index++;
+    }
+}
+
+async function buildTabs(window, index, isMoreThenOneWindow) {
+
+    let windowContainer = document.createElement("div")
+    
+    if(isMoreThenOneWindow){
+        windowContainer.classList.add("window-container")
+
+        let windowLabel = document.createElement("div")
+        windowLabel.classList.add("window-label");
+    
+        let windowName = document.createElement("span");
+        if(window.focused){
+            windowName.innerText = "Current window";
+        }
+        else{
+            windowName.innerText = "Window " + index;
+        }
+        
+        let buttonsWrapper = document.createElement("div")
+    
+        let pinWindowBtn = document.createElement("button")
+        pinWindowBtn.innerText = "Pin"
+        pinWindowBtn.classList.add("pin-btn")
+        pinWindowBtn.onclick = () => {
+    
+            if(windowContainer.parentNode.id == "all-windows"){
+                pinnedWindowsSection.classList.add("shown")
+                document.querySelector("#app").style.width = "700px";
+                document.querySelector("main").style.width = "1750px";
+        
+                pinnedWindowsContainer.appendChild(windowContainer)
+                pinWindowBtn.innerText = "Unpin"
+            }
+            else{
+                hostsContainer.appendChild(windowContainer);
+                pinWindowBtn.innerText = "Pin"
+    
+                if(pinnedWindowsContainer.childNodes.length == 0){
+                    pinnedWindowsSection.classList.remove("shown")
+                    document.querySelector("#app").style.width = "350px";
+                    document.querySelector("main").style.width = "1400px";
+                }
+            }
+        }
+    
+        let closeWindowBtn = document.createElement("button")
+        closeWindowBtn.classList.add("close-btn")
+        closeWindowBtn.onclick = () => {
+            chrome.windows.remove(window.windowId);
+            windowContainer.remove();
+        }
+
+        windowLabel.appendChild(windowName);
+        buttonsWrapper.appendChild(pinWindowBtn)
+        buttonsWrapper.appendChild(closeWindowBtn)
+        
+
+        windowLabel.appendChild(buttonsWrapper);
+        windowContainer.appendChild(windowLabel)
+    }
+    
+    let windowList = document.createElement("ul")
+    windowList.classList.add("window-list", "outer-list")
+
+    windowContainer.appendChild(windowList);
+    
+    for (const [host, hostTabs] of Object.entries(window.hosts)) {
 
         let hostItem = document.createElement("li");
         hostItem.id = "host_" + host;
@@ -196,7 +274,8 @@ async function buildTabs() {
         }
 
         hostItem.appendChild(hostTabsList);
-        hostsContainer.appendChild(hostItem);
+        windowList.appendChild(hostItem);
+        hostsContainer.appendChild(windowContainer)
     }
 }
 
@@ -385,7 +464,7 @@ function buildSingleTab(host, hostTab, hostItem, hostTabs) {
 function initializeHostsSelectables() {
     new Selectables({
         elements: '.selectable',
-        zone: '#main-list',
+        zone: '#all-windows',
         selectedClass: 'active',
         key: "ctrlKey",
 
@@ -479,8 +558,14 @@ function initializeHostsSelectables() {
 //................BUTTONS AND INPUT ACTIONS.....................
 //..............................................................
 
-expandAllHostsBtn.onclick = () => checkAllCheckboxes(allHostsCheckboxes)
-colapseAllHostsBtn.onclick = () =>uncheckAllCheckboxes(allHostsCheckboxes)
+expandAllHostsBtn.onclick = () => {
+    checkAllCheckboxes(allHostsCheckboxes);
+    checkAllCheckboxes(allPinedHostsCheckboxes);
+}
+colapseAllHostsBtn.onclick = () => {
+    uncheckAllCheckboxes(allHostsCheckboxes);
+    uncheckAllCheckboxes(allPinedHostsCheckboxes);
+}
 
 closeSelectedBtn.onclick = () => {
 

@@ -9,6 +9,8 @@ let selectedGroups = []
 
 let duplicateNumber = 0;
 
+let groupedWindows = [];
+
 // chrome.tabs.onUpdated.addListener(function (tabId , info) {
 //   console.log(info)
 // });
@@ -43,30 +45,35 @@ chrome.storage.sync.get("groups", (res) => {
   groups = res.groups != null && res.groups != undefined ? res.groups : [];
 });
 
-chrome.tabs.query({currentWindow: true}, tabs => {
-  groupAllOpenTabs(tabs);
-
-  buildTabs();
-  buildGroups();
-  buildFavourites();
-
-  initializeHostsSelectables();
-  initializeGroupsSelectable();
-  createMultiselect();
-
-})
-
-chrome.windows.getAll({}, tabs => {
-  groupedWindows = [];
-  
-  for(let windowId of tabs.map(x => x.id)){
-    chrome.tabs.query({windowId: windowId}, (tabs) => {
-      groupedWindows.push(groupAllOpenTabs2(tabs))
+chrome.windows.getAll({}, windows => {
+  for(let window of windows){
+    chrome.tabs.query({windowId: window.id}, (tabs) => {
+      let ob = new Object();
+      ob.hosts = groupAllOpenTabs2(tabs);
+      ob.windowId = window.id;
+      ob.focused = window.focused
+      groupedWindows.push(ob)
     })
   }
 
-  console.log(groupedWindows)
+  chrome.tabs.query({currentWindow: true}, tabs => {
+    groupAllOpenTabs(tabs);
+  
+    buildWindows();
+    buildGroups();
+    buildFavourites();
+  
+    initializeHostsSelectables();
+    initializeGroupsSelectable();
+    createMultiselect();
+  
+  })
+
 })
+
+
+
+
 
 
 window.addEventListener('click', function(e){   
@@ -270,6 +277,13 @@ function handleSelectedCounterClick(className){
 //..............................................................
 
 goToTabsBtn.addEventListener("click", (e) => {
+  if(pinnedWindowsContainer.childNodes.length > 0){
+    //DRY
+    pinnedWindowsSection.classList.add("shown");
+    document.querySelector("#app").style.width = "700px";
+    document.querySelector("main").style.width = "1750px";
+  }
+
   main.style.transform = "translateX(0)";
 
   document.querySelector(".selected-section").classList.remove("selected-section")
@@ -277,13 +291,26 @@ goToTabsBtn.addEventListener("click", (e) => {
 })
 
 goToGroupsBtn.addEventListener("click", (e) => {
+  //DRY
+  pinnedWindowsSection.classList.remove("shown");
+  document.querySelector("#app").style.width = "350px";
+  document.querySelector("main").style.width = "1400px";
+
+
   main.style.transform = "translateX(-350px)"
 
   document.querySelector(".selected-section").classList.remove("selected-section")
   e.target.classList.add("selected-section")
+
+  
 })
 
 goToFavouritesBtn.addEventListener("click", (e) => {
+  //DRY
+  pinnedWindowsSection.classList.remove("shown");
+  document.querySelector("#app").style.width = "350px";
+  document.querySelector("main").style.width = "1400px";
+
   main.style.transform = "translateX(-700px)"
 
   document.querySelector(".selected-section").classList.remove("selected-section")
@@ -291,10 +318,15 @@ goToFavouritesBtn.addEventListener("click", (e) => {
 })
 
 goToSettingsBtn.addEventListener("click", (e) => {
+  //DRY
+  pinnedWindowsSection.classList.remove("shown");
+  document.querySelector("#app").style.width = "350px";
+  document.querySelector("main").style.width = "1400px";
+
   main.style.transform = "translateX(-1050px)"
 
   document.querySelector(".selected-section").classList.remove("selected-section")
-  e.target.classList.add("selected-section")
+  e.target.classList.add("selected-section");
 })
 
 
@@ -352,7 +384,7 @@ goToSettingsBtn.addEventListener("click", (e) => {
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
-
+//69. Wyświetlanie wszystkich okien
 
 //Do zrobienia:
 
@@ -363,7 +395,7 @@ goToSettingsBtn.addEventListener("click", (e) => {
 //54. Opcja przenieś zaznaczone do nowego okna.
 //65. Dodanie karty do listy po otwarrciu grupy lub ulubionych
 //66. Wykrywanie zmiany tutułu strony 
-//69. Wyświetlanie wszystkich okien
+
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować

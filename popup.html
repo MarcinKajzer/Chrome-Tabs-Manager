@@ -67,9 +67,7 @@
               <input type="checkbox" id="expand-select-group">
               <label for="expand-select-group" id="select-group-label">Select group</label>
               <div id="select-group-container">
-                  <div id="inputs">
-                      
-                  </div>
+                  <div id="inputs"></div>
                   <button id="confirm-saving-tabs-btn" disabled>Save</button>
                   <div id="create-new-group-section">
                       <input type="checkbox" id="create-new-group-btn">
@@ -79,15 +77,18 @@
                           <button id="confirm-group-creation-btn" disabled>Create</button>
                       </div>
                   </div>
-                  
               </div>
-          </div>
+            </div>
           </div>
         </nav>
 
-        <ul class="outer-list" id="main-list"></ul>
+        <div id="all-windows"></div>
         <p id="no-results-info">No results</p>
 
+      </section>
+
+      <section id="pinned-windows-section">
+        <div id="all-pinned-windows"></div>
       </section>
 
       <section id="groups-section">

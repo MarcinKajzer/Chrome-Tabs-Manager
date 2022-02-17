@@ -8,14 +8,14 @@ html{
 }
 
 body{
- /* background: url("assets/background.jpg"); */
+  background: rgba(41,42,45, 1);
 }
 
 #app{
   width: 350px;
   font-size: 13px;
-  background: rgba(41,42,45, 1);
   box-sizing: border-box;
+  transition: width .3s;
 }
 
 ul{
@@ -238,7 +238,7 @@ main{
   padding-top: 50px;
   display: flex;
   justify-content: left;
-  transition: transform .3s;
+  transition: transform .3s, width .3s;
 }
 
 #current-tabs, #groups-section, #settings-section, #favourites-section{
@@ -247,6 +247,21 @@ main{
   width: 350px;
   box-sizing: border-box;
   position: relative;
+}
+
+#pinned-windows-section{
+  width: 0;
+  transition: width .3s, opacity .3s;
+  opacity: 0;
+}
+
+#pinned-windows-section.shown{
+  padding: 0 0 20px 20px;
+  width: 350px;
+  box-sizing: border-box;
+  position: relative;
+  color: white;
+  opacity: 1;
 }
 
 nav{
@@ -404,7 +419,6 @@ nav{
 }
 
 .outer-list{
-  max-height: 400px;
   overflow: auto;
   padding-right: 20px;
   box-sizing: border-box;
@@ -1121,4 +1135,51 @@ transform: scale(1.2);
   width: 20px;
   margin-right: 10px;
   vertical-align: middle;
+}
+
+/* nowa struktura - obsługa wszystkich okien */
+
+#all-windows{
+  max-height: 452px;
+  overflow: auto;
+  padding-right: 20px;
+}
+
+.window-container{
+  margin-top: 10px;
+  border: solid 1px rgba(0,0,0,.1)
+}
+
+.window-list.outer-list{
+  padding: 0;
+}
+
+.window-container .window-list{
+  padding: 10px;
+}
+
+.pin-btn{
+  background: none;
+  border: none;
+  color: white
+}
+
+.window-label{
+  height: 20px;
+  background: rgba(0,0,0,.1);
+  line-height: 20px;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+#all-pinned-windows{
+  padding-right: 20px;
+  max-height: 530px;
+  overflow: auto;
+  box-sizing: border-box;
+}
+
+#all-pinned-windows .window-container:first-child{
+  margin-top: 0;
 }
