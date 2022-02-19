@@ -542,10 +542,6 @@ function buildUngroupedTabs(window, index, isMoreThenOneWindow){
     if(isMoreThenOneWindow){
         windowContainer.classList.add("window-container")
 
-        let dropHerePopup = document.createElement("div")
-        dropHerePopup.classList.add("drop-here-popup")
-        dropHerePopup.innerText = "Drop here."
-
         let windowLabel = document.createElement("div")
         windowLabel.classList.add("window-label");
     
@@ -598,29 +594,11 @@ function buildUngroupedTabs(window, index, isMoreThenOneWindow){
         windowLabel.appendChild(buttonsWrapper);
         
         windowContainer.appendChild(windowLabel);
-        windowContainer.appendChild(dropHerePopup);
     }
     
     let windowList = document.createElement("ul")
     windowList.classList.add("window-list", "outer-list")
-    windowList.addEventListener("dragover", (e) => {
-        
-        if(currentDraggingHostList != windowList ){
-            if(document.querySelector(".visible-popup") != null) {
-                document.querySelector(".visible-popup").classList.remove("visible-popup")
-            }
-            dragOverHostList = windowList;
-            dragOverWindowId = window.windowId;
-            windowList.parentNode.querySelector(".drop-here-popup").classList.add("visible-popup")
-        }
-        else{
-            if(document.querySelector(".visible-popup") != null) {
-                document.querySelector(".visible-popup").classList.remove("visible-popup")
-            }
-            dragOverHostList = null;
-            dragOverWindowId = null;
-        }
-    })
+    windowList.id = "window_" + window.windowId;
 
     windowContainer.appendChild(windowList);
 
@@ -632,13 +610,46 @@ function buildUngroupedTabs(window, index, isMoreThenOneWindow){
     hostsContainer.appendChild(windowContainer)
 }
 
+let after;
+
 function buildSingleUngroupedTab(hostTab, windowId){
     
     let tab = document.createElement("li");
     tab.classList.add("inner-list-item")
     tab.style.height = "auto"; //POPRAWIĆ !!!!!!!!!!!!!!!!!!!!!!
     tab.style.padding = "5px 0"
+    tab.draggable = true;
     tab.id = hostTab.id;
+
+    tab.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        let draggingElement = document.querySelector(".dragging-ungrouped-tab")
+        let enteredElement = tab.getBoundingClientRect()
+
+        let centerY = enteredElement.top + enteredElement.height / 2;
+
+        if (e.clientY > centerY) {
+            tab.after(draggingElement)
+            after = true;
+        }
+        else {
+            tab.before(draggingElement);
+            after = false;
+        }
+    })
+
+
+    tab.addEventListener("dragstart", () => {
+        tab.classList.add("dragging-ungrouped-tab");
+    })
+
+    tab.addEventListener("dragend", () => {
+        tab.classList.remove("dragging-ungrouped-tab")
+
+        let winId = parseInt(tab.parentNode.id.substring(7))
+        let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
+        chrome.tabs.move(parseInt(tab.id), {windowId: winId, index: index})
+    })
 
     if (hostTab.active) {
         tab.classList.add("selected-tab")

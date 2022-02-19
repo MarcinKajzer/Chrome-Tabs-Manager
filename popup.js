@@ -62,6 +62,8 @@ chrome.windows.getAll({}, windows => {
       o.focused = window.focused;
       o.tabs = mapAllOpenTabs(tabs);
       ungroupedWindows.push(o)
+
+      console.log(tabs)
     })
   }
 
@@ -446,18 +448,16 @@ testBtn.addEventListener("click", () => {
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
 //69. Wyświetlanie wszystkich okien
+//70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
+
+
 
 //Do zrobienia:
-
-
-
-
 
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
 
-//70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //75. Licznik grup i ulubionych przy ikonce
@@ -470,6 +470,7 @@ testBtn.addEventListener("click", () => {
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
 //74. Taki sam w 2 różnych oknach = to samo id !!!
+//77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 
 //Opcjonalne lub  na koniec: 
 

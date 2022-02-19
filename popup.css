@@ -1203,6 +1203,8 @@ transform: scale(1.2);
   display: flex;
 }
 
-.dragging-host{
+.dragging-host, .dragging-ungrouped-tab{
   opacity: .5;
+  cursor: none;
 }
+

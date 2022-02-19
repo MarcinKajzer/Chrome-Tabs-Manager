@@ -149,6 +149,7 @@ function createSingeFavourite(fav){
 }
 
 function dragANdDrop(e){
+    e.preventDefault();
     let dragable = e.target;
     let draggingElement = document.querySelector(".dragging")
     let enteredElement = e.target.getBoundingClientRect()
