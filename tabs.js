@@ -1,3 +1,7 @@
+let currentDraggingHostList;
+let dragOverHostList;
+let dragOverWindowId;
+
 //..............................................................
 //..................EXISTING ELEMENTS HOOKS.....................
 //..............................................................
@@ -26,6 +30,10 @@ let allPinedHostsCheckboxes = pinnedWindowsContainer.getElementsByClassName("inn
 //..............................................................
 //...........................FUNCTIONS..........................
 //..............................................................
+
+function getPosition(string, subString, index) {
+    return string.split(subString, index).join(subString).length;
+}
 
 showDuplicatesBtn.onclick = (e) => findDuplicates(e);
 
@@ -134,8 +142,13 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
 
     let windowContainer = document.createElement("div")
     
+    //osobna funkcja
     if(isMoreThenOneWindow){
         windowContainer.classList.add("window-container")
+
+        let dropHerePopup = document.createElement("div")
+        dropHerePopup.classList.add("drop-here-popup")
+        dropHerePopup.innerText = "Drop here."
 
         let windowLabel = document.createElement("div")
         windowLabel.classList.add("window-label");
@@ -186,26 +199,66 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         buttonsWrapper.appendChild(pinWindowBtn)
         buttonsWrapper.appendChild(closeWindowBtn)
         
-
         windowLabel.appendChild(buttonsWrapper);
-        windowContainer.appendChild(windowLabel)
+        
+        windowContainer.appendChild(windowLabel);
+        windowContainer.appendChild(dropHerePopup);
     }
     
     let windowList = document.createElement("ul")
     windowList.classList.add("window-list", "outer-list")
+    windowList.addEventListener("dragover", () => {
+        if(currentDraggingHostList != windowList ){
+            if(document.querySelector(".visible-popup") != null) {
+                document.querySelector(".visible-popup").classList.remove("visible-popup")
+            }
+            dragOverHostList = windowList;
+            dragOverWindowId = window.windowId;
+            windowList.parentNode.querySelector(".drop-here-popup").classList.add("visible-popup")
+        }
+        else{
+            if(document.querySelector(".visible-popup") != null) {
+                document.querySelector(".visible-popup").classList.remove("visible-popup")
+            }
+            dragOverHostList = null;
+            dragOverWindowId = null;
+        }
+    })
 
     windowContainer.appendChild(windowList);
-    
+    console.log(window)
     for (const [host, hostTabs] of Object.entries(window.hosts)) {
 
         let hostItem = document.createElement("li");
-        hostItem.id = "host_" + host;
+        hostItem.id = "host_" + host + "_window" + window.windowId;
+        hostItem.draggable = true;
         hostItem.classList.add("outer-list-item");
+
+        hostItem.addEventListener("dragstart", () => {
+            hostItem.classList.add("dragging-host")
+            currentDraggingHostList = hostItem.parentNode;
+        })
+
+        hostItem.addEventListener("dragend", () => {
+            hostItem.classList.remove("dragging-host");
+            if(document.querySelector(".visible-popup") != null) {
+                document.querySelector(".visible-popup").classList.remove("visible-popup")
+            }
+
+            //jeżeli taki host już nie istnieje!!!
+            if(dragOverHostList != null){
+                
+                dragOverHostList.appendChild(hostItem);
+
+                chrome.tabs.move(hostTabs.map(x => x.id), {index : -1, windowId : dragOverWindowId})
+            }
+        })
+
 
         let hostCheckbox = document.createElement("input");
         hostCheckbox.type = "checkbox";
         hostCheckbox.classList.add("inner-list-checkbox")
-        hostCheckbox.id = host;
+        hostCheckbox.id = host + window.windowId;
 
         chrome.storage.sync.get(host, function (result) {
             hostCheckbox.checked = Object.values(result)[0];
@@ -214,7 +267,7 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         let hostLabel = document.createElement("label");
         hostLabel.classList.add("inner-list-checkbox-label");
         hostLabel.classList.add("selectable");
-        hostLabel.htmlFor = host;
+        hostLabel.htmlFor = host + window.windowId;
 
         if (hostTabs.some(x => x.active)) {
             hostLabel.classList.add("selected-tab")
@@ -242,7 +295,7 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         let closeAllTabsOfHostBtn = document.createElement("button");
         closeAllTabsOfHostBtn.classList.add("close-btn")
 
-        closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(hostTabs, host)
+        closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(hostTabs, host, window.windowId)
 
         if (hostTabs.some(x => x.audible) || hostTabs.some(x => x.muted)) {
             let muteAllTabsOfHostBtn = document.createElement("button");
@@ -270,7 +323,7 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         hostItem.appendChild(hostLabel);
 
         for (let hostTab of hostTabs) {
-            hostTabsList.appendChild(buildSingleTab(host, hostTab, hostItem, hostTabs));
+            hostTabsList.appendChild(buildSingleTab(host, hostTab, hostItem, window.windowId));
         }
 
         hostItem.appendChild(hostTabsList);
@@ -279,16 +332,17 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
     }
 }
 
-function closeAllTabsOfHost(hostTabs, host) {
+function closeAllTabsOfHost(hostTabs, host, windowId) {
     for (let tab of hostTabs) {
         chrome.tabs.remove(tab.id);
     }
 
-    deleteHostElementFromDOM(host)
+    deleteHostElementFromDOM(host, windowId)
     chrome.storage.sync.remove(host);
 }
 
-function closeTab(tabId, host) {
+function closeTab(tabId, host, windowId) {
+    console.log(windowId)
     chrome.tabs.remove(tabId);
 
     let currentTab = document.getElementById(tabId);
@@ -298,13 +352,15 @@ function closeTab(tabId, host) {
     setTimeout(() => {
         currentTab.remove();
         if (currentHostTabsList.childNodes.length == 0) {
-            deleteHostElementFromDOM(host);
+            deleteHostElementFromDOM(host, windowId);
         }
     }, 200);
 }
 
-function deleteHostElementFromDOM(host) {
-    let hostElement = document.getElementById("host_" + host)
+function deleteHostElementFromDOM(host, windowId) {
+    console.log("host_" + host + "_window" + windowId)
+    let hostElement = document.getElementById("host_" + host + "_window" + windowId)
+    
 
     hostElement.classList.add("remove-host");
     setTimeout(() => {
@@ -336,7 +392,7 @@ function defineOnClickMuteGroupBtn(btn, hostTabs) {
     }
 }
 
-function buildSingleTab(host, hostTab, hostItem, hostTabs) {
+function buildSingleTab(host, hostTab, hostItem, windowId) {
     let tab = document.createElement("li");
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
@@ -450,7 +506,8 @@ function buildSingleTab(host, hostTab, hostItem, hostTabs) {
 
     let closeTabButton = document.createElement("button");
     closeTabButton.classList.add("close-btn")
-    closeTabButton.onclick = () => closeTab(hostTab.id, host)
+    
+    closeTabButton.onclick = () => closeTab(hostTab.id, host, windowId)
 
     tabButtons.appendChild(addToFavouritesButton)
     tabButtons.appendChild(closeTabButton)
