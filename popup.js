@@ -3,6 +3,7 @@ let groups = [];
 let favourities = [];
 
 
+
 let groupCreating = false;
 let showDuplicates = false;
 let selectedGroups = []
@@ -10,7 +11,7 @@ let selectedGroups = []
 let duplicateNumber = 0;
 
 let groupedWindows = [];
-
+let ungroupedWindows = [];
 // chrome.tabs.onUpdated.addListener(function (tabId , info) {
 //   console.log(info)
 // });
@@ -48,25 +49,35 @@ chrome.storage.sync.get("groups", (res) => {
 chrome.windows.getAll({}, windows => {
   for(let window of windows){
     chrome.tabs.query({windowId: window.id}, (tabs) => {
+      //grouped
       let ob = new Object();
       ob.hosts = groupAllOpenTabs2(tabs);
       ob.windowId = window.id;
-      ob.focused = window.focused
-      groupedWindows.push(ob)
+      ob.focused = window.focused;
+      groupedWindows.push(ob);
+
+      //ungrouped
+      let o = new Object();
+      o.windowId = window.id;
+      o.focused = window.focused;
+      o.tabs = mapAllOpenTabs(tabs);
+      ungroupedWindows.push(o)
     })
   }
+
+  console.log(ungroupedWindows)
 
   chrome.tabs.query({currentWindow: true}, tabs => {
     groupAllOpenTabs(tabs);
   
-    buildWindows();
+    //buildWindows();
+    buildUngroupedWindows();
     buildGroups();
     buildFavourites();
   
     initializeHostsSelectables();
     initializeGroupsSelectable();
-    createMultiselect();
-  
+    createMultiselect();    
   })
 
 })
@@ -81,6 +92,44 @@ window.addEventListener('click', function(e){
     document.getElementById('expand-select-group').checked = false;
   }
 });
+
+function mapAllOpenTabs(tabs){
+  let t = [];
+
+  for(let tab of tabs){
+
+    let url;
+    try{
+      url = tab.url;
+    }
+    catch{
+      url = tab.pendingUrl
+    }
+
+    let ob = {
+      id: tab.id,
+      favIcon: tab.favIconUrl,
+      title: tab.title,
+      audible: tab.audible,
+      active: tab.active,
+      muted: tab.mutedInfo.muted,
+      url: url,
+      duplicateNumber: duplicateNumber
+    }
+
+    let duplicates = t.filter(x => x.url == tab.url);
+
+    if(duplicates.length > 0){
+      ob.duplicateNumber = duplicates[0].duplicateNumber;
+    }
+
+    t.push(ob)
+
+    duplicateNumber++
+  }
+
+  return t;
+}
 
 function groupAllOpenTabs(tabs){
 
@@ -329,7 +378,19 @@ goToSettingsBtn.addEventListener("click", (e) => {
   e.target.classList.add("selected-section");
 })
 
-
+grouped = false;
+testBtn = document.getElementById("test-btn")
+testBtn.addEventListener("click", () => {
+  hostsContainer.innerHTML = "";
+  if(grouped){
+    buildUngroupedWindows();
+    grouped = false;
+  }
+  else{
+    buildWindows();
+    grouped = true;
+  }
+})
 
 
 

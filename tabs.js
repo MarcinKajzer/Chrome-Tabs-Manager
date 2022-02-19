@@ -128,6 +128,17 @@ function hideGroupSelection(){
     selectedGroups = [];
 }
 
+function buildUngroupedWindows(){
+    buildUngroupedTabs(ungroupedWindows.filter(x => x.focused)[0], null, ungroupedWindows.length > 1)
+
+    let index = 2;
+    for(let window of ungroupedWindows.filter(x => !x.focused)){
+        buildUngroupedTabs(window, index, true);
+        index++;
+    }
+}
+
+
 function buildWindows(){
     buildTabs(groupedWindows.filter(x => x.focused)[0], null, groupedWindows.length > 1)
 
@@ -207,7 +218,8 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
     
     let windowList = document.createElement("ul")
     windowList.classList.add("window-list", "outer-list")
-    windowList.addEventListener("dragover", () => {
+    windowList.addEventListener("dragover", (e) => {
+        
         if(currentDraggingHostList != windowList ){
             if(document.querySelector(".visible-popup") != null) {
                 document.querySelector(".visible-popup").classList.remove("visible-popup")
@@ -226,7 +238,7 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
     })
 
     windowContainer.appendChild(windowList);
-    console.log(window)
+    
     for (const [host, hostTabs] of Object.entries(window.hosts)) {
 
         let hostItem = document.createElement("li");
@@ -350,7 +362,7 @@ function closeAllTabsOfHost(hostTabs, host, windowId) {
     chrome.storage.sync.remove(host);
 }
 
-function closeTab(tabId, host, windowId) {
+function closeTab(tabId, host, windowId, deleteHost = true) {
     console.log(windowId)
     chrome.tabs.remove(tabId);
 
@@ -360,17 +372,15 @@ function closeTab(tabId, host, windowId) {
     currentTab.classList.add("removed");
     setTimeout(() => {
         currentTab.remove();
-        if (currentHostTabsList.childNodes.length == 0) {
+        if (currentHostTabsList.childNodes.length == 0 && deleteHost) {
             deleteHostElementFromDOM(host, windowId);
         }
     }, 200);
 }
 
 function deleteHostElementFromDOM(host, windowId) {
-    console.log("host_" + host + "_window" + windowId)
     let hostElement = document.getElementById("host_" + host + "_window" + windowId)
     
-
     hostElement.classList.add("remove-host");
     setTimeout(() => {
         hostElement.remove();
@@ -386,7 +396,6 @@ function defineOnClickMuteGroupBtn(btn, hostTabs) {
         for(let btn of document.getElementById(hostTabs[0].id).parentNode.querySelectorAll(".mute-btn")){
             btn.classList.add("muted")
         }
-        console.log(document.getElementById(hostTabs[0].id).parentNode.querySelectorAll(".mute-btn"))
         btn.classList.add("muted");
     }
     else {
@@ -396,7 +405,6 @@ function defineOnClickMuteGroupBtn(btn, hostTabs) {
         for(let btn of document.getElementById(hostTabs[0].id).parentNode.querySelectorAll(".mute-btn")){
             btn.classList.remove("muted")
         }
-        console.log(document.getElementById(hostTabs[0].id).parentNode.querySelectorAll(".mute-btn"))
         btn.classList.remove("muted");
     }
 }
@@ -526,6 +534,240 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
 
     return tab;
 }
+
+function buildUngroupedTabs(window, index, isMoreThenOneWindow){
+    let windowContainer = document.createElement("div")
+    
+    //osobna funkcja -DRY
+    if(isMoreThenOneWindow){
+        windowContainer.classList.add("window-container")
+
+        let dropHerePopup = document.createElement("div")
+        dropHerePopup.classList.add("drop-here-popup")
+        dropHerePopup.innerText = "Drop here."
+
+        let windowLabel = document.createElement("div")
+        windowLabel.classList.add("window-label");
+    
+        let windowName = document.createElement("span");
+        if(window.focused){
+            windowName.innerText = "Current window";
+        }
+        else{
+            windowName.innerText = "Window " + index;
+        }
+        
+        let buttonsWrapper = document.createElement("div")
+    
+        let pinWindowBtn = document.createElement("button")
+        pinWindowBtn.innerText = "Pin"
+        pinWindowBtn.classList.add("pin-btn")
+        pinWindowBtn.onclick = () => {
+    
+            if(windowContainer.parentNode.id == "all-windows"){
+                pinnedWindowsSection.classList.add("shown")
+                document.querySelector("#app").style.width = "700px";
+                document.querySelector("main").style.width = "1750px";
+        
+                pinnedWindowsContainer.appendChild(windowContainer)
+                pinWindowBtn.innerText = "Unpin"
+            }
+            else{
+                hostsContainer.appendChild(windowContainer);
+                pinWindowBtn.innerText = "Pin"
+    
+                if(pinnedWindowsContainer.childNodes.length == 0){
+                    pinnedWindowsSection.classList.remove("shown")
+                    document.querySelector("#app").style.width = "350px";
+                    document.querySelector("main").style.width = "1400px";
+                }
+            }
+        }
+    
+        let closeWindowBtn = document.createElement("button")
+        closeWindowBtn.classList.add("close-btn")
+        closeWindowBtn.onclick = () => {
+            chrome.windows.remove(window.windowId);
+            windowContainer.remove();
+        }
+
+        windowLabel.appendChild(windowName);
+        buttonsWrapper.appendChild(pinWindowBtn)
+        buttonsWrapper.appendChild(closeWindowBtn)
+        
+        windowLabel.appendChild(buttonsWrapper);
+        
+        windowContainer.appendChild(windowLabel);
+        windowContainer.appendChild(dropHerePopup);
+    }
+    
+    let windowList = document.createElement("ul")
+    windowList.classList.add("window-list", "outer-list")
+    windowList.addEventListener("dragover", (e) => {
+        
+        if(currentDraggingHostList != windowList ){
+            if(document.querySelector(".visible-popup") != null) {
+                document.querySelector(".visible-popup").classList.remove("visible-popup")
+            }
+            dragOverHostList = windowList;
+            dragOverWindowId = window.windowId;
+            windowList.parentNode.querySelector(".drop-here-popup").classList.add("visible-popup")
+        }
+        else{
+            if(document.querySelector(".visible-popup") != null) {
+                document.querySelector(".visible-popup").classList.remove("visible-popup")
+            }
+            dragOverHostList = null;
+            dragOverWindowId = null;
+        }
+    })
+
+    windowContainer.appendChild(windowList);
+
+    for(let tab of window.tabs){
+        console.log(buildSingleUngroupedTab(tab, window.windowId))
+        windowList.appendChild(buildSingleUngroupedTab(tab, window.windowId))
+    }
+
+    hostsContainer.appendChild(windowContainer)
+}
+
+function buildSingleUngroupedTab(hostTab, windowId){
+    
+    let tab = document.createElement("li");
+    tab.classList.add("inner-list-item")
+    tab.style.height = "auto"; //POPRAWIĆ !!!!!!!!!!!!!!!!!!!!!!
+    tab.style.padding = "5px 0"
+    tab.id = hostTab.id;
+
+    if (hostTab.active) {
+        tab.classList.add("selected-tab")
+    }
+
+    let tabInfo = document.createElement("div")
+
+    let tabFavIcon = document.createElement("img");
+    tabFavIcon.classList.add("favIcon");
+    tabFavIcon.src = hostTab.favIcon != null && hostTab.favIcon != "" ? hostTab.favIcon : "assets/default_favicon.png";
+
+    let tabTitle = document.createElement("span");
+    tabTitle.onclick = () => {
+        chrome.tabs.update(hostTab.id, { selected: true });
+    }
+
+    tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
+
+    let tabButtons = document.createElement("div");
+
+    if (hostTab.audible) {
+        let muteTabButton = document.createElement("button");
+        muteTabButton.classList.add("mute-btn");
+
+        chrome.tabs.get(hostTab.id, (tab) => {
+            if (hostTab.muted) {
+                muteTabButton.classList.add("muted");
+            }
+        })
+
+        muteTabButton.onclick = (e) => {
+
+            if (!e.target.classList.contains("muted")) {
+                chrome.tabs.update(hostTab.id, { muted: true })
+                e.target.classList.add("muted");
+            }
+            else {
+                chrome.tabs.update(hostTab.id, { muted: false })
+                e.target.classList.remove("muted");
+            }
+        }
+
+        tabButtons.appendChild(muteTabButton);
+    }
+
+    let addToFavouritesButton = document.createElement("button");
+    addToFavouritesButton.classList.add("add-to-favourites-btn")
+    addToFavouritesButton.classList.add("duplicate_" + hostTab.duplicateNumber )
+    
+    let index = favourities.findIndex(x => x.url === hostTab.url)
+    
+    if(index != -1){
+        addToFavouritesButton.classList.add(favourities[index].id)
+    }
+
+    if(favourities.filter(x => x.url == hostTab.url).length > 0){
+        addToFavouritesButton.classList.add("favourite-tab");
+    }   
+
+    addToFavouritesButton.onclick = () => {
+        chrome.storage.sync.get("favourities", result => {
+            
+            favourities = result.favourities;
+            
+            let fav = new Object();
+            fav.name = hostTab.title,
+            fav.favIcon = hostTab.favIcon,
+            fav.url = hostTab.url
+            fav.id = "fav_" + Date.now();
+
+            if(favourities != null){
+                let indexOfRemovedFav = favourities.findIndex(x => x.url == fav.url);
+
+                if(indexOfRemovedFav != -1){
+                    dragableContainer.removeChild(dragableContainer.childNodes[indexOfRemovedFav+1])
+
+                    for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+                        button.classList.remove("favourite-tab")
+                        button.classList.remove(fav.id)
+                    }
+
+                    favourities = favourities.filter(x => x.url != fav.url)
+                }
+                else{
+                    favourities.push(fav);
+                    for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+                        button.classList.add("favourite-tab")
+                        button.classList.add(fav.id)
+                    }
+
+                    createSingeFavourite(fav);
+                }
+                chrome.storage.sync.set({favourities: favourities})
+            }
+            else{
+                chrome.storage.sync.set({favourities: [fav]})
+                for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+                    button.classList.add("favourite-tab")
+                    button.classList.add(fav.id)
+                }
+                createSingeFavourite(fav);
+            }
+        });
+    }
+
+    let closeTabButton = document.createElement("button");
+    closeTabButton.classList.add("close-btn")
+    
+    closeTabButton.onclick = () => closeTab(hostTab.id, null, windowId, false)
+
+    tabInfo.appendChild(tabFavIcon)
+    tabInfo.appendChild(tabTitle)
+
+    tabButtons.appendChild(addToFavouritesButton)
+    tabButtons.appendChild(closeTabButton)
+
+    tab.appendChild(tabInfo)
+    tab.appendChild(tabButtons);
+
+    return tab;
+}
+
+
+
+
+
+
+
+
 
 function initializeHostsSelectables() {
     new Selectables({
