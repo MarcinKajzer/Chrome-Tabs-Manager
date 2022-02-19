@@ -392,14 +392,15 @@ goToSettingsBtn.addEventListener("click", (e) => {
 
 
 
-//54. Opcja przenieś zaznaczone do nowego okna.
-//65. Dodanie karty do listy po otwarrciu grupy lub ulubionych
-//66. Wykrywanie zmiany tutułu strony 
+//54. Opcja przenieś zaznaczone do NOWEGO okna.
+//65. Dodanie karty do listy po otwarciu grupy lub ulubionych
+//66. Wykrywanie zmiany tytułu strony 
 
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //75. Licznik grup i ulubionych przy ikonce
+
 
 //Fix:
 
@@ -419,4 +420,4 @@ goToSettingsBtn.addEventListener("click", (e) => {
 //64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków
 //67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
 //57. Zmiana wysokości body w zależoności o ilości wyświetlanych elementów - lub dla całej wtyczki stała wysokość.
-
+//76. Zmienić ikonki ???

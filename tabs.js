@@ -245,15 +245,24 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
                 document.querySelector(".visible-popup").classList.remove("visible-popup")
             }
 
-            //jeżeli taki host już nie istnieje!!!
             if(dragOverHostList != null){
                 
-                dragOverHostList.appendChild(hostItem);
+                let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
 
+                if(matchingHost.length > 0){
+                    let tabsToMove = hostItem.getElementsByClassName("inner-list-item")
+                    while(tabsToMove.length > 0){
+                        matchingHost[0].querySelector("ul").appendChild(tabsToMove[0]);
+                    }
+                    hostItem.remove();
+                }
+                else{
+                    dragOverHostList.appendChild(hostItem);
+                }
+                
                 chrome.tabs.move(hostTabs.map(x => x.id), {index : -1, windowId : dragOverWindowId})
             }
         })
-
 
         let hostCheckbox = document.createElement("input");
         hostCheckbox.type = "checkbox";
