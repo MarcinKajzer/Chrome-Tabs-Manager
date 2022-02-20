@@ -72,8 +72,8 @@ chrome.windows.getAll({}, windows => {
   chrome.tabs.query({currentWindow: true}, tabs => {
     groupAllOpenTabs(tabs);
   
-    //buildWindows();
-    buildUngroupedWindows();
+    buildWindows();
+    //buildUngroupedWindows();
     buildGroups();
     buildFavourites();
   
@@ -454,6 +454,7 @@ testBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
+
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
@@ -461,7 +462,9 @@ testBtn.addEventListener("click", () => {
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //75. Licznik grup i ulubionych przy ikonce
-
+//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
+//79. Update kolekcji po przeniesieniu do innego okna
+//80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
 
 //Fix:
 

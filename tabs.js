@@ -249,6 +249,8 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         hostItem.addEventListener("dragstart", () => {
             hostItem.classList.add("dragging-host")
             currentDraggingHostList = hostItem.parentNode;
+            console.log("1: ")
+            console.log(currentDraggingHostList)
         })
 
         hostItem.addEventListener("dragend", () => {
@@ -344,7 +346,7 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         hostItem.appendChild(hostLabel);
 
         for (let hostTab of hostTabs) {
-            hostTabsList.appendChild(buildSingleTab(host, hostTab, hostItem, window.windowId));
+            hostTabsList.appendChild(buildSingleTab(host, hostTab, hostItem, window.windowId, hostTabs));
         }
 
         hostItem.appendChild(hostTabsList);
@@ -363,7 +365,6 @@ function closeAllTabsOfHost(hostTabs, host, windowId) {
 }
 
 function closeTab(tabId, host, windowId, deleteHost = true) {
-    console.log(windowId)
     chrome.tabs.remove(tabId);
 
     let currentTab = document.getElementById(tabId);
@@ -409,7 +410,7 @@ function defineOnClickMuteGroupBtn(btn, hostTabs) {
     }
 }
 
-function buildSingleTab(host, hostTab, hostItem, windowId) {
+function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
     let tab = document.createElement("li");
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
@@ -418,6 +419,89 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     if (hostTab.active) {
         tab.classList.add("selected-tab")
     }
+
+    tab.draggable = true;
+
+    tab.addEventListener("dragstart", (e) => {
+        e.stopPropagation();
+        tab.classList.add("dragging-grouped-tab")
+        currentDraggingHostList = tab.parentNode.parentNode.parentNode;
+        console.log("2: ")
+        console.log(currentDraggingHostList)
+    })
+
+    tab.addEventListener("dragend", (e) => {
+        e.stopPropagation();
+
+        tab.classList.remove("dragging-grouped-tab")
+        if(document.querySelector(".visible-popup") != null) {
+            document.querySelector(".visible-popup").classList.remove("visible-popup")
+        }
+
+        if(dragOverHostList != null){
+            
+            let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
+
+            let hostId = tab.parentNode.parentNode.id;
+
+            if(matchingHost.length > 0){
+                
+                matchingHost[0].querySelector("ul").appendChild(tab);
+            }
+            else{
+                let hostItemCopy = tab.parentNode.parentNode.cloneNode(true);
+                hostItemCopy.id += "_copy";
+                hostItemCopy.querySelector("ul").innerHTML = ""
+                hostItemCopy.querySelector("ul").appendChild(tab);
+                dragOverHostList.appendChild(hostItemCopy);
+
+                //do osobnych funkcji
+                hostItemCopy.addEventListener("dragstart", () => {
+                    hostItemCopy.classList.add("dragging-host")
+                    currentDraggingHostList = hostItemCopy.parentNode;
+                    console.log("3: ")
+                    console.log(currentDraggingHostList)
+                })
+        
+                hostItemCopy.addEventListener("dragend", () => {
+                    hostItemCopy.classList.remove("dragging-host");
+                    if(document.querySelector(".visible-popup") != null) {
+                        document.querySelector(".visible-popup").classList.remove("visible-popup")
+                    }
+        
+                    if(dragOverHostList != null){
+                        
+                        let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
+        
+                        if(matchingHost.length > 0){
+                            let tabsToMove = hostItemCopy.getElementsByClassName("inner-list-item")
+                            while(tabsToMove.length > 0){
+                                matchingHost[0].querySelector("ul").appendChild(tabsToMove[0]);
+                            }
+                            hostItemCopy.remove();
+                        }
+                        else{
+                            dragOverHostList.appendChild(hostItemCopy);
+                        }
+                        
+                        chrome.tabs.move(hostTabs.map(x => x.id), {index : -1, windowId : dragOverWindowId})
+                    }
+                })
+            }
+            
+            if(document.getElementById(hostId).getElementsByClassName("inner-list-item").length == 0)
+            {
+               document.getElementById(hostId).remove();
+               let listId = tab.parentNode.parentNode.id
+
+               if(listId.includes("_copy")){
+                    tab.parentNode.parentNode.id = listId.substring(0, listId.length - 5)
+               }
+            }
+
+            chrome.tabs.move(hostTab.id, {index : -1, windowId : dragOverWindowId})
+        }
+    })
 
     let tabTitle = document.createElement("span");
     tabTitle.onclick = () => {
@@ -603,7 +687,6 @@ function buildUngroupedTabs(window, index, isMoreThenOneWindow){
     windowContainer.appendChild(windowList);
 
     for(let tab of window.tabs){
-        console.log(buildSingleUngroupedTab(tab, window.windowId))
         windowList.appendChild(buildSingleUngroupedTab(tab, window.windowId))
     }
 
@@ -1092,7 +1175,6 @@ function createMultiselect(){
             let groupList = document.getElementById("group_" + groupName).querySelector("ul")
 
             for(let tab of newTabs){
-                console.log(tabs.findIndex(x => x.url == tab.url))
                 if(tabs.findIndex(x => x.url == tab.url) == -1){
                     tabs.push(tab)
                     groupList.appendChild(buildSingleGroupTab(groupName, tab));

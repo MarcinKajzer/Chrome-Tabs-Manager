@@ -1155,6 +1155,8 @@ transform: scale(1.2);
   padding: 0;
 }
 
+
+
 .window-container .window-list{
   padding: 10px;
 }
@@ -1203,8 +1205,7 @@ transform: scale(1.2);
   display: flex;
 }
 
-.dragging-host, .dragging-ungrouped-tab{
+.dragging-host, .dragging-ungrouped-tab, .dragging-grouped-tab{
   opacity: .5;
-  cursor: none;
 }
 
