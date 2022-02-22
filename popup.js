@@ -12,15 +12,7 @@ let duplicateNumber = 0;
 
 let groupedWindows = [];
 let ungroupedWindows = [];
-// chrome.tabs.onUpdated.addListener(function (tabId , info) {
-//   console.log(info)
-// });
 
-// chrome.storage.sync.get("favourities", (res) => {
-//   console.log(res)
-// })
-
-// chrome.storage.sync.remove("favourities")
 
 //..............................................................
 //..................EXISTING ELEMENTS HOOKS.....................
@@ -63,25 +55,24 @@ chrome.windows.getAll({}, windows => {
       o.tabs = mapAllOpenTabs(tabs);
       ungroupedWindows.push(o)
 
-      console.log(tabs)
     })
   }
 
-  console.log(ungroupedWindows)
 
   chrome.tabs.query({currentWindow: true}, tabs => {
     groupAllOpenTabs(tabs);
   
     buildWindows();
-    //buildUngroupedWindows();
     buildGroups();
     buildFavourites();
   
     initializeHostsSelectables();
     initializeGroupsSelectable();
     createMultiselect();    
-  })
 
+    
+  })
+  console.log(ungroupedWindows)
 })
 
 
@@ -101,10 +92,13 @@ function mapAllOpenTabs(tabs){
   for(let tab of tabs){
 
     let url;
+    let domain;
     try{
+      domain = (new URL(tab.url));
       url = tab.url;
     }
     catch{
+      domain = (new URL(tab.pendingUrl));
       url = tab.pendingUrl
     }
 
@@ -116,7 +110,8 @@ function mapAllOpenTabs(tabs){
       active: tab.active,
       muted: tab.mutedInfo.muted,
       url: url,
-      duplicateNumber: duplicateNumber
+      duplicateNumber: duplicateNumber,
+      host: domain.hostname
     }
 
     let duplicates = t.filter(x => x.url == tab.url);
@@ -380,7 +375,7 @@ goToSettingsBtn.addEventListener("click", (e) => {
   e.target.classList.add("selected-section");
 })
 
-grouped = false;
+grouped = true;
 testBtn = document.getElementById("test-btn")
 testBtn.addEventListener("click", () => {
   hostsContainer.innerHTML = "";
@@ -449,7 +444,7 @@ testBtn.addEventListener("click", () => {
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
-
+//79. Update kolekcji po przeniesieniu do innego okna
 
 
 //Do zrobienia:
@@ -463,7 +458,6 @@ testBtn.addEventListener("click", () => {
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //75. Licznik grup i ulubionych przy ikonce
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
-//79. Update kolekcji po przeniesieniu do innego okna
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
 
 //Fix:

@@ -218,8 +218,8 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
     
     let windowList = document.createElement("ul")
     windowList.classList.add("window-list", "outer-list")
+    windowList.id = "window_" + window.windowId
     windowList.addEventListener("dragover", (e) => {
-        
         if(currentDraggingHostList != windowList ){
             if(document.querySelector(".visible-popup") != null) {
                 document.querySelector(".visible-popup").classList.remove("visible-popup")
@@ -249,8 +249,6 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
         hostItem.addEventListener("dragstart", () => {
             hostItem.classList.add("dragging-host")
             currentDraggingHostList = hostItem.parentNode;
-            console.log("1: ")
-            console.log(currentDraggingHostList)
         })
 
         hostItem.addEventListener("dragend", () => {
@@ -261,6 +259,24 @@ async function buildTabs(window, index, isMoreThenOneWindow) {
 
             if(dragOverHostList != null){
                 
+                //DRY
+                                
+                let windowId = parseInt(hostItem.parentNode.id.substring(7))
+
+                if(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] != null){
+                    groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] = groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host].concat(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host])
+                }
+                else{
+                    groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] = groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host];
+                }
+                
+                ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.concat(groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host])
+
+                ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host != host)
+                delete groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host]
+                
+                //DRY END
+
                 let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
 
                 if(matchingHost.length > 0){
@@ -426,13 +442,10 @@ function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
         e.stopPropagation();
         tab.classList.add("dragging-grouped-tab")
         currentDraggingHostList = tab.parentNode.parentNode.parentNode;
-        console.log("2: ")
-        console.log(currentDraggingHostList)
     })
 
     tab.addEventListener("dragend", (e) => {
         e.stopPropagation();
-
         tab.classList.remove("dragging-grouped-tab")
         if(document.querySelector(".visible-popup") != null) {
             document.querySelector(".visible-popup").classList.remove("visible-popup")
@@ -441,14 +454,18 @@ function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
         if(dragOverHostList != null){
             
             let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
-
+            
             let hostId = tab.parentNode.parentNode.id;
+            let windowId = parseInt(tab.parentNode.parentNode.parentNode.id.substring(7))
 
             if(matchingHost.length > 0){
-                
                 matchingHost[0].querySelector("ul").appendChild(tab);
+
+                groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host].push(hostTab);
             }
             else{
+                groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] = [hostTab];
+
                 let hostItemCopy = tab.parentNode.parentNode.cloneNode(true);
                 hostItemCopy.id += "_copy";
                 hostItemCopy.querySelector("ul").innerHTML = ""
@@ -459,8 +476,6 @@ function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
                 hostItemCopy.addEventListener("dragstart", () => {
                     hostItemCopy.classList.add("dragging-host")
                     currentDraggingHostList = hostItemCopy.parentNode;
-                    console.log("3: ")
-                    console.log(currentDraggingHostList)
                 })
         
                 hostItemCopy.addEventListener("dragend", () => {
@@ -468,7 +483,25 @@ function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
                     if(document.querySelector(".visible-popup") != null) {
                         document.querySelector(".visible-popup").classList.remove("visible-popup")
                     }
-        
+                            
+                    //DRY - tu skończyłem !!!!!!!!!!!!!!!
+                                                    
+                    // let windowId = parseInt(hostItemCopy.parentNode.id.substring(7))
+
+                    // if(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] != null){
+                    //     groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] = groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host].concat(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host])
+                    // }
+                    // else{
+                    //     groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[host] = groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host];
+                    // }
+
+                    // ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.concat(groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host])
+
+                    // ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host != host)
+                    // delete groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host]
+
+                    //DRY END
+
                     if(dragOverHostList != null){
                         
                         let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
@@ -488,7 +521,21 @@ function buildSingleTab(host, hostTab, hostItem, windowId, hostTabs) {
                     }
                 })
             }
-            
+
+            //DRY
+            // console.log(dragOverWindowId)
+            // console.log(windowId)
+            // console.log(groupedWindows)
+            groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host] = groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host].filter(y => y != hostTab)
+            if(groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host].length == 0){
+                delete groupedWindows.filter(x => x.windowId == windowId)[0].hosts[host]
+            }
+
+            ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.push(hostTab);
+            ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.id != hostTab.id)
+            //DRY END
+
+
             if(document.getElementById(hostId).getElementsByClassName("inner-list-item").length == 0)
             {
                document.getElementById(hostId).remove();
@@ -706,6 +753,9 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     tab.addEventListener("dragover", (e) => {
         e.preventDefault();
+
+        dragOverWindowId = parseInt(tab.parentNode.id.substring(7));
+        
         let draggingElement = document.querySelector(".dragging-ungrouped-tab")
         let enteredElement = tab.getBoundingClientRect()
 
@@ -721,17 +771,38 @@ function buildSingleUngroupedTab(hostTab, windowId){
         }
     })
 
+    let winId;
 
     tab.addEventListener("dragstart", () => {
         tab.classList.add("dragging-ungrouped-tab");
+        winId = parseInt(tab.parentNode.id.substring(7))
     })
 
     tab.addEventListener("dragend", () => {
         tab.classList.remove("dragging-ungrouped-tab")
 
-        let winId = parseInt(tab.parentNode.id.substring(7))
         let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
-        chrome.tabs.move(parseInt(tab.id), {windowId: winId, index: index})
+        chrome.tabs.move(parseInt(tab.id), {windowId: winId, index: index});
+
+        //DRY////
+        console.log(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts)
+
+        if(groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[hostTab.host] != null){
+            
+            groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[hostTab.host].push(hostTab);
+        }
+        else{
+            groupedWindows.filter(x => x.windowId == dragOverWindowId)[0].hosts[hostTab.host] = [hostTab];
+        }
+
+        groupedWindows.filter(x => x.windowId == winId)[0].hosts[hostTab.host] = groupedWindows.filter(x => x.windowId == winId)[0].hosts[hostTab.host].filter(y => y.id != hostTab.id)
+        if(groupedWindows.filter(x => x.windowId == winId)[0].hosts[hostTab.host].length == 0){
+            delete groupedWindows.filter(x => x.windowId == winId)[0].hosts[hostTab.host]
+        }
+
+        ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.push(hostTab);
+        ungroupedWindows.filter(x => x.windowId == winId)[0].tabs = ungroupedWindows.filter(x => x.windowId == winId)[0].tabs.filter(y => y.id != hostTab.id)
+
     })
 
     if (hostTab.active) {
