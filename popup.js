@@ -39,52 +39,91 @@ chrome.storage.sync.get("groups", (res) => {
 });
 
 chrome.windows.getAll({}, windows => {
+
   for(let window of windows){
     chrome.tabs.query({windowId: window.id}, (tabs) => {
-      //grouped
-      let ob = new Object();
-      ob.hosts = groupAllOpenTabs2(tabs);
-      ob.windowId = window.id;
-      ob.focused = window.focused;
-      groupedWindows.push(ob);
-
-      //ungrouped
+    
       let o = new Object();
       o.windowId = window.id;
       o.focused = window.focused;
       o.tabs = mapAllOpenTabs(tabs);
-      ungroupedWindows.push(o)
-
+      ungroupedWindows.push(o);
     })
   }
 
-
-  chrome.tabs.query({currentWindow: true}, tabs => {
-    groupAllOpenTabs(tabs);
   
-    buildWindows();
+  chrome.tabs.query({currentWindow: true}, tabs => {
+    buildAllUngroupedWindows();
     buildGroups();
     buildFavourites();
   
     initializeHostsSelectables();
     initializeGroupsSelectable();
     createMultiselect();    
-
-    
   })
-  console.log(ungroupedWindows)
 })
-
-
-
-
-
 
 window.addEventListener('click', function(e){   
   if (!document.getElementById('search-header').contains(e.target)){
     document.getElementById('expand-select-group').checked = false;
   }
 });
+
+
+
+function groupUngroupedTabs(){
+  groupedWindows = [];
+  for(let window of ungroupedWindows){
+
+    let groupedTabs = [];
+
+    for(let tab of window.tabs){
+      
+      let ob = {
+        id: tab.id,
+        favIcon: tab.favIcon,
+        title: tab.title,
+        audible: tab.audible,
+        active: tab.active,
+        muted: tab.muted,
+        url: tab.url,
+        duplicateNumber: tab.duplicateNumber,
+        host: tab.host
+      }
+
+      if(groupedTabs[tab.host] == undefined){
+        groupedTabs[tab.host] = [ob]
+        
+        chrome.storage.sync.get(tab.host, result => {
+          if(Object.keys(result).length === 0){
+            let obj = new Object();
+            obj[tab.host] = false; 
+            chrome.storage.sync.set(obj);
+          }
+        })
+      }
+      else{
+        let duplicates = groupedTabs[tab.host].filter(x => x.url == tab.url);
+
+        if(duplicates.length > 0){
+          ob.duplicateNumber = duplicates[0].duplicateNumber;
+        }
+        
+        groupedTabs[tab.host].push(ob)
+      }
+
+      duplicateNumber++;
+    }
+
+    let ob = new Object();
+    ob.hosts = groupedTabs;
+    ob.windowId = window.windowId;
+    ob.focused = window.focused;
+
+    groupedWindows.push(ob);
+  }
+}
+
 
 function mapAllOpenTabs(tabs){
   let t = [];
@@ -128,133 +167,23 @@ function mapAllOpenTabs(tabs){
   return t;
 }
 
-function groupAllOpenTabs(tabs){
-
-  for(let tab of tabs){
-    
-    let domain;
-    let url;
-
-    // obsługa ładowania dużej ilości grup
-    try{
-      domain = (new URL(tab.url));
-      url = tab.url;
-    }
-    catch{
-      domain = (new URL(tab.pendingUrl));
-      url = tab.pendingUrl
-    }
-
-    let host = domain.hostname;
-
-    let ob = {
-      id: tab.id,
-      favIcon: tab.favIconUrl,
-      title: tab.title,
-      audible: tab.audible,
-      active: tab.active,
-      muted: tab.mutedInfo.muted,
-      url: url,
-      duplicateNumber: duplicateNumber
-    }
-
-    if(groupedTabs[host] == undefined){
-      groupedTabs[host] = [ob]
-      
-      chrome.storage.sync.get(host, result => {
-        if(Object.keys(result).length === 0){
-          let obj = new Object();
-          obj[host] = false; 
-          chrome.storage.sync.set(obj);
-        }
-      })
-    }
-    else{
-      let duplicates = groupedTabs[host].filter(x => x.url == tab.url);
-
-      if(duplicates.length > 0){
-        ob.duplicateNumber = duplicates[0].duplicateNumber;
-      }
-      
-      groupedTabs[host].push(ob)
-    }
-
-    duplicateNumber++;
-  }
-}
-
-function groupAllOpenTabs2(tabs){
-
-  let groupedTabs = [];
-
-  for(let tab of tabs){
-    
-    let domain;
-    let url;
-
-    // obsługa ładowania dużej ilości grup
-    try{
-      domain = (new URL(tab.url));
-      url = tab.url;
-    }
-    catch{
-      domain = (new URL(tab.pendingUrl));
-      url = tab.pendingUrl
-    }
-
-    let host = domain.hostname;
-
-    let ob = {
-      id: tab.id,
-      favIcon: tab.favIconUrl,
-      title: tab.title,
-      audible: tab.audible,
-      active: tab.active,
-      muted: tab.mutedInfo.muted,
-      url: url,
-      duplicateNumber: duplicateNumber
-    }
-
-    if(groupedTabs[host] == undefined){
-      groupedTabs[host] = [ob]
-      
-      chrome.storage.sync.get(host, result => {
-        if(Object.keys(result).length === 0){
-          let obj = new Object();
-          obj[host] = false; 
-          chrome.storage.sync.set(obj);
-        }
-      })
-    }
-    else{
-      let duplicates = groupedTabs[host].filter(x => x.url == tab.url);
-
-      if(duplicates.length > 0){
-        ob.duplicateNumber = duplicates[0].duplicateNumber;
-      }
-      
-      groupedTabs[host].push(ob)
-    }
-
-    duplicateNumber++;
-  }
-
-  return groupedTabs;
-}
-
-
 
 //..............................................................
 //.....................COMON FUNCTIONS..........................
 //..............................................................
 
 
-function hideSelectedCounter(counter){
-  counter.querySelector("span").innerText = ""
-  counter.style.opacity = "0"
+function hideSelectedCounter(){
+  selectedTabsCounter.querySelector("span").innerText = ""
+  selectedTabsCounter.style.opacity = "0"
   setTimeout(() => {
-    counter.style.visibility = "hidden"
+    selectedTabsCounter.style.visibility = "hidden"
   }, 200)
+}
+
+function showSelectedCounter(){
+  selectedTabsCounter.style.visibility = "visible"
+  selectedTabsCounter.style.opacity = "1"
 }
 
 function checkAllCheckboxes(checkboxes){
@@ -375,16 +304,18 @@ goToSettingsBtn.addEventListener("click", (e) => {
   e.target.classList.add("selected-section");
 })
 
-grouped = true;
+grouped = false;
 testBtn = document.getElementById("test-btn")
 testBtn.addEventListener("click", () => {
+
   hostsContainer.innerHTML = "";
   if(grouped){
-    buildUngroupedWindows();
+    buildAllUngroupedWindows();
     grouped = false;
   }
   else{
-    buildWindows();
+    groupUngroupedTabs();
+    buildAllGroupedWindows();
     grouped = true;
   }
 })
@@ -450,15 +381,17 @@ testBtn.addEventListener("click", () => {
 //Do zrobienia:
 
 
-//54. Opcja przenieś zaznaczone do NOWEGO okna.
+
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
 
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
-//75. Licznik grup i ulubionych przy ikonce
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
+
+//84. Zmiana animacji
+//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej
 
 //Fix:
 
@@ -468,6 +401,9 @@ testBtn.addEventListener("click", () => {
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
 //74. Taki sam w 2 różnych oknach = to samo id !!!
 //77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
+//81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
+//82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
+//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
 
 //Opcjonalne lub  na koniec: 
 
@@ -480,3 +416,5 @@ testBtn.addEventListener("click", () => {
 //67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
 //57. Zmiana wysokości body w zależoności o ilości wyświetlanych elementów - lub dla całej wtyczki stała wysokość.
 //76. Zmienić ikonki ???
+//54. Opcja przenieś zaznaczone do NOWEGO okna.
+//75. Licznik grup i ulubionych przy ikonce
