@@ -3,51 +3,28 @@ const dragableContainer = document.getElementById("dragables-container")
 let animation = true;
 
 //DRY
-document.getElementById("favourites-list-btn").addEventListener("click", () => {
-    animation = false;
+// document.getElementById("favourites-list-btn").addEventListener("click", () => {
+//     animation = false;
 
-    let dragables = document.getElementsByClassName("dragable");
-    for(let dragable of dragables){
-        dragable.classList.remove("animated", "x3", "x4", "x5")
-        dragable.classList.add("vertical")
-    }
-})
+//     let dragables = document.getElementsByClassName("dragable");
+//     for(let dragable of dragables){
+//         dragable.classList.remove("animated", "x3", "x4", "x5")
+//         dragable.classList.add("vertical")
+//     }
+// })
 
-document.getElementById("favourites-x3-btn").addEventListener("click", () => {
-    let dragables = document.getElementsByClassName("dragable");
-    for(let dragable of dragables){
-        if(animation){
-            dragable.classList.add("animated")
-        }
-        dragable.classList.add("x3")
-        dragable.classList.remove("vertical", "x4", "x5")
-    }
-    animation = true;
-})
+// document.getElementById("favourites-x3-btn").addEventListener("click", () => {
+//     let dragables = document.getElementsByClassName("dragable");
+//     for(let dragable of dragables){
+//         if(animation){
+//             dragable.classList.add("animated")
+//         }
+//         dragable.classList.add("x3")
+//         dragable.classList.remove("vertical", "x4", "x5")
+//     }
+//     animation = true;
+// })
 
-document.getElementById("favourites-x4-btn").addEventListener("click", () => {
-    let dragables = document.getElementsByClassName("dragable");
-    for(let dragable of dragables){
-        if(animation){
-            dragable.classList.add("animated")
-        }
-        dragable.classList.add("x4")
-        dragable.classList.remove("vertical", "x3", "x5")
-    }
-    animation = true;
-})
-
-document.getElementById("favourites-x5-btn").addEventListener("click", () => {
-    let dragables = document.getElementsByClassName("dragable");
-    for(let dragable of dragables){
-        if(animation){
-            dragable.classList.add("animated")
-        }
-        dragable.classList.add("x5")
-        dragable.classList.remove("vertical", "x4", "x3")
-    }
-    animation = true;
-})
 
 //DRY END
 

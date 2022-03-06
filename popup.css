@@ -931,26 +931,6 @@ color: green
   padding-left: 10px;
 }
 
-
-
-
-
-
-#favourites-section nav{
-  padding-left: 18px; 
-}
-
-#favourites-section nav .navigation{
-  width: 100%;
-}
-
-#favourites-section nav button{
-  width: 50px;
-  background: white;
-  color: black;
-  border-radius: 10px;
-}
-
 .remove-favourite-btn{
   width: 12px;
   height: 12px;
