@@ -288,9 +288,12 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         hostCheckbox.classList.add("inner-list-checkbox")
         hostCheckbox.id = host + window.windowId;
 
-        chrome.storage.sync.get(host, function (result) {
-            hostCheckbox.checked = Object.values(result)[0];
-        });
+        if(expandedHosts.filter(x => x == host + window.windowId).length > 0){
+            hostCheckbox.checked = true;
+        }
+        // chrome.storage.sync.get(host, function (result) {
+        //     hostCheckbox.checked = Object.values(result)[0];
+        // });
 
         let hostLabel = document.createElement("label");
         hostLabel.classList.add("inner-list-checkbox-label");
@@ -302,9 +305,13 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         }
 
         hostLabel.onclick = () => {
-            let obj = new Object();
-            obj[host] = !hostCheckbox.checked;
-            chrome.storage.sync.set(obj);
+            if(expandedHosts.filter(x => x == host + window.windowId).length == 0){
+                expandedHosts.push(host + window.windowId);
+            }
+            else{
+                expandedHosts = expandedHosts.filter(x => x != host + window.windowId)
+            }
+            chrome.storage.sync.set({"expandedHosts": expandedHosts});
         }
 
         let hostInfo = document.createElement("div");

@@ -13,6 +13,7 @@ let duplicateNumber = 0;
 let groupedWindows = [];
 let ungroupedWindows = [];
 
+let expandedHosts = [];
 
 //..............................................................
 //..................EXISTING ELEMENTS HOOKS.....................
@@ -38,6 +39,10 @@ chrome.storage.sync.get("groups", (res) => {
   groups = res.groups != null && res.groups != undefined ? res.groups : [];
 });
 
+chrome.storage.sync.get("expandedHosts", (res) => {
+  expandedHosts = res.expandedHosts != null && res.expandedHosts != undefined ? res.expandedHosts : [];
+});
+
 chrome.windows.getAll({}, windows => {
 
   for(let window of windows){
@@ -51,7 +56,7 @@ chrome.windows.getAll({}, windows => {
     })
   }
 
-  
+  // po co to ????? - żeby opóźnić wykonanie akcji zamin uzupełnione zostaną pola 
   chrome.tabs.query({currentWindow: true}, tabs => {
     buildAllUngroupedWindows();
     buildGroups();
@@ -190,20 +195,20 @@ function checkAllCheckboxes(checkboxes){
   for(let i = 0; i < checkboxes.length; i++){
     checkboxes[i].checked = true;
 
-      let obj = new Object();
-      obj[checkboxes[i].id] = true; 
-      chrome.storage.sync.set(obj);
+    if(expandedHosts.filter(x => x == checkboxes[i].id).length == 0){
+      expandedHosts.push(checkboxes[i].id);
+    }
   }
+  chrome.storage.sync.set({"expandedHosts": expandedHosts});
 }
 
 function uncheckAllCheckboxes(checkboxes){
   for(let i = 0; i < checkboxes.length; i++){
     checkboxes[i].checked = false;
 
-      let obj = new Object();
-      obj[checkboxes[i].id] = false; 
-      chrome.storage.sync.set(obj);
+    expandedHosts = [];
   }
+  chrome.storage.sync.set({"expandedHosts": expandedHosts}); 
 }
 
 function deleteTabElementFromDOM(className, tabId){
@@ -349,8 +354,7 @@ groupTabsBtn.addEventListener("click", () => {
 //9. Unselect jednocześnie hosta i tabów
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
-//74. Taki sam w 2 różnych oknach = to samo id !!!
-//77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
+
 //81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
 //82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
 //83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
@@ -374,7 +378,7 @@ groupTabsBtn.addEventListener("click", () => {
 //75. Licznik grup i ulubionych przy ikonce
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
 //84. Zmiana animacji
-//85. Wyszukiwanie po hoście w niezgrupowanych listach
+//86. Wyszukiwanie po hoście w niezgrupowanych listach
 
 
 
@@ -431,5 +435,7 @@ groupTabsBtn.addEventListener("click", () => {
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
+//74. Taki sam w 2 różnych oknach = to samo id !!!
+//77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 //79. Update kolekcji po przeniesieniu do innego okna
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
