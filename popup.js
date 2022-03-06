@@ -263,6 +263,9 @@ goToTabsBtn.addEventListener("click", (e) => {
 
   document.querySelector(".selected-section").classList.remove("selected-section")
   e.target.classList.add("selected-section")
+
+  changeFavouritedDisplayBtn.style.display = "none";
+  groupTabsBtn.style.display = "block"
 })
 
 goToGroupsBtn.addEventListener("click", (e) => {
@@ -277,7 +280,8 @@ goToGroupsBtn.addEventListener("click", (e) => {
   document.querySelector(".selected-section").classList.remove("selected-section")
   e.target.classList.add("selected-section")
 
-  
+  changeFavouritedDisplayBtn.style.display = "none";
+  groupTabsBtn.style.display = "none"
 })
 
 goToFavouritesBtn.addEventListener("click", (e) => {
@@ -290,6 +294,9 @@ goToFavouritesBtn.addEventListener("click", (e) => {
 
   document.querySelector(".selected-section").classList.remove("selected-section")
   e.target.classList.add("selected-section")
+
+  changeFavouritedDisplayBtn.style.display = "block";
+  groupTabsBtn.style.display = "none"
 })
 
 goToSettingsBtn.addEventListener("click", (e) => {
@@ -302,23 +309,75 @@ goToSettingsBtn.addEventListener("click", (e) => {
 
   document.querySelector(".selected-section").classList.remove("selected-section")
   e.target.classList.add("selected-section");
+
+  changeFavouritedDisplayBtn.style.display = "none";
+  groupTabsBtn.style.display = "none"
 })
 
 grouped = false;
-testBtn = document.getElementById("test-btn")
-testBtn.addEventListener("click", () => {
-
+groupTabsBtn = document.getElementById("group-tabs-btn")
+groupTabsBtn.addEventListener("click", () => {
   hostsContainer.innerHTML = "";
   if(grouped){
     buildAllUngroupedWindows();
     grouped = false;
+    groupTabsBtn.classList.remove("ungroup-tabs")
+    groupTabsBtn.title = "Group tabs."
   }
   else{
     groupUngroupedTabs();
     buildAllGroupedWindows();
     grouped = true;
+    groupTabsBtn.classList.add("ungroup-tabs")
+    groupTabsBtn.title = "Ungroup tabs."
   }
 })
+
+
+//Do zrobienia:
+
+//65. Dodanie karty do listy po otwarciu grupy lub ulubionych
+//66. Wykrywanie zmiany tytułu strony 
+
+//71. Przypinanie kart
+//73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
+
+//80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
+
+//84. Zmiana animacji
+//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej
+
+
+
+//Fix:
+
+//9. Unselect jednocześnie hosta i tabów
+//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
+//68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
+//72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
+//74. Taki sam w 2 różnych oknach = to samo id !!!
+//77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
+//81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
+//82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
+//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
+
+
+
+//Opcjonalne lub  na koniec: 
+
+//24. Strona/sekcja do personalizacji wtyczki.
+//44. Przeciąganie kart między grupami
+//47. Dodawanie nowej grupy w sekcji grup
+//58. Dodanie loadrea gdy strony się dopiero ładują i późniejsze uzupełnienie favIcony ???? - raczej zbędne
+//60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
+//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków
+//67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
+//57. Zmiana wysokości body w zależoności o ilości wyświetlanych elementów - lub dla całej wtyczki stała wysokość.
+//76. Zmienić ikonki ???
+//54. Opcja przenieś zaznaczone do NOWEGO okna.
+//75. Licznik grup i ulubionych przy ikonce
+//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
+
 
 
 
@@ -376,45 +435,3 @@ testBtn.addEventListener("click", () => {
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //79. Update kolekcji po przeniesieniu do innego okna
-
-
-//Do zrobienia:
-
-
-
-//65. Dodanie karty do listy po otwarciu grupy lub ulubionych
-//66. Wykrywanie zmiany tytułu strony 
-
-//71. Przypinanie kart
-//73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
-//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
-//80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
-
-//84. Zmiana animacji
-//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej
-
-//Fix:
-
-//9. Unselect jednocześnie hosta i tabów
-//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
-//68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
-//72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
-//74. Taki sam w 2 różnych oknach = to samo id !!!
-//77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
-//81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
-//82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
-//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
-
-//Opcjonalne lub  na koniec: 
-
-//24. Strona/sekcja do personalizacji wtyczki.
-//44. Przeciąganie kart między grupami
-//47. Dodawanie nowej grupy w sekcji grup
-//58. Dodanie loadrea gdy strony się dopiero ładują i późniejsze uzupełnienie favIcony ???? - raczej zbędne
-//60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
-//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków
-//67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
-//57. Zmiana wysokości body w zależoności o ilości wyświetlanych elementów - lub dla całej wtyczki stała wysokość.
-//76. Zmienić ikonki ???
-//54. Opcja przenieś zaznaczone do NOWEGO okna.
-//75. Licznik grup i ulubionych przy ikonce

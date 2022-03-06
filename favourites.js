@@ -2,29 +2,41 @@ const dragableContainer = document.getElementById("dragables-container")
 
 let animation = true;
 
+let favouritesGrid = true;
 //DRY
-// document.getElementById("favourites-list-btn").addEventListener("click", () => {
-//     animation = false;
+let changeFavouritedDisplayBtn = document.getElementById("change-favourites-display-grid");
+changeFavouritedDisplayBtn.addEventListener("click", () => {
 
-//     let dragables = document.getElementsByClassName("dragable");
-//     for(let dragable of dragables){
-//         dragable.classList.remove("animated", "x3", "x4", "x5")
-//         dragable.classList.add("vertical")
-//     }
-// })
+    if(favouritesGrid){
+        animation = false;
 
-// document.getElementById("favourites-x3-btn").addEventListener("click", () => {
-//     let dragables = document.getElementsByClassName("dragable");
-//     for(let dragable of dragables){
-//         if(animation){
-//             dragable.classList.add("animated")
-//         }
-//         dragable.classList.add("x3")
-//         dragable.classList.remove("vertical", "x4", "x5")
-//     }
-//     animation = true;
-// })
+        let dragables = document.getElementsByClassName("dragable");
+        for(let dragable of dragables){
+            dragable.classList.remove("animated", "x4")
+            dragable.classList.add("vertical")
+        }
 
+        favouritesGrid = false;
+        changeFavouritedDisplayBtn.classList.remove("grid");
+        changeFavouritedDisplayBtn.title = "Show grid."
+    }
+    else{
+        let dragables = document.getElementsByClassName("dragable");
+        for(let dragable of dragables){
+            if(animation){
+                dragable.classList.add("animated")
+            }
+            dragable.classList.add("x4")
+            dragable.classList.remove("vertical")
+        }
+        animation = true;
+
+        favouritesGrid = true;
+
+        changeFavouritedDisplayBtn.classList.add("grid");
+        changeFavouritedDisplayBtn.title = "Show list."
+    }
+})
 
 //DRY END
 

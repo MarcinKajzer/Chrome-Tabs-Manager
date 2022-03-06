@@ -41,7 +41,7 @@ header #main-buttons button{
 }
 
 #dynamic-buttons{
-  background: gray;
+  background: rgba(0,0,0,.2);
   padding: 2px 5px;
   box-sizing: border-box;
   border-radius: 20px;
@@ -50,7 +50,7 @@ header #main-buttons button{
   justify-content: flex-end;
 }
 
-header #dynamic-buttons button{
+header #dynamic-buttons #group-tabs-btn{
   height: 20px;
   width: 20px;
   border: none;
@@ -59,6 +59,25 @@ header #dynamic-buttons button{
   background-size: contain;
 }
 
+header #dynamic-buttons #group-tabs-btn.ungroup-tabs{
+  background: url("assets/ungroup_tabs_btn2.png") no-repeat;
+  background-size: contain;
+}
+
+header #dynamic-buttons #change-favourites-display-grid{
+  height: 20px;
+  width: 20px;
+  border: none;
+  transition: all .3s;
+  background: url("assets/grid.png") no-repeat;
+  background-size: contain;
+  display: none;
+}
+
+header #dynamic-buttons #change-favourites-display-grid.grid{
+  background: url("assets/ungroup_tabs_btn.png") no-repeat;
+  background-size: contain;
+}
 header button:hover{
   cursor: pointer;
   transform: scale(1.2);
