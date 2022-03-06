@@ -69,6 +69,10 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tab.addEventListener("dragstart", () => hangleUngroupedTabDragstart(tab));
     tab.addEventListener("dragend", (e) => handleUngroupedTabDragEnd(e, tab, hostTab));
 
+    tab.onclick = () => {
+        chrome.tabs.update(hostTab.id, { selected: true });
+    }
+
     if (hostTab.active) {
         tab.classList.add("selected-tab")
     }
@@ -81,10 +85,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     let tabTitle = document.createElement("span");
     tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
-    tabTitle.onclick = () => {
-        chrome.tabs.update(hostTab.id, { selected: true });
-    }
-
+    
     let tabButtons = document.createElement("div");
 
     if (hostTab.audible) {
@@ -127,13 +128,19 @@ function buildSingleUngroupedTab(hostTab, windowId){
         addToFavouritesButton.classList.add("favourite-tab");
     }   
 
-    addToFavouritesButton.onclick = () => handleAddToFavouriteBtnClick(hostTab);
+    addToFavouritesButton.onclick = (e) => {
+        e.stopPropagation();
+        handleAddToFavouriteBtnClick(hostTab);
+    }
     //DRY END..............
 
     let closeTabButton = document.createElement("button");
     closeTabButton.classList.add("close-btn")
     
-    closeTabButton.onclick = () => closeTab(hostTab.id, null, windowId, false)
+    closeTabButton.onclick = (e) => {
+        e.stopPropagation();
+        closeTab(hostTab.id, null, windowId, false)
+    }
 
     tabInfo.appendChild(tabFavIcon)
     tabInfo.appendChild(tabTitle)
@@ -357,7 +364,9 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
     tab.id = hostTab.id;
-
+    tab.onclick = () => {
+        chrome.tabs.update(hostTab.id, { selected: true });
+    }
     if (hostTab.active) {
         tab.classList.add("selected-tab")
     }
@@ -368,10 +377,6 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.addEventListener("dragend", (e) => handleGroupedTabDragend(tab, e, host, hostTab))
 
     let tabTitle = document.createElement("span");
-    tabTitle.onclick = () => {
-        chrome.tabs.update(hostTab.id, { selected: true });
-    }
-
     tabTitle.innerHTML = hostTab.title.length > 32 ? hostTab.title.substring(0, 29) + " ..." : hostTab.title;
 
     let tabButtons = document.createElement("div");
@@ -424,13 +429,19 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         addToFavouritesButton.classList.add("favourite-tab");
     }   
 
-    addToFavouritesButton.onclick = () => handleAddToFavouriteBtnClick(hostTab);
+    addToFavouritesButton.onclick = (e) => {
+        e.stopPropagation();
+        handleAddToFavouriteBtnClick(hostTab);
+    }
     //DRY END.............
 
     let closeTabButton = document.createElement("button");
     closeTabButton.classList.add("close-btn")
     
-    closeTabButton.onclick = () => closeTab(hostTab.id, host, windowId)
+    closeTabButton.onclick = (e) => {
+        e.stopPropagation();
+        closeTab(hostTab.id, host, windowId)
+    }
 
     tabButtons.appendChild(addToFavouritesButton)
     tabButtons.appendChild(closeTabButton)
@@ -533,7 +544,7 @@ function handleGroupedTabDragend(tab, e, host, hostTab){
             dragOverHostList.appendChild(hostItemCopy);
 
             let hostTabs = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs; 
-            
+
             hostItemCopy.addEventListener("dragstart", () => handleHostItemDragstart(hostItemCopy))
             hostItemCopy.addEventListener("dragend", () => handleHostItmDragend(host, hostItemCopy, hostTabs))
         }
@@ -1003,12 +1014,12 @@ searchInput.addEventListener("focus", () => {
     }
 
     //pokaż no results gdy nie ma wyników
-    if(allHosts.length == document.getElementsByClassName("outer-list-item display-none").length){
-      document.getElementById("no-results-info").style.display = "block";
-    }
-    else{
-      document.getElementById("no-results-info").style.display = "none";
-    }
+    // if(allHosts.length == document.getElementsByClassName("outer-list-item display-none").length){
+    //   document.getElementById("no-results-info").style.display = "block";
+    // }
+    // else{
+    //   document.getElementById("no-results-info").style.display = "none";
+    // }
 
     //zmniejsz liczbę wybranych po search
     let activeVisibleTabs = document.querySelectorAll(".inner-list-item.active:not(.display-none)");
