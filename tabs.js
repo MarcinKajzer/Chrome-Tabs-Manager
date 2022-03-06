@@ -84,6 +84,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tabFavIcon.src = hostTab.favIcon != null && hostTab.favIcon != "" ? hostTab.favIcon : "assets/default_favicon.png";
 
     let tabTitle = document.createElement("span");
+    tabTitle.classList.add("selectable");
     tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
     
     let tabButtons = document.createElement("div");
@@ -1112,7 +1113,7 @@ function createMultiselect(){
         let uniqueTabs = 0;
 
         for(let tab of activeVisibleTabs){
-            let tabInfo = Object.values(groupedTabs).find(x => x.find(y => y.id == tab.id) != null).find(z => z.id == tab.id);
+            let tabInfo = ungroupedWindows.find(x => x.tabs.find(y => y.id == tab.id) != null).tabs.find(z => z.id == tab.id);
             
             let ob = new Object();
             ob.favIcon = tabInfo.favIcon;

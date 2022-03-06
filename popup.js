@@ -62,9 +62,9 @@ chrome.windows.getAll({}, windows => {
     buildGroups();
     buildFavourites();
   
-    initializeHostsSelectables();
+    //initializeHostsSelectables();
     initializeGroupsSelectable();
-    createMultiselect();    
+    createMultiselect();   
   })
 })
 
@@ -328,6 +328,8 @@ groupTabsBtn.addEventListener("click", () => {
     grouped = false;
     groupTabsBtn.classList.remove("ungroup-tabs")
     groupTabsBtn.title = "Group tabs."
+    colapseAllHostsBtn.disabled = true;
+    expandAllHostsBtn.disabled = true;
   }
   else{
     groupUngroupedTabs();
@@ -335,7 +337,10 @@ groupTabsBtn.addEventListener("click", () => {
     grouped = true;
     groupTabsBtn.classList.add("ungroup-tabs")
     groupTabsBtn.title = "Ungroup tabs."
+    colapseAllHostsBtn.disabled = false;
+    expandAllHostsBtn.disabled = false;
   }
+  initializeHostsSelectables();
 })
 
 
@@ -353,11 +358,8 @@ groupTabsBtn.addEventListener("click", () => {
 
 //9. Unselect jednocześnie hosta i tabów
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
-//72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
 
-//82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
-
-
+//87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
 
 //59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
 
@@ -434,9 +436,12 @@ groupTabsBtn.addEventListener("click", () => {
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
+//72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki. <- 
 //74. Taki sam w 2 różnych oknach = to samo id !!!
 //77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 //79. Update kolekcji po przeniesieniu do innego okna
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
 //81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
+//82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
 //83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
+//88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
