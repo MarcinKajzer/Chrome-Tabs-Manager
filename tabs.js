@@ -187,11 +187,18 @@ function handleUngroupedTabDragEnd(e, tab, hostTab){
     let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
     chrome.tabs.move(parseInt(tab.id), {windowId: targetWindowId, index: index});
 
-    ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.push(hostTab);
+    if(targetWindowId != parentWindowId){
+        ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.splice(index, 0, hostTab)
 
-    ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs = 
-    ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs
-                    .filter(y => y.id != hostTab.id)
+        ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs = 
+        ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs
+                        .filter(y => y.id != hostTab.id)
+    }
+    else{
+        let indexOfElement = ungroupedWindows.filter(x => x.windowId == targetWindowId)[0].tabs.indexOf(hostTab);
+        let elem = ungroupedWindows.filter(x => x.windowId == targetWindowId)[0].tabs.splice(indexOfElement, 1)
+        ungroupedWindows.filter(x => x.windowId == targetWindowId)[0].tabs.splice(index, 0, elem[0])
+    }
 }
 
 function handleAddToFavouriteBtnClick(hostTab){
@@ -291,9 +298,6 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         if(expandedHosts.filter(x => x == host + window.windowId).length > 0){
             hostCheckbox.checked = true;
         }
-        // chrome.storage.sync.get(host, function (result) {
-        //     hostCheckbox.checked = Object.values(result)[0];
-        // });
 
         let hostLabel = document.createElement("label");
         hostLabel.classList.add("inner-list-checkbox-label");

@@ -345,7 +345,7 @@ groupTabsBtn.addEventListener("click", () => {
 //66. Wykrywanie zmiany tytułu strony 
 //71. Przypinanie kart
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
-//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej
+//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej ?????????
 
 
 
@@ -355,9 +355,8 @@ groupTabsBtn.addEventListener("click", () => {
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki.
 
-//81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
 //82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
-//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
+
 
 
 //59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
@@ -439,3 +438,5 @@ groupTabsBtn.addEventListener("click", () => {
 //77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 //79. Update kolekcji po przeniesieniu do innego okna
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
+//81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
+//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
