@@ -62,9 +62,10 @@ chrome.windows.getAll({}, windows => {
     buildGroups();
     buildFavourites();
   
-    //initializeHostsSelectables();
     initializeGroupsSelectable();
     createMultiselect();   
+
+    initializeUngroupedTabsSelectables();
   })
 })
 
@@ -246,7 +247,7 @@ function handleSelectedCounterClick(className){
     currentTab.classList.remove(className, "grouped");
     let currentHostTabsList = currentTab.parentNode;
     
-    if(currentHostTabsList.getElementsByClassName(className).length == 0){
+    if(grouped && currentHostTabsList.getElementsByClassName(className).length == 0){
       currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className, "grouped");
     }
   }
@@ -330,6 +331,9 @@ groupTabsBtn.addEventListener("click", () => {
     groupTabsBtn.title = "Group tabs."
     colapseAllHostsBtn.disabled = true;
     expandAllHostsBtn.disabled = true;
+
+    initializeUngroupedTabsSelectables(); // czy na pewno tworzyć za każdym razem nowy obiekt ??
+    grSel.disable();
   }
   else{
     groupUngroupedTabs();
@@ -339,8 +343,10 @@ groupTabsBtn.addEventListener("click", () => {
     groupTabsBtn.title = "Ungroup tabs."
     colapseAllHostsBtn.disabled = false;
     expandAllHostsBtn.disabled = false;
+
+    initializeGroupedTabsSelectables();
+    ungrSel.disable();
   }
-  initializeHostsSelectables();
 })
 
 
@@ -349,8 +355,6 @@ groupTabsBtn.addEventListener("click", () => {
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
 //71. Przypinanie kart
-//73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
-//85. Przejście na 2 kolekcje grouped/ungrouped zamiast jednej ?????????
 
 
 
@@ -380,6 +384,7 @@ groupTabsBtn.addEventListener("click", () => {
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
 //84. Zmiana animacji
 //86. Wyszukiwanie po hoście w niezgrupowanych listach
+//88. Import/export ustawień/ulubionych/grup.
 
 
 
@@ -437,6 +442,7 @@ groupTabsBtn.addEventListener("click", () => {
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki. <- 
+//73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //74. Taki sam w 2 różnych oknach = to samo id !!!
 //77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 //79. Update kolekcji po przeniesieniu do innego okna

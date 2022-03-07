@@ -61,7 +61,7 @@ function buildSingleUngroupedWindow(window, index){
 function buildSingleUngroupedTab(hostTab, windowId){
     
     let tab = document.createElement("li");
-    tab.classList.add("inner-list-item", "ungrouped")
+    tab.classList.add("inner-list-item", "ungrouped", "selectable")
     tab.draggable = true;
     tab.id = hostTab.id;
 
@@ -84,7 +84,6 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tabFavIcon.src = hostTab.favIcon != null && hostTab.favIcon != "" ? hostTab.favIcon : "assets/default_favicon.png";
 
     let tabTitle = document.createElement("span");
-    tabTitle.classList.add("selectable");
     tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
     
     let tabButtons = document.createElement("div");
@@ -815,9 +814,10 @@ function buildWindowContainer(index, window){
     return windowContainer;
 }
 
+let grSel;
 
-function initializeHostsSelectables() {
-    new Selectables({
+function initializeGroupedTabsSelectables() {
+    grSel = new Selectables({
         elements: '.selectable',
         zone: '#all-windows',
         selectedClass: 'active',
@@ -909,6 +909,64 @@ function initializeHostsSelectables() {
     });
 }
 
+let ungrSel;
+
+function initializeUngroupedTabsSelectables() {
+    ungrSel = new Selectables({
+        elements: '.selectable',
+        zone: '#all-windows',
+        selectedClass: 'active',
+        key: "ctrlKey",
+
+        start: () => {
+            showDuplicates = false;
+
+            let yellow = document.getElementsByClassName("yellow");
+            while(yellow.length > 0){
+                yellow[0].classList.remove("yellow")
+            }
+            showDuplicatesBtn.innerText = "Show duplicates"
+            selectedTabsCounter.classList.remove("duplicates");
+            hideSelectedCounter();
+            
+            showDuplicatesBtn.disabled = true;
+        },
+        onSelect: (e) => {
+            if (groupCreating) {
+                e.classList.add("grouped");
+            }
+        },
+        onDeselect: (e) => {
+            e.classList.remove("grouped");
+        },
+        stop: () => {
+
+            let activeTabs = document.getElementsByClassName("selectable active");
+
+            if (activeTabs.length == 0) {
+
+                groupCreating = false;
+                searchInput.parentNode.classList.remove("group-name");
+
+                showDuplicatesBtn.disabled = false;
+                hideSelectedCounter();
+                disableTabsButtons();
+            }
+            else {
+                if (!groupCreating) {
+                    enableTabsButtons();
+                }
+
+                selectedTabsCounter.style.visibility = "visible"
+                selectedTabsCounter.style.opacity = "1"
+                selectedTabsCounter.querySelector("span").innerText = activeTabs.length;
+            }
+
+        }
+    });
+}
+
+
 //..............................................................
 //................BUTTONS AND INPUT ACTIONS.....................
 //..............................................................
@@ -956,7 +1014,7 @@ createGroupBtn.onclick = () => {
 }
 
 selectedTabsCounter.addEventListener("click", () => {
-
+    console.log(groupCreating)
     if(groupCreating){
         selectedTabsCounter.classList.remove("group-creation");
         resetGroupNameInput();
