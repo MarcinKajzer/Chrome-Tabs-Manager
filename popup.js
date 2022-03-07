@@ -125,6 +125,7 @@ function groupUngroupedTabs(){
     ob.hosts = groupedTabs;
     ob.windowId = window.windowId;
     ob.focused = window.focused;
+    ob.pinned = window.pinned;
 
     groupedWindows.push(ob);
   }
@@ -324,6 +325,7 @@ grouped = false;
 groupTabsBtn = document.getElementById("group-tabs-btn")
 groupTabsBtn.addEventListener("click", () => {
   hostsContainer.innerHTML = "";
+  pinnedWindowsContainer.innerHTML = ""
   if(grouped){
     buildAllUngroupedWindows();
     grouped = false;
@@ -358,14 +360,8 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
+
 //Fix:
-
-//9. Unselect jednocześnie hosta i tabów
-//68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
-
-//87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
-
-//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
 
 
 //Opcjonalne lub  na koniec: 
@@ -385,6 +381,10 @@ groupTabsBtn.addEventListener("click", () => {
 //84. Zmiana animacji
 //86. Wyszukiwanie po hoście w niezgrupowanych listach
 //88. Import/export ustawień/ulubionych/grup.
+
+
+//9. Unselect jednocześnie hosta i tabów
+//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
 
 
 
@@ -439,6 +439,7 @@ groupTabsBtn.addEventListener("click", () => {
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
+//68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki. <- 
@@ -450,4 +451,7 @@ groupTabsBtn.addEventListener("click", () => {
 //81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
 //82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
 //83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
+//87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
 //88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
+//89. Prawy klik na karte powoduje zniknięcie countera ???
+//90. FLaga pinned dla okna.

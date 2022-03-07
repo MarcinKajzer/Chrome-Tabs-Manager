@@ -155,7 +155,7 @@ function buildSingleGroup(group){
   favIcon.style.background = colors.filter(x => x.name == group.color)[0].code;
  
   let groupName = document.createElement("span");
-  groupName.innerHTML = group.name.length > 30 ? group.name.substring(0, 30) + " ..." : group.name;
+  groupName.innerHTML = group.name.length > 30 ? group.name.substring(0, 27) + " ..." : group.name;
 
   let groupButtons = document.createElement("div");
 
@@ -244,7 +244,7 @@ function buildSingleGroupTab(groupName, groupTab) {
   tabFavIcon.src = groupTab.favIcon != null && groupTab.favIcon != "" ? groupTab.favIcon : "assets/default_favicon.png";
 
   let tabTitle = document.createElement("span");
-  tabTitle.innerHTML = groupTab.title.length > 28 ? groupTab.title.substring(0, 25) + " ..." : groupTab.title;
+  tabTitle.innerHTML = groupTab.title.length > 26 ? groupTab.title.substring(0, 23) + " ..." : groupTab.title;
   tabTitle.onclick = () => {
     chrome.tabs.create({ url: groupTab.url })
   }

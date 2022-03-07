@@ -55,7 +55,12 @@ function buildSingleUngroupedWindow(window, index){
         windowList.appendChild(buildSingleUngroupedTab(tab, window.windowId))
     }
 
-    hostsContainer.appendChild(windowContainer)
+    if(window.pinned){
+        pinnedWindowsContainer.appendChild(windowContainer);
+    }
+    else{
+        hostsContainer.appendChild(windowContainer);
+    }
 }
 
 function buildSingleUngroupedTab(hostTab, windowId){
@@ -366,7 +371,13 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
 
         hostItem.appendChild(hostTabsList);
         windowList.appendChild(hostItem);
-        hostsContainer.appendChild(windowContainer)
+
+        if(window.pinned){
+            pinnedWindowsContainer.appendChild(windowContainer);
+        }
+        else{
+            hostsContainer.appendChild(windowContainer);
+        }
     }
 }
 
@@ -767,7 +778,13 @@ function buildWindowContainer(index, window){
     let buttonsWrapper = document.createElement("div")
 
     let pinWindowBtn = document.createElement("button")
-    pinWindowBtn.innerText = "Pin"
+    if(window.pinned){
+        pinWindowBtn.innerText = "Unpin"
+    }
+    else{
+        pinWindowBtn.innerText = "Pin"
+    }
+    
     pinWindowBtn.classList.add("pin-btn")
     pinWindowBtn.onclick = () => {
 
@@ -778,6 +795,8 @@ function buildWindowContainer(index, window){
     
             pinnedWindowsContainer.appendChild(windowContainer)
             pinWindowBtn.innerText = "Unpin"
+
+            ungroupedWindows.filter(x => x.windowId == window.windowId)[0].pinned = true;
         }
         else{
             hostsContainer.appendChild(windowContainer);
@@ -788,6 +807,8 @@ function buildWindowContainer(index, window){
                 document.querySelector("#app").style.width = "350px";
                 document.querySelector("main").style.width = "1400px";
             }
+
+            ungroupedWindows.filter(x => x.windowId == window.windowId)[0].pinned = false;
         }
     }
 
@@ -827,14 +848,17 @@ function initializeGroupedTabsSelectables() {
             showDuplicates = false;
 
             let yellow = document.getElementsByClassName("yellow");
+
+            if(yellow.length > 0){
+                selectedTabsCounter.querySelector("span").innerText = 0;
+            }
+
             while(yellow.length > 0){
                 yellow[0].classList.remove("yellow")
             }
             showDuplicatesBtn.innerText = "Show duplicates"
             selectedTabsCounter.classList.remove("duplicates");
-            hideSelectedCounter();
             
-
             showDuplicatesBtn.disabled = true;
         },
         onSelect: (e) => {
@@ -922,12 +946,16 @@ function initializeUngroupedTabsSelectables() {
             showDuplicates = false;
 
             let yellow = document.getElementsByClassName("yellow");
+
+            if(yellow.length > 0){
+                selectedTabsCounter.querySelector("span").innerText = 0;
+            }
+
             while(yellow.length > 0){
                 yellow[0].classList.remove("yellow")
             }
             showDuplicatesBtn.innerText = "Show duplicates"
             selectedTabsCounter.classList.remove("duplicates");
-            hideSelectedCounter();
             
             showDuplicatesBtn.disabled = true;
         },
