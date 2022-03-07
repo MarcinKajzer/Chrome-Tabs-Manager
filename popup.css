@@ -78,7 +78,18 @@ header #dynamic-buttons #change-favourites-display-grid.grid{
   background: url("assets/ungroup_tabs_btn.png") no-repeat;
   background-size: contain;
 }
-header button:hover{
+
+header #dynamic-buttons #donate-btn{
+  height: 20px;
+  width: 20px;
+  border: none;
+  transition: all .3s;
+  background: url("assets/donate.png") no-repeat;
+  background-size: contain;
+  margin: 0 3px;
+}
+
+header button:hover, header a:hover{
   cursor: pointer;
   transform: scale(1.2);
 }
