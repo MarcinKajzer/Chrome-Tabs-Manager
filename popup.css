@@ -373,19 +373,33 @@ nav{
   background: url(assets/favourite_white.png) no-repeat;
   background-size: contain;
   transform: translateY(2px);
+  margin-left: 5px;
 }
 
-.add-to-favourites-btn:hover{
+.pin-tab-btn{  
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  transition: 0.2s;
+  cursor: pointer;
+  border:none;
+  background: url(assets/pin_tab_btn.png) no-repeat;
+  background-size: contain;
+  transform: translateY(2px);
+}
+
+.add-to-favourites-btn:hover, .pin-tab-btn:hover, .close-btn:hover{
   transform: scale(1.4);
+}
+
+.unpin-tab{
+  background: url(assets/unpin_tab_btn.png) no-repeat;
+  background-size: contain;
 }
 
 .favourite-tab{
   background: url(assets/favourite_filled.png) no-repeat;
   background-size: contain;
-}
-
-.close-btn:hover{
-  transform: scale(1.4);
 }
 
 .mute-btn{

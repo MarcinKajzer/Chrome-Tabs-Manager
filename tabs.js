@@ -119,6 +119,36 @@ function buildSingleUngroupedTab(hostTab, windowId){
     }
 
     //DRY..............
+
+    let pinTabBtn = document.createElement("button");
+    pinTabBtn.classList.add("pin-tab-btn");
+
+    if(hostTab.pinned){
+        pinTabBtn.classList.add("unpin-tab");
+    }
+
+    pinTabBtn.onclick = (e) => {
+        e.stopPropagation();
+        chrome.tabs.get(hostTab.id, (t) => {
+            let pinned = !t.pinned;
+            chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
+                if(pinned){
+                    tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index]);
+                    pinTabBtn.classList.add("unpin-tab")
+                }
+                else{
+                    tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index+1])
+                    pinTabBtn.classList.remove("unpin-tab")
+                }
+
+                //DRY - zmiana kolejności elementu - osobna funkcji
+                let indexOfElement = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
+                let elem = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1)
+                ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+            })
+        })
+    }
+
     let addToFavouritesButton = document.createElement("button");
     addToFavouritesButton.classList.add("add-to-favourites-btn")
     addToFavouritesButton.classList.add("duplicate_" + hostTab.duplicateNumber )
@@ -150,6 +180,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tabInfo.appendChild(tabFavIcon)
     tabInfo.appendChild(tabTitle)
 
+    tabButtons.appendChild(pinTabBtn)
     tabButtons.appendChild(addToFavouritesButton)
     tabButtons.appendChild(closeTabButton)
 
@@ -399,7 +430,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.addEventListener("dragend", (e) => handleGroupedTabDragend(tab, e, host, hostTab))
 
     let tabTitle = document.createElement("span");
-    tabTitle.innerHTML = hostTab.title.length > 32 ? hostTab.title.substring(0, 29) + " ..." : hostTab.title;
+    tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
 
     let tabButtons = document.createElement("div");
 
@@ -437,6 +468,35 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     }
 
     //DRY..............
+
+    let pinTabBtn = document.createElement("button");
+    pinTabBtn.classList.add("pin-tab-btn");
+
+    if(hostTab.pinned){
+        pinTabBtn.classList.add("unpin-tab");
+    }
+
+    pinTabBtn.onclick = (e) => {
+        e.stopPropagation();
+        chrome.tabs.get(hostTab.id, (t) => {
+            let pinned = !t.pinned;
+            chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
+                if(pinned){
+                    pinTabBtn.classList.add("unpin-tab")
+                }
+                else{
+                    pinTabBtn.classList.remove("unpin-tab")
+                }
+
+                //DRY - zmiana kolejności elementu - osobna funkcji
+                let indexOfElement = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
+                let elem = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1)
+                ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+            })
+        })
+    }
+
+
     let addToFavouritesButton = document.createElement("button");
     addToFavouritesButton.classList.add("add-to-favourites-btn")
     addToFavouritesButton.classList.add("duplicate_" + hostTab.duplicateNumber )
@@ -465,6 +525,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         closeTab(hostTab.id, host, windowId)
     }
 
+    tabButtons.appendChild(pinTabBtn)
     tabButtons.appendChild(addToFavouritesButton)
     tabButtons.appendChild(closeTabButton)
 

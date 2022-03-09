@@ -94,7 +94,8 @@ function groupUngroupedTabs(){
         muted: tab.muted,
         url: tab.url,
         duplicateNumber: tab.duplicateNumber,
-        host: tab.host
+        host: tab.host,
+        pinned: tab.pinned
       }
 
       if(groupedTabs[tab.host] == undefined){
@@ -157,7 +158,8 @@ function mapAllOpenTabs(tabs){
       muted: tab.mutedInfo.muted,
       url: url,
       duplicateNumber: duplicateNumber,
-      host: domain.hostname
+      host: domain.hostname,
+      pinned: tab.pinned
     }
 
     let duplicates = t.filter(x => x.url == tab.url);
@@ -354,14 +356,17 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
+
+
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
-//71. Przypinanie kart
-
+//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
 
 
 //Fix:
+//91. Show duplicates znika po kliknięciu na okno ???
+//92. Selectable w pinned kartach
 
 
 //Opcjonalne lub  na koniec: 
@@ -442,6 +447,7 @@ groupTabsBtn.addEventListener("click", () => {
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.
+//71. Przypinanie kart
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki. <- 
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //74. Taki sam w 2 różnych oknach = to samo id !!!
