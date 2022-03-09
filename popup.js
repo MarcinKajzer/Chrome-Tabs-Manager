@@ -2,7 +2,16 @@ let groupedTabs = new Object();
 let groups = [];
 let favourities = [];
 
+//Być może przeniść gdzieś indziej ??? BACKGROUND ? 
+chrome.tabs.onUpdated.addListener(
+  (tabId) => {
 
+    chrome.tabs.get(tabId, tab => {
+      let targetTabSpan = document.getElementById(tabId).querySelector("span");
+      targetTabSpan.innerText = tab.title.length > 29 ? tab.title.substring(0, 26) + " ..." : tab.title;
+    })
+  }
+)
 
 let groupCreating = false;
 let showDuplicates = false;
