@@ -3,12 +3,15 @@ let groups = [];
 let favourities = [];
 
 //Być może przeniść gdzieś indziej ??? BACKGROUND ? 
+//Być może wprowadzić jakieś warunki, żeby nie zawsze odbywał się update
 chrome.tabs.onUpdated.addListener(
   (tabId) => {
-
     chrome.tabs.get(tabId, tab => {
-      let targetTabSpan = document.getElementById(tabId).querySelector("span");
-      targetTabSpan.innerText = tab.title.length > 29 ? tab.title.substring(0, 26) + " ..." : tab.title;
+      let targerTab = document.getElementById(tabId);
+      if(targerTab != null){
+        targerTab.querySelector("span").innerText = tab.title.length > 29 ? tab.title.substring(0, 26) + " ..." : tab.title;
+        ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.id == tab.id)[0].title = tab.title;
+      }
     })
   }
 )
@@ -119,16 +122,8 @@ function groupUngroupedTabs(){
         })
       }
       else{
-        let duplicates = groupedTabs[tab.host].filter(x => x.url == tab.url);
-
-        if(duplicates.length > 0){
-          ob.duplicateNumber = duplicates[0].duplicateNumber;
-        }
-        
         groupedTabs[tab.host].push(ob)
       }
-
-      duplicateNumber++;
     }
 
     let ob = new Object();
@@ -368,26 +363,25 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
-//66. Wykrywanie zmiany tytułu strony 
-//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
+//95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
+//96. Zabronić przeciągania karty przed przypięte karty.
 
 
 
 //Fix:
 //91. Show duplicates znika po kliknięciu na okno ???
 //92. Selectable w pinned kartach
-
+//94. Cose duplicates - usunąć karty z kolekcji.
 
 //Opcjonalne lub  na koniec: 
 
 //24. Strona/sekcja do personalizacji wtyczki.
 //44. Przeciąganie kart między grupami
 //47. Dodawanie nowej grupy w sekcji grup
-//58. Dodanie loadrea gdy strony się dopiero ładują i późniejsze uzupełnienie favIcony ???? - raczej zbędne
+
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 //64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków
 //67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
-//57. Zmiana wysokości body w zależoności o ilości wyświetlanych elementów - lub dla całej wtyczki stała wysokość.
 //76. Zmienić ikonki ???
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
 //75. Licznik grup i ulubionych przy ikonce
@@ -395,6 +389,7 @@ groupTabsBtn.addEventListener("click", () => {
 //84. Zmiana animacji
 //86. Wyszukiwanie po hoście w niezgrupowanych listach
 //88. Import/export ustawień/ulubionych/grup.
+//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
 
 //9. Unselect jednocześnie hosta i tabów
@@ -450,9 +445,11 @@ groupTabsBtn.addEventListener("click", () => {
 //53. Funkcja "zamknij duplikaty" + "Pokaż duplikaty"
 //55. Usuwanie ulubionych z poziomu sekcji
 //56. Czasem podczas przenoszenia elementów pojawia się błąd "Uncaught NotFoundError: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node."
+//58. Dodanie loadrea gdy strony się dopiero ładują i późniejsze uzupełnienie favIcony ???? - raczej zbędne
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
+//66. Wykrywanie zmiany tytułu strony 
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //69. Wyświetlanie wszystkich okien
 //70. Rozgrupowanie kart wg hosta - możliwość zmiany kolejności kart/grupowanie/przeciąganie między oknami itp.

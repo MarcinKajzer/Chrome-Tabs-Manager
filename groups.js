@@ -344,9 +344,50 @@ function deleteTab(groupName, tabId) {
 }
 
 function openAllTabsOfGroup(tabs) {
+  console.log(tabs)
   for (let t of tabs) {
-    chrome.tabs.create({ url: t.url, active: false })
+    chrome.tabs.create({ url: t.url, active: false }, tab => {
+     
+      //być może do osobnej funkcji - DRY
+      
+      let ob = {
+        id: tab.id,
+        favIcon: t.favIcon,
+        title: tab.title,
+        audible: tab.audible,
+        active: tab.active,
+        muted: tab.mutedInfo.muted,
+        duplicateNumber: duplicateNumber,
+        url: t.url,
+        host: t.host,
+        pinned: tab.pinned
+      }
+
+      let duplicates = ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(x => x.url == t.url);
+
+      if(duplicates.length > 0){
+        ob.duplicateNumber = duplicates[0].duplicateNumber;
+      }
+
+      //filtrowanie za każdą kartą ??? 
+      ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.push(ob);
+      
+      duplicateNumber++;
+    })
   }
+
+  //opóźnienie wykonania 
+  chrome.tabs.query({currentWindow: true}, () => {
+    hostsContainer.innerHTML = "";
+    pinnedWindowsContainer.innerHTML = ""
+    if(grouped){
+      groupUngroupedTabs();
+      buildAllGroupedWindows();
+    }
+    else{
+      buildAllUngroupedWindows();
+    }
+  })
 }
 
 async function openAllTabsOfGroupAndMerge(tabs, groupName, color){

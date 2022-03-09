@@ -1266,6 +1266,7 @@ function createMultiselect(){
             ob.favIcon = tabInfo.favIcon;
             ob.title = tabInfo.title;
             ob.url = tabInfo.url;
+            ob.host = tabInfo.host;
             ob.id = String(tabInfo.id) + Date.now();
 
             newTabs.push(ob);
