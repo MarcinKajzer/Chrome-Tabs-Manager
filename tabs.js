@@ -960,10 +960,6 @@ function initializeGroupedTabsSelectables() {
             while(yellow.length > 0){
                 yellow[0].classList.remove("yellow")
             }
-            showDuplicatesBtn.innerText = "Show duplicates"
-            selectedTabsCounter.classList.remove("duplicates");
-            
-            showDuplicatesBtn.disabled = true;
         },
         onSelect: (e) => {
             if (groupCreating) {
@@ -1035,6 +1031,11 @@ function initializeGroupedTabsSelectables() {
                 selectedTabsCounter.style.visibility = "visible"
                 selectedTabsCounter.style.opacity = "1"
                 selectedTabsCounter.querySelector("span").innerText = activeTabs.length;
+
+                showDuplicatesBtn.innerText = "Show duplicates"
+                selectedTabsCounter.classList.remove("duplicates");
+                
+                showDuplicatesBtn.disabled = true;
             }
 
         }
@@ -1062,10 +1063,6 @@ function initializeUngroupedTabsSelectables() {
             while(yellow.length > 0){
                 yellow[0].classList.remove("yellow")
             }
-            showDuplicatesBtn.innerText = "Show duplicates"
-            selectedTabsCounter.classList.remove("duplicates");
-            
-            showDuplicatesBtn.disabled = true;
         },
         onSelect: (e) => {
             if (groupCreating) {
@@ -1098,6 +1095,11 @@ function initializeUngroupedTabsSelectables() {
                 selectedTabsCounter.style.visibility = "visible"
                 selectedTabsCounter.style.opacity = "1"
                 selectedTabsCounter.querySelector("span").innerText = activeTabs.length;
+
+                showDuplicatesBtn.innerText = "Show duplicates"
+                selectedTabsCounter.classList.remove("duplicates");
+                
+                showDuplicatesBtn.disabled = true;
             }
 
             for(let tab of activeTabs){
