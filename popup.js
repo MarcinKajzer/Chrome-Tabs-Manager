@@ -362,7 +362,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
-//65. Dodanie karty do listy po otwarciu grupy lub ulubionych
+
 
 
 
@@ -457,6 +457,7 @@ groupTabsBtn.addEventListener("click", () => {
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
+//65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
 //69. Wyświetlanie wszystkich okien
@@ -475,3 +476,4 @@ groupTabsBtn.addEventListener("click", () => {
 //88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
 //89. Prawy klik na karte powoduje zniknięcie countera ???
 //90. FLaga pinned dla okna.
+//100. Zamknięcie okna ma usuwać je z kolekcji

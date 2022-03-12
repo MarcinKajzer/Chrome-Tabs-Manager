@@ -877,6 +877,7 @@ function buildWindowContainer(index, window){
     closeWindowBtn.classList.add("close-btn")
     closeWindowBtn.onclick = () => {
         chrome.windows.remove(window.windowId);
+        ungroupedWindows = ungroupedWindows.filter(x => x.windowId != window.windowId);
         windowContainer.remove();
     }
 
