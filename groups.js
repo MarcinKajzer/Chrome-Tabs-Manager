@@ -247,7 +247,6 @@ function buildSingleGroupTab(groupName, groupTab) {
   tabTitle.innerHTML = groupTab.title.length > 26 ? groupTab.title.substring(0, 23) + " ..." : groupTab.title;
   tabTitle.onclick = () => {
     openTabsOfGroup([groupTab], true)
-    //chrome.tabs.create({ url: groupTab.url })
   }
   tabTitle.addEventListener("mousedown", (e) => {
     e.preventDefault();
@@ -353,9 +352,15 @@ function updateWindowsContainers(){
     if(grouped){
       groupUngroupedTabs();
       buildAllGroupedWindows();
+
+      grSel.disable();
+      initializeGroupedTabsSelectables();
     }
     else{
       buildAllUngroupedWindows();
+
+      ungrSel.disable();
+      initializeUngroupedTabsSelectables(); // czy na pewno tworzyć za każdym razem nowy obiekt ??
     }
   })
 }
@@ -434,8 +439,6 @@ function openInNewWindow(tabs, incognito = false){
       updateWindowsContainers()
     }
   })
-
-  //chrome.windows.create({url: url, incognito: incognito})
 }
 
 function initializeGroupsSelectable() {

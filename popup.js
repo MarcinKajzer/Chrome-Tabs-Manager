@@ -378,7 +378,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Fix:
 
 
-//91. Show duplicates znika po kliknięciu na okno ???
+
 
 //92. Selectable w pinned kartach
 
@@ -486,6 +486,7 @@ groupTabsBtn.addEventListener("click", () => {
 //89. Prawy klik na karte powoduje zniknięcie countera ???
 //95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
 //90. FLaga pinned dla okna.
+//91. Show duplicates znika po kliknięciu na okno ???
 //94. Close duplicates - usunąć karty z kolekcji.
 //97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
