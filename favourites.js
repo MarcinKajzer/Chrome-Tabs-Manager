@@ -57,11 +57,11 @@ function createSingeFavourite(fav){
 
     dragable.draggable = true;
     dragable.onclick = () => {
-        chrome.tabs.create({url: fav.url})
+        openTabsOfGroup([fav], true)
     }
     dragable.addEventListener("mousedown", (e) => {
         if(e.button == 1){
-            chrome.tabs.create({active: false, url: fav.url })
+            openTabsOfGroup([fav], false)
         }
     })
 
