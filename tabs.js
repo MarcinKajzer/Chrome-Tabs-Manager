@@ -387,7 +387,7 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
 
         let closeAllTabsOfHostBtn = document.createElement("button");
         closeAllTabsOfHostBtn.classList.add("close-btn")
-        closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(hostTabs, host, window.windowId)
+        closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(host, window.windowId)
 
         if (hostTabs.some(x => x.audible) || hostTabs.some(x => x.muted)) {
             let muteAllTabsOfHostBtn = document.createElement("button");
@@ -795,8 +795,9 @@ function hideGroupSelection(){
     selectedGroups = [];
 }
 
-function closeAllTabsOfHost(hostTabs, host, windowId) {
-    for (let tab of hostTabs) {
+function closeAllTabsOfHost(host, windowId) {
+
+    for (let tab of ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host == host)) {
         chrome.tabs.remove(tab.id);
     }
 
@@ -825,6 +826,10 @@ function closeTab(tabId, host, windowId, deleteHost = true) {
             ungroupedWindows = ungroupedWindows.filter(x => x.windowId != windowId);
         }
     }, 200);
+
+    console.log(ungroupedWindows);
+    groupUngroupedTabs();
+    console.log(groupedWindows)
 }
 
 function deleteHostElementFromDOM(host, windowId) {
