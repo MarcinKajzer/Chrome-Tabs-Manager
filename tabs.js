@@ -927,12 +927,18 @@ function buildWindowContainer(index, window){
     windowList.classList.add("window-list", "outer-list")
     windowList.id = "window_" + window.windowId;
 
+    let noResultInfo = document.createElement("p")
+    noResultInfo.classList.add("no-results-info")
+    noResultInfo.innerText = "No results."
+
     buttonsWrapper.appendChild(pinWindowBtn)
     buttonsWrapper.appendChild(closeWindowBtn)
     
     windowLabel.appendChild(windowName);
     windowLabel.appendChild(buttonsWrapper);
     
+    windowList.appendChild(noResultInfo)
+
     windowContainer.appendChild(windowLabel);
     windowContainer.appendChild(windowList);
 
@@ -1243,13 +1249,16 @@ searchInput.addEventListener("focus", () => {
           }
     }
     
-    //pokaż no results gdy nie ma wyników
-    // if(allHosts.length == document.getElementsByClassName("outer-list-item display-none").length){
-    //   document.getElementById("no-results-info").style.display = "block";
-    // }
-    // else{
-    //   document.getElementById("no-results-info").style.display = "none";
-    // }
+    let noResultsInfos = document.getElementsByClassName("no-results-info")
+    
+    for(let noRes of noResultsInfos){
+        if(noRes.parentNode.querySelector("li:not(.display-none)") == null){
+            noRes.style.display = "block";
+        }
+        else{
+            noRes.style.display = "none";
+        }
+    }
 
     //zmniejsz liczbę wybranych po search
     let activeVisibleTabs = document.querySelectorAll(".inner-list-item.active:not(.display-none)");

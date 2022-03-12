@@ -597,7 +597,7 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
   display: none;;
 }
 
-#no-results-info{
+.no-results-info{
   color: gray;
   text-align: center;
   padding-top: 10px;
@@ -706,7 +706,7 @@ color: green
   position: absolute;
   left: 0; 
   right: 0;
-  background: rgba(33,34,36,.9);
+  background: rgba(33,34,36,.98);
   color: white;
   border-radius: 15px;
   padding: 0 37px;

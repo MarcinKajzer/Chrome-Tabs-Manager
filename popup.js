@@ -361,7 +361,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-
+//47. Dodawanie nowej grupy w sekcji grup
 
 
 
@@ -370,6 +370,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Do zrobienia:
 
 //96. Zabronić przeciągania karty przed przypięte karty.
+//102. Wyszukiwanie w grupach.
 
 
 
@@ -378,8 +379,6 @@ groupTabsBtn.addEventListener("click", () => {
 //Fix:
 
 //92. Selectable w pinned kartach
-
-
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 
 
@@ -387,11 +386,11 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
-//Opcjonalne lub  na koniec: 
+//Opcjonalne: 
 
 //24. Strona/sekcja do personalizacji wtyczki.
 //44. Przeciąganie kart między grupami
-//47. Dodawanie nowej grupy w sekcji grup
+
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 //64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
@@ -404,8 +403,14 @@ groupTabsBtn.addEventListener("click", () => {
 //93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
 
+
+
+//Na koniec:
+
 //9. Unselect jednocześnie hosta i tabów
 //59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
+
+
 
 
 
@@ -488,3 +493,4 @@ groupTabsBtn.addEventListener("click", () => {
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
 //100. Zamknięcie okna ma usuwać je z kolekcji.
 //101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
+//103. Brak wyników napis w każdym oknie.
