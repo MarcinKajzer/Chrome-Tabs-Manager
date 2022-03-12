@@ -363,15 +363,23 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
+
+
+
 //95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
 //96. Zabronić przeciągania karty przed przypięte karty.
-
+//98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
 
 
 //Fix:
 //91. Show duplicates znika po kliknięciu na okno ???
 //92. Selectable w pinned kartach
 //94. Cose duplicates - usunąć karty z kolekcji.
+//97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
+//99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
+
+
+
 
 //Opcjonalne lub  na koniec: 
 

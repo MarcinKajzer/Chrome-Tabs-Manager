@@ -171,7 +171,7 @@ function buildSingleGroup(group){
   openAllGroupInNewWindowBtn.classList.add("open-all-in-new-window-btn")
   openAllGroupInNewWindowBtn.onclick = (e) => {
     e.stopPropagation();
-    openAllTabsOfGroupInNewWindow(group.tabs)
+    openInNewWindow(group.tabs)
   }
   openAllGroupInNewWindowBtn.title = "Open in new window."
 
@@ -179,7 +179,7 @@ function buildSingleGroup(group){
   openAllGroupBtn.classList.add("open-all-btn")
   openAllGroupBtn.onclick = (e) => {
     e.stopPropagation();
-    openAllTabsOfGroup(group.tabs)
+    openTabsOfGroup(group.tabs, false)
   }
   openAllGroupBtn.title = "Open in this window."
 
@@ -195,7 +195,7 @@ function buildSingleGroup(group){
   openAllGroupIncognitoBtn.classList.add("open-all-incognito-btn")
   openAllGroupIncognitoBtn.onclick = (e) => {
     e.stopPropagation();
-    openAllTabsOfGroupInNewWindow(group.tabs, true)
+    openInNewWindow(group.tabs, true)
   }
   openAllGroupIncognitoBtn.title = "Open in incognito window."
 
@@ -246,12 +246,13 @@ function buildSingleGroupTab(groupName, groupTab) {
   let tabTitle = document.createElement("span");
   tabTitle.innerHTML = groupTab.title.length > 26 ? groupTab.title.substring(0, 23) + " ..." : groupTab.title;
   tabTitle.onclick = () => {
-    chrome.tabs.create({ url: groupTab.url })
+    openTabsOfGroup([groupTab], true)
+    //chrome.tabs.create({ url: groupTab.url })
   }
   tabTitle.addEventListener("mousedown", (e) => {
     e.preventDefault();
     if(e.button == 1){
-      chrome.tabs.create({active: false, url: groupTab.url })
+      openTabsOfGroup([groupTab], false)
     }
   })
 
@@ -264,12 +265,12 @@ function buildSingleGroupTab(groupName, groupTab) {
 
   let openInNewWindowBtn = document.createElement("button");
   openInNewWindowBtn.classList.add("open-all-in-new-window-btn")
-  openInNewWindowBtn.onclick = () => openInNewWindow(groupTab.url)
+  openInNewWindowBtn.onclick = () => openInNewWindow([groupTab])
   openInNewWindowBtn.title = "Open in new window."
 
   let openIncognitoBtn = document.createElement("button");
   openIncognitoBtn.classList.add("open-all-incognito-btn")
-  openIncognitoBtn.onclick = () => openInNewWindow(groupTab.url, true)
+  openIncognitoBtn.onclick = () => openInNewWindow([groupTab], true)
   openIncognitoBtn.title = "Open in incognito window."
 
 
@@ -343,39 +344,8 @@ function deleteTab(groupName, tabId) {
 
 }
 
-function openAllTabsOfGroup(tabs) {
-  console.log(tabs)
-  for (let t of tabs) {
-    chrome.tabs.create({ url: t.url, active: false }, tab => {
-     
-      //być może do osobnej funkcji - DRY
-      
-      let ob = {
-        id: tab.id,
-        favIcon: t.favIcon,
-        title: tab.title,
-        audible: tab.audible,
-        active: tab.active,
-        muted: tab.mutedInfo.muted,
-        duplicateNumber: duplicateNumber,
-        url: t.url,
-        host: t.host,
-        pinned: tab.pinned
-      }
-
-      let duplicates = ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(x => x.url == t.url);
-
-      if(duplicates.length > 0){
-        ob.duplicateNumber = duplicates[0].duplicateNumber;
-      }
-
-      //filtrowanie za każdą kartą ??? 
-      ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.push(ob);
-      
-      duplicateNumber++;
-    })
-  }
-
+function updateWindowsContainers(){
+  
   //opóźnienie wykonania 
   chrome.tabs.query({currentWindow: true}, () => {
     hostsContainer.innerHTML = "";
@@ -390,25 +360,82 @@ function openAllTabsOfGroup(tabs) {
   })
 }
 
+function createSingleTabFromGroupTab(groupTab, createdTab){
+  let ob = {
+    id: createdTab.id,
+    favIcon: groupTab.favIcon,
+    title: createdTab.title,
+    audible: createdTab.audible,
+    active: createdTab.active,
+    muted: createdTab.mutedInfo.muted,
+    duplicateNumber: duplicateNumber,
+    url: groupTab.url,
+    host: groupTab.host,
+    pinned: createdTab.pinned
+  }
+
+  let duplicates = ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.filter(x => x.url == groupTab.url);
+
+  if(duplicates.length > 0){
+    ob.duplicateNumber = duplicates[0].duplicateNumber;
+  }
+
+  ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.push(ob);
+  
+  duplicateNumber++;
+}
+
+function openTabsOfGroup(tabs, active) {
+  
+  for (let t of tabs) {
+    chrome.tabs.create({ url: t.url, active: active }, tab => {
+      createSingleTabFromGroupTab(t, tab)
+    })
+  }
+
+  updateWindowsContainers();
+}
+
 async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
   
   let tabsToGroup = [];
 
-  for(let tab of tabs){
-    tabsToGroup.push(await chrome.tabs.create({url: tab.url, active: false}))
+  for(let t of tabs){
+
+    let tab = await chrome.tabs.create({url: t.url, active: false})
+    createSingleTabFromGroupTab(t, tab);
+    tabsToGroup.push(tab);
   }
   
+  updateWindowsContainers()
+
   chrome.tabs.group({ tabIds: tabsToGroup.map(x => x.id)}, (groupId) => {
     chrome.tabGroups.update(groupId, { collapsed: false, title: groupName, color: color });
   });
 }
 
-function openAllTabsOfGroupInNewWindow(tabs, incognito = false){
-  chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito})
-}
+function openInNewWindow(tabs, incognito = false){
 
-function openInNewWindow(url, incognito = false){
-  chrome.windows.create({url: url, incognito: incognito})
+  chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito, focused: false}, window => {
+    
+    if(!incognito){
+
+      let o = new Object();
+      o.windowId = window.id;
+      o.focused = window.focused;
+      o.tabs = [];
+
+      ungroupedWindows.push(o)
+      
+      for(let t of window.tabs){
+        createSingleTabFromGroupTab(tabs.filter(x => x.url == t.url || x.url == t.pendingUrl)[0], t);
+      }
+
+      updateWindowsContainers()
+    }
+  })
+
+  //chrome.windows.create({url: url, incognito: incognito})
 }
 
 function initializeGroupsSelectable() {
