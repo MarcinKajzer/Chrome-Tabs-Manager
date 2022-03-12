@@ -361,9 +361,9 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
-//95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
+
 //96. Zabronić przeciągania karty przed przypięte karty.
-//98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
+
 
 
 //Fix:
@@ -372,7 +372,7 @@ groupTabsBtn.addEventListener("click", () => {
 //94. Cose duplicates - usunąć karty z kolekcji.
 //97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
-
+//101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
 
 
 
@@ -470,5 +470,7 @@ groupTabsBtn.addEventListener("click", () => {
 //87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
 //88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
 //89. Prawy klik na karte powoduje zniknięcie countera ???
+//95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
 //90. FLaga pinned dla okna.
+//98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
 //100. Zamknięcie okna ma usuwać je z kolekcji

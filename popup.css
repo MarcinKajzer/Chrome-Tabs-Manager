@@ -535,13 +535,10 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
   display: inline-block;
 }
 
-li input:checked ~ ul .removed{
-  height: 0;
-  padding: 0;
+.inner-list-item.removed{
+  height: 0 !important;
+  padding: 0 !important;
 }
-
-
-
 
 .remove-host{
   transform: translateX(-130%);

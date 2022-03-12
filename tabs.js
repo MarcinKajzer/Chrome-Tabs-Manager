@@ -805,12 +805,17 @@ function closeTab(tabId, host, windowId, deleteHost = true) {
 
     let currentTab = document.getElementById(tabId);
     let currentHostTabsList = currentTab.parentNode;
+    let windowList = currentTab.closest(".window-list")
 
     currentTab.classList.add("removed");
     setTimeout(() => {
         currentTab.remove();
         if (currentHostTabsList.childNodes.length == 0 && deleteHost) {
             deleteHostElementFromDOM(host, windowId);
+        }
+        if(currentHostTabsList.childNodes.length == 0){
+            currentHostTabsList.parentNode.remove();
+            ungroupedWindows = ungroupedWindows.filter(x => x.windowId != windowId);
         }
     }, 200);
 }
