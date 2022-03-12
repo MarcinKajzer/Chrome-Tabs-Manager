@@ -220,6 +220,7 @@ function handleUngroupedTabDragover(e, tab){
 }
 
 function hangleUngroupedTabDragstart(tab){
+
     tab.classList.add("dragging-ungrouped-tab");
     parentWindowId = parseInt(tab.parentNode.id.substring(7))
 }
@@ -731,7 +732,13 @@ function closeDuplicates(e){
             elements[0].closest(".inner-list-item").classList.remove("yellow")
 
             for(let i = 1; i<elements.length; i++){
-                chrome.tabs.remove(parseInt(elements[i].closest(".inner-list-item").id));
+
+                let tabId = parseInt(elements[i].closest(".inner-list-item").id)
+
+                let windowId = parseInt(elements[i].closest(".window-list").id.substring(7));
+                ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.id != tabId);
+
+                chrome.tabs.remove(tabId);
                 elements[i].closest(".inner-list-item").classList.add("removed");
             }
 
@@ -813,7 +820,7 @@ function closeTab(tabId, host, windowId, deleteHost = true) {
         if (currentHostTabsList.childNodes.length == 0 && deleteHost) {
             deleteHostElementFromDOM(host, windowId);
         }
-        if(currentHostTabsList.childNodes.length == 0){
+        if(windowList.childNodes.length == 0){
             currentHostTabsList.parentNode.remove();
             ungroupedWindows = ungroupedWindows.filter(x => x.windowId != windowId);
         }
@@ -1124,7 +1131,7 @@ closeSelectedBtn.onclick = () => {
 
     for(let tab of activeVisibleTabs){
         chrome.tabs.remove(parseInt(tab.id));
-        deleteTabElementFromDOM("active", tab.id)
+        deleteTabElementFromDOM("active", tab.id);
     }
 
     hideSelectedCounter();
