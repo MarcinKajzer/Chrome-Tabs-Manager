@@ -107,7 +107,8 @@ function groupUngroupedTabs(){
         url: tab.url,
         duplicateNumber: tab.duplicateNumber,
         host: tab.host,
-        pinned: tab.pinned
+        pinned: tab.pinned,
+        selected: tab.selected
       }
 
       if(groupedTabs[tab.host] == undefined){
@@ -359,12 +360,6 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //Do zrobienia:
-
-
-
-
-
-
 
 //95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
 //96. Zabronić przeciągania karty przed przypięte karty.

@@ -67,6 +67,14 @@ function buildSingleUngroupedTab(hostTab, windowId){
     
     let tab = document.createElement("li");
     tab.classList.add("inner-list-item", "ungrouped", "selectable")
+
+    if(hostTab.selected){
+        tab.classList.add("active")
+        if(groupCreating){
+            tab.classList.add("grouped")
+        }
+    }
+
     tab.draggable = true;
     tab.id = hostTab.id;
 
@@ -338,6 +346,15 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         let hostLabel = document.createElement("label");
         hostLabel.classList.add("inner-list-checkbox-label");
         hostLabel.classList.add("selectable");
+
+        if(hostTabs.filter(x => x.selected).length > 0){
+            hostLabel.classList.add("active");
+
+            if(groupCreating){
+                hostLabel.classList.add("grouped")
+            }
+        }
+
         hostLabel.htmlFor = host + window.windowId;
 
         if (hostTabs.some(x => x.active)) {
@@ -416,6 +433,14 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     let tab = document.createElement("li");
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
+
+    if(hostTab.selected){
+        tab.classList.add("active");
+        if(groupCreating){
+            tab.classList.add("grouped")
+        }
+    }
+
     tab.id = hostTab.id;
     tab.onclick = () => {
         chrome.tabs.update(hostTab.id, { selected: true });
@@ -961,6 +986,8 @@ function initializeGroupedTabsSelectables() {
                 }
             }
 
+            unactiveAllTabsInColection();
+
             let activeTabs = document.getElementsByClassName("inner-list-item active");
 
             for (let i = 0; i < activeTabs.length; i++) {
@@ -970,6 +997,8 @@ function initializeGroupedTabsSelectables() {
                 if (!label.classList.contains("active")) {
                     label.classList.add("active")
                 }
+
+                ungroupedWindows.filter(x => x.tabs.filter(y => y.id == activeTabs[i].id).length > 0)[0].tabs.filter(z => z.id == activeTabs[i].id)[0].selected = true;
             }
 
             if (activeTabs.length == 0) {
@@ -1031,8 +1060,10 @@ function initializeUngroupedTabsSelectables() {
         },
         stop: () => {
 
-            let activeTabs = document.getElementsByClassName("selectable active");
+            unactiveAllTabsInColection();
 
+            let activeTabs = document.getElementsByClassName("selectable active");
+            
             if (activeTabs.length == 0) {
 
                 groupCreating = false;
@@ -1052,10 +1083,20 @@ function initializeUngroupedTabsSelectables() {
                 selectedTabsCounter.querySelector("span").innerText = activeTabs.length;
             }
 
+            for(let tab of activeTabs){
+                ungroupedWindows.filter(x => x.tabs.filter(y => y.id == tab.id).length > 0)[0].tabs.filter(z => z.id == tab.id)[0].selected = true;
+            }
         }
     });
 }
 
+function unactiveAllTabsInColection(){
+    for(let win of ungroupedWindows){
+        for(let tab of win.tabs){
+            tab.selected = false;
+        }
+    }
+}
 
 //..............................................................
 //................BUTTONS AND INPUT ACTIONS.....................
@@ -1104,7 +1145,7 @@ createGroupBtn.onclick = () => {
 }
 
 selectedTabsCounter.addEventListener("click", () => {
-    console.log(groupCreating)
+    
     if(groupCreating){
         selectedTabsCounter.classList.remove("group-creation");
         resetGroupNameInput();
@@ -1127,6 +1168,8 @@ selectedTabsCounter.addEventListener("click", () => {
         hideSelectedCounter();
         disableTabsButtons();
         showDuplicatesBtn.disabled = false;
+
+        unactiveAllTabsInColection();
     }
 
     removeGroupedClassFromAllElements();
