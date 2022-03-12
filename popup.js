@@ -377,14 +377,11 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Fix:
 
-
-
-
 //92. Selectable w pinned kartach
 
 
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
-//101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
+
 
 
 
@@ -397,14 +394,12 @@ groupTabsBtn.addEventListener("click", () => {
 //47. Dodawanie nowej grupy w sekcji grup
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
-//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków
-//67. Zmiana głównego koloru - aktywna sekcja/karta na stonowany niebieski.
+//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
 //76. Zmienić ikonki ???
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
-//75. Licznik grup i ulubionych przy ikonce
-//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów
-//84. Zmiana animacji
-//86. Wyszukiwanie po hoście w niezgrupowanych listach
+//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów.
+
+
 //88. Import/export ustawień/ulubionych/grup.
 //93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
@@ -480,7 +475,8 @@ groupTabsBtn.addEventListener("click", () => {
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
 //81. Expand i collapes -> tylko jeden wpis do stora MAX_WRITE_OPERATION_PER_MINUTE
 //82. Zamknięcie okna. gdy są pogrupowane -> po powrocie do niepogrupowanych znów jest widoczne
-//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem
+//83. Gdy zamieniam tylko kolejność kart wewnątrz okna -> znikają one z listy, co widać po przełączeniu na widok pogrupowany i z powrotem.
+//86. Wyszukiwanie po hoście w niezgrupowanych listach
 //87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
 //88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
 //89. Prawy klik na karte powoduje zniknięcie countera ???
@@ -490,4 +486,5 @@ groupTabsBtn.addEventListener("click", () => {
 //94. Close duplicates - usunąć karty z kolekcji.
 //97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
-//100. Zamknięcie okna ma usuwać je z kolekcji
+//100. Zamknięcie okna ma usuwać je z kolekcji.
+//101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.

@@ -1205,11 +1205,17 @@ searchInput.addEventListener("focus", () => {
   
   searchInput.addEventListener("input", (e) => {
 
-    let allTabs = document.getElementsByClassName("inner-list-item")
-    let allHosts = document.getElementsByClassName("outer-list-item");
+    let allTabs = document.querySelectorAll(".window-container  .inner-list-item")
+    let allHosts = document.querySelectorAll(".window-container .outer-list-item");
 
+    console.log(ungroupedWindows)
+    
     for(let i = 0; i < allTabs.length; i++){
-      if(!allTabs[i].innerText.toLowerCase().includes(e.target.value.toLowerCase())){
+      if(!allTabs[i].innerText.toLowerCase().includes(e.target.value.toLowerCase()) &&
+         !ungroupedWindows.filter(x => x.tabs.filter(y => y.id == allTabs[i].id).length > 0)[0].tabs
+                          .filter(z => z.id == allTabs[i].id)[0].host.toLowerCase()
+                          .includes(e.target.value.toLowerCase())
+         ){
         allTabs[i].classList.add("display-none")
       }
       else{
@@ -1217,24 +1223,26 @@ searchInput.addEventListener("focus", () => {
       }
     }
 
-    for(let i = 0; i < allHosts.length; i++){
+    if(grouped){
+        for(let i = 0; i < allHosts.length; i++){
 
-      if(allHosts[i].querySelector(".inner-list-checkbox-label").innerText.toLowerCase().includes(e.target.value.toLowerCase())){
-        allHosts[i].classList.remove("display-none");
-
-        let tabs = allHosts[i].getElementsByClassName("inner-list-item");
-        for(let j = 0; j < tabs.length; j++){
-          tabs[j].classList.remove("display-none");
-        }
-      }
-      else if(allHosts[i].getElementsByClassName("inner-list-item").length == allHosts[i].getElementsByClassName("display-none").length){
-        allHosts[i].classList.add("display-none");
-      }
-      else{
-        allHosts[i].classList.remove("display-none");
-      }
+            if(allHosts[i].querySelector(".inner-list-checkbox-label").innerText.toLowerCase().includes(e.target.value.toLowerCase())){
+              allHosts[i].classList.remove("display-none");
+      
+              let tabs = allHosts[i].getElementsByClassName("inner-list-item");
+              for(let j = 0; j < tabs.length; j++){
+                tabs[j].classList.remove("display-none");
+              }
+            }
+            else if(allHosts[i].getElementsByClassName("inner-list-item").length == allHosts[i].getElementsByClassName("display-none").length){
+              allHosts[i].classList.add("display-none");
+            }
+            else{
+              allHosts[i].classList.remove("display-none");
+            }
+          }
     }
-
+    
     //pokaż no results gdy nie ma wyników
     // if(allHosts.length == document.getElementsByClassName("outer-list-item display-none").length){
     //   document.getElementById("no-results-info").style.display = "block";
