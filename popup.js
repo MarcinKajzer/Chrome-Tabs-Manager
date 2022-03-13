@@ -168,9 +168,13 @@ function mapAllOpenTabs(tabs){
       pinned: tab.pinned
     }
 
+    let duplcatesInAllWindows = ungroupedWindows.filter(x => x.tabs.filter(y => y.url == tab.url).length > 0)
     let duplicates = t.filter(x => x.url == tab.url);
 
-    if(duplicates.length > 0){
+    if(duplcatesInAllWindows.length > 0){
+      ob.duplicateNumber = duplcatesInAllWindows[0].tabs.filter(x => x.url == tab.url)[0].duplicateNumber;
+    }
+    else if(duplicates.length > 0){
       ob.duplicateNumber = duplicates[0].duplicateNumber;
     }
 
@@ -369,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-
+//104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
 
 
 
@@ -378,7 +382,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Do zrobienia:
 
 //96. Zabronić przeciągania karty przed przypięte karty.
-//105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
+
 
 
 
@@ -387,7 +391,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //92. Selectable w pinned kartach
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
-//104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
+
 
 
 
@@ -503,4 +507,5 @@ groupTabsBtn.addEventListener("click", () => {
 //101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
 //102. Wyszukiwanie w grupach.
 //103. Brak wyników napis w każdym oknie.
+//105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
