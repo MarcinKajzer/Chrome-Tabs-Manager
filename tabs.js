@@ -75,6 +75,10 @@ function buildSingleUngroupedTab(hostTab, windowId){
         }
     }
 
+    if(hostTab.shownDuplicate){
+        tab.classList.add("yellow");
+    }
+
     tab.draggable = true;
     tab.id = hostTab.id;
 
@@ -356,6 +360,10 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
             }
         }
 
+        if(hostTabs.filter(x => x.shownDuplicate).length > 0){
+            hostLabel.classList.add("yellow");
+        }
+
         hostLabel.htmlFor = host + window.windowId;
 
         if (hostTabs.some(x => x.active)) {
@@ -440,6 +448,10 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         if(groupCreating){
             tab.classList.add("grouped")
         }
+    }
+
+    if(hostTab.shownDuplicate){
+        tab.classList.add("yellow");
     }
 
     tab.id = hostTab.id;
@@ -702,9 +714,12 @@ function showDuplicate(e){
             for(let el of elements){
                 el.closest(".inner-list-item").classList.add("yellow")
                 numberOfDuplicates++;
+
+                let tabId = el.closest(".inner-list-item").id;
+                ungroupedWindows.filter(x => x.tabs.filter(y => y.id == tabId).length > 0)[0].tabs.filter(z => z.id == tabId)[0].shownDuplicate = true;
             }
             numberOfDuplicates--
-            console.log(elements[0].closest(".inner-list-item"))
+
             try{
                 elements[0].closest(".outer-list-item").classList.add("yellow")
             }
@@ -718,6 +733,8 @@ function showDuplicate(e){
             showDuplicates = true;
         }
     }
+
+    console.log(ungroupedWindows)
 }
 
 function closeDuplicates(e){
@@ -955,17 +972,7 @@ function initializeGroupedTabsSelectables() {
         key: "ctrlKey",
 
         start: () => {
-            showDuplicates = false;
-
-            let yellow = document.getElementsByClassName("yellow");
-
-            if(yellow.length > 0){
-                selectedTabsCounter.querySelector("span").innerText = 0;
-            }
-
-            while(yellow.length > 0){
-                yellow[0].classList.remove("yellow")
-            }
+            
         },
         onSelect: (e) => {
             if (groupCreating) {
@@ -990,6 +997,20 @@ function initializeGroupedTabsSelectables() {
             e.classList.remove("grouped");
         },
         stop: () => {
+
+            //wyłączenie duplikatów
+            showDuplicates = false;
+
+            let yellow = document.getElementsByClassName("yellow");
+
+            if(yellow.length > 0){
+                selectedTabsCounter.querySelector("span").innerText = 0;
+            }
+
+            while(yellow.length > 0){
+                yellow[0].classList.remove("yellow")
+            }
+            //..........
 
             let activeHosts = document.getElementsByClassName("inner-list-checkbox-label active");
 
@@ -1058,6 +1079,19 @@ function initializeUngroupedTabsSelectables() {
         key: "ctrlKey",
 
         start: () => {
+            
+        },
+        onSelect: (e) => {
+            if (groupCreating) {
+                e.classList.add("grouped");
+            }
+        },
+        onDeselect: (e) => {
+            e.classList.remove("grouped");
+        },
+        stop: () => {
+
+            //Wyłączenie duplkatów
             showDuplicates = false;
 
             let yellow = document.getElementsByClassName("yellow");
@@ -1069,16 +1103,7 @@ function initializeUngroupedTabsSelectables() {
             while(yellow.length > 0){
                 yellow[0].classList.remove("yellow")
             }
-        },
-        onSelect: (e) => {
-            if (groupCreating) {
-                e.classList.add("grouped");
-            }
-        },
-        onDeselect: (e) => {
-            e.classList.remove("grouped");
-        },
-        stop: () => {
+            //............
 
             unactiveAllTabsInColection();
 
@@ -1119,6 +1144,14 @@ function unactiveAllTabsInColection(){
     for(let win of ungroupedWindows){
         for(let tab of win.tabs){
             tab.selected = false;
+        }
+    }
+}
+
+function hideDuplicatesInCollection(){
+    for(let win of ungroupedWindows){
+        for(let tab of win.tabs){
+            tab.shownDuplicate = false;
         }
     }
 }
@@ -1187,6 +1220,8 @@ selectedTabsCounter.addEventListener("click", () => {
         selectedTabsCounter.classList.remove("duplicates");
         hideSelectedCounter(selectedTabsCounter);
         showDuplicates = false;
+
+        hideDuplicatesInCollection();
     }
     else{
         handleSelectedCounterClick("active");

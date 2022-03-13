@@ -108,7 +108,8 @@ function groupUngroupedTabs(){
         duplicateNumber: tab.duplicateNumber,
         host: tab.host,
         pinned: tab.pinned,
-        selected: tab.selected
+        selected: tab.selected,
+        shownDuplicate: tab.shownDuplicate
       }
 
       if(groupedTabs[tab.host] == undefined){
