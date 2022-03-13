@@ -265,6 +265,13 @@ function buildSingleGroup(group){
 
   let groupButtons = document.createElement("div");
 
+  let noConstatnButtons = document.createElement("div");
+  noConstatnButtons.classList.add("no-constant-buttons");
+
+  if(group.tabs.length == 0){
+    noConstatnButtons.style.display = "none";
+  }
+
   let editGroupBtn = document.createElement("button");
   editGroupBtn.classList.add("edit-group-btn")
   editGroupBtn.onclick = (e) => {
@@ -310,16 +317,26 @@ function buildSingleGroup(group){
   deleteGroupBtn.onclick = () => deleteGroup(group.name)
   deleteGroupBtn.title = "Remove group."
 
+  let groupIsEmptyInfo = document.createElement("p");
+  groupIsEmptyInfo.classList.add("group-is-empty-info");
+  groupIsEmptyInfo.innerText = "Empty";
+  if(group.tabs.length != 0){
+    groupIsEmptyInfo.style.display = "none";
+  }
+
   groupInfo.appendChild(favIcon);
   groupInfo.appendChild(groupName);
 
-  groupButtons.appendChild(editGroupBtn);
-  groupButtons.appendChild(openAllGroupBtn);
-  groupButtons.appendChild(openAllGroupAndMergeBtn);
-  groupButtons.appendChild(openAllGroupInNewWindowBtn);
-  groupButtons.appendChild(openAllGroupIncognitoBtn);
-  groupButtons.appendChild(deleteGroupBtn);
+  noConstatnButtons.appendChild(openAllGroupBtn);
+  noConstatnButtons.appendChild(openAllGroupAndMergeBtn);
+  noConstatnButtons.appendChild(openAllGroupInNewWindowBtn);
+  noConstatnButtons.appendChild(openAllGroupIncognitoBtn)
 
+  groupButtons.appendChild(groupIsEmptyInfo)
+  groupButtons.appendChild(editGroupBtn);
+  groupButtons.appendChild(noConstatnButtons)
+  groupButtons.appendChild(deleteGroupBtn);
+  
   groupLabel.appendChild(groupInfo);
   groupLabel.appendChild(groupButtons);
 
@@ -370,19 +387,27 @@ function buildSingleGroupTab(groupName, groupTab) {
 
   let deleteTabBtn = document.createElement("button");
   deleteTabBtn.classList.add("delete-btn")
-  deleteTabBtn.onclick = () => deleteTab(groupName, groupTab.id)
+  deleteTabBtn.onclick = (e) => {
+    e.stopPropagation();
+    deleteTab(groupName, groupTab.id)
+  }
   deleteTabBtn.title = "Remove tab."
 
   let openInNewWindowBtn = document.createElement("button");
   openInNewWindowBtn.classList.add("open-all-in-new-window-btn")
-  openInNewWindowBtn.onclick = () => openInNewWindow([groupTab])
+  openInNewWindowBtn.onclick = (e) => {
+    e.stopPropagation();
+    openInNewWindow([groupTab])
+  }
   openInNewWindowBtn.title = "Open in new window."
 
   let openIncognitoBtn = document.createElement("button");
   openIncognitoBtn.classList.add("open-all-incognito-btn")
-  openIncognitoBtn.onclick = () => openInNewWindow([groupTab], true)
+  openIncognitoBtn.onclick = (e) => {
+    e.stopPropagation();
+    openInNewWindow([groupTab], true)
+  }
   openIncognitoBtn.title = "Open in incognito window."
-
 
   tabButtons.appendChild(openInNewWindowBtn)
   tabButtons.appendChild(openIncognitoBtn)
@@ -485,7 +510,10 @@ function deleteTab(groupName, tabId) {
   
   let counterText;
   if(numberOfTabsInGroup == 0  || numberOfTabsInGroup == undefined){
-    counterText = "empty"
+    counterText = "empty";
+    
+    document.getElementById("group_" + groupName).querySelector(".no-constant-buttons").style.display = "none"
+    document.getElementById("group_" + groupName).querySelector(".group-is-empty-info").style.display = "block";
   }
   else if(numberOfTabsInGroup == 1){
     counterText = "1 page"
@@ -558,42 +586,46 @@ function openTabsOfGroup(tabs, active) {
 
 async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
   
-  let tabsToGroup = [];
+  if(tabs.length > 0){
+    let tabsToGroup = [];
 
-  for(let t of tabs){
-
-    let tab = await chrome.tabs.create({url: t.url, active: false})
-    createSingleTabFromGroupTab(t, tab);
-    tabsToGroup.push(tab);
-  }
+    for(let t of tabs){
   
-  updateWindowsContainers()
-
-  chrome.tabs.group({ tabIds: tabsToGroup.map(x => x.id)}, (groupId) => {
-    chrome.tabGroups.update(groupId, { collapsed: false, title: groupName, color: color });
-  });
+      let tab = await chrome.tabs.create({url: t.url, active: false})
+      createSingleTabFromGroupTab(t, tab);
+      tabsToGroup.push(tab);
+    }
+    
+    updateWindowsContainers()
+  
+    chrome.tabs.group({ tabIds: tabsToGroup.map(x => x.id)}, (groupId) => {
+      chrome.tabGroups.update(groupId, { collapsed: false, title: groupName, color: color });
+    });
+  }
 }
 
 function openInNewWindow(tabs, incognito = false){
 
-  chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito, focused: false}, window => {
+  if(tabs.length > 0){
+    chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito, focused: false}, window => {
     
-    if(!incognito){
-
-      let o = new Object();
-      o.windowId = window.id;
-      o.focused = window.focused;
-      o.tabs = [];
-
-      ungroupedWindows.push(o)
-      
-      for(let t of window.tabs){
-        createSingleTabFromGroupTab(tabs.filter(x => x.url == t.url || x.url == t.pendingUrl)[0], t);
+      if(!incognito){
+  
+        let o = new Object();
+        o.windowId = window.id;
+        o.focused = window.focused;
+        o.tabs = [];
+  
+        ungroupedWindows.push(o)
+        
+        for(let t of window.tabs){
+          createSingleTabFromGroupTab(tabs.filter(x => x.url == t.url || x.url == t.pendingUrl)[0], t);
+        }
+  
+        updateWindowsContainers()
       }
-
-      updateWindowsContainers()
-    }
-  })
+    })
+  }
 }
 
 function initializeGroupsSelectable() {

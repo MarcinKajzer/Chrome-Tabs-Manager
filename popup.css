@@ -492,6 +492,7 @@ nav{
 
 .inner-list-checkbox-label div{
   position: relative;
+  display: flex;
 }
 
 .inner-list-checkbox-label div:first-child::after{
@@ -1277,4 +1278,10 @@ transform: scale(1.2);
 
 #groups-list{
   margin-top: 50px;
+}
+
+.group-is-empty-info{
+  color: gray;
+  display: inline-block;
+  padding-right: 10px;
 }

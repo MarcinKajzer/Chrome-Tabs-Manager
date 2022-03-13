@@ -1401,6 +1401,9 @@ function createMultiselect(){
             let tabs = groups[groupIndex].tabs;
             let groupList = document.getElementById("group_" + groupName).querySelector("ul")
 
+            document.getElementById("group_" + groupName).querySelector(".no-constant-buttons").style.display = "block"
+            document.getElementById("group_" + groupName).querySelector(".group-is-empty-info").style.display = "none";
+
             for(let tab of newTabs){
                 if(tabs.findIndex(x => x.url == tab.url) == -1){
                     tabs.push(tab)

@@ -373,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-//44. Przeciąganie kart między grupami
+//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
 
 
 
@@ -382,7 +382,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
-//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
+
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
 //93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
@@ -391,8 +391,8 @@ groupTabsBtn.addEventListener("click", () => {
 //Fix:
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-
-
+//108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
+//109. Przeciąganie przypiętych kart do innego okna nie działa.
 
 
 
@@ -465,6 +465,7 @@ groupTabsBtn.addEventListener("click", () => {
 //41. Button zapisu do grup jest aktywny po przejściu do czerwonegi i z potrotem do zielonego
 //42. Grupa o podanej nazwie istnieje - czy chcesz dodać do istniejącej listy/nadpisać/zmienić nazwę ?
 //43. Rozdzielić każdą sekcję na osobny plik js.
+//44. Przeciąganie kart między grupami
 //45. Edytowanie nazwy grupy, nadanie koloru
 //46. Walidacja nazwy grupy - musi mieć długość minimum 1
 //47. Dodawanie nowej grupy w sekcji grup
