@@ -29,6 +29,30 @@ let pinnedWindowsContainer = document.getElementById("all-pinned-windows")
 let allHostsCheckboxes = hostsContainer.getElementsByClassName("inner-list-checkbox");
 let allPinedHostsCheckboxes = pinnedWindowsContainer.getElementsByClassName("inner-list-checkbox");
 
+let createNewWindowBtn = document.getElementById("create-new-window-btn")
+
+createNewWindowBtn.onclick = () => {
+    buildNewWindow();
+}
+
+//..............................................................
+//.....................BUILD NEW WINDOW.........................
+//..............................................................
+
+async function buildNewWindow(){
+    let newWindow = await chrome.windows.create({focused: false}, );
+    
+    chrome.tabs.query({windowId: newWindow.id}, (tabs) => {
+    
+        let o = new Object();
+        o.windowId = newWindow.id;
+        o.focused = newWindow.focused;
+        o.tabs = mapAllOpenTabs(tabs);
+        ungroupedWindows.push(o);
+
+        buildSingleUngroupedWindow(o, ungroupedWindows.length)
+    })
+}
 
 //..............................................................
 //...........BUILD UNGROUPED LIST OF TABS FUNCTIONS.............
@@ -116,7 +140,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
         })
 
         muteTabButton.onclick = (e) => {
-
+            e.stopPropagation();
             if (!e.target.classList.contains("muted")) {
                 chrome.tabs.update(hostTab.id, { muted: true })
                 e.target.classList.add("muted");
@@ -506,7 +530,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         })
 
         muteTabButton.onclick = (e) => {
-
+            e.stopPropagation();
             if (!e.target.classList.contains("muted")) {
                 chrome.tabs.update(hostTab.id, { muted: true })
                 e.target.classList.add("muted");
@@ -921,11 +945,9 @@ function buildWindowContainer(index, window){
     let buttonsWrapper = document.createElement("div")
 
     let pinWindowBtn = document.createElement("button")
+    pinWindowBtn.classList.add("pin-btn")
     if(window.pinned){
-        pinWindowBtn.innerText = "Unpin"
-    }
-    else{
-        pinWindowBtn.innerText = "Pin"
+        pinWindowBtn.classList.add("unpin");
     }
     
     pinWindowBtn.classList.add("pin-btn")
@@ -937,13 +959,12 @@ function buildWindowContainer(index, window){
             document.querySelector("main").style.width = "1750px";
     
             pinnedWindowsContainer.appendChild(windowContainer)
-            pinWindowBtn.innerText = "Unpin"
-
+            pinWindowBtn.classList.add("unpin")
             ungroupedWindows.filter(x => x.windowId == window.windowId)[0].pinned = true;
         }
         else{
             hostsContainer.appendChild(windowContainer);
-            pinWindowBtn.innerText = "Pin"
+            pinWindowBtn.classList.remove("unpin")
 
             if(pinnedWindowsContainer.childNodes.length == 0){
                 pinnedWindowsSection.classList.remove("shown")

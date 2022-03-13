@@ -48,15 +48,16 @@ header #main-buttons button{
   min-width: 30px;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
 }
 
 #dynamic-buttons button{
   margin: 0 3px;
+  height: 20px;
+  width: 20px;
 }
 
 header #dynamic-buttons #create-new-window-btn{
-  height: 20px;
-  width: 20px;
   border: none;
   transition: all .3s;
   background: url("assets/new_window_btn.png") no-repeat;
@@ -64,8 +65,6 @@ header #dynamic-buttons #create-new-window-btn{
 }
 
 header #dynamic-buttons #group-tabs-btn{
-  height: 20px;
-  width: 20px;
   border: none;
   transition: all .3s;
   background: url("assets/group_tabs_btn.png") no-repeat;
@@ -78,8 +77,6 @@ header #dynamic-buttons #group-tabs-btn.ungroup-tabs{
 }
 
 header #dynamic-buttons #change-favourites-display-grid{
-  height: 20px;
-  width: 20px;
   border: none;
   transition: all .3s;
   background: url("assets/grid.png") no-repeat;
@@ -93,8 +90,6 @@ header #dynamic-buttons #change-favourites-display-grid.grid{
 }
 
 header #dynamic-buttons #donate-btn{
-  height: 20px;
-  width: 20px;
   border: none;
   transition: all .3s;
   background: url("assets/donate.png") no-repeat;
@@ -146,26 +141,6 @@ header button:hover, header a:hover{
   background-size: contain;
 }
 /* Koniec headera */
-
-
-/* #selected-counter{
-  width: 70px;
-  height: 22px;
-  position: fixed;
-  background: red;
-  z-index: 100;
-  color: white;
-  font-weight: bold;
-  transform:  translate(-30px, -4px) rotate(-45deg);
-  padding: 2px;
-  display: flex;
-  visibility: hidden;
-  opacity: 0;
-  justify-content: center;
-  transition: visibility 0s, opacity 0.2s;
-} */
-
-/* Selected counter */
 
 .selected-counter{
   left: -20px;
@@ -360,46 +335,41 @@ nav{
   right: 0;
 }
 
-.close-btn{
-  height: 12px;
-  width: 12px;
+.inner-list-item button, .outer-list-item button{
+  height: 14px;
+  width: 14px;
   border-radius: 50%;
   transition: 0.2s;
   cursor: pointer;
   border:none;
+  margin-left: 5px;
+  transform: translateY(2px);
+}
+
+.close-btn{
+  border: none;
+  background: none;
+  height: 14px;
+  width: 14px;
+  margin-left: 3px;
   background: url(assets/close.png) no-repeat;
   background-size: contain;
-  transform: translateY(2px);
-  margin-left: 5px;
+  transition: transform .2s;
+  cursor: pointer;
 }
 
 .add-to-favourites-btn{  
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  transition: 0.2s;
-  cursor: pointer;
-  border:none;
   background: url(assets/favourite_white.png) no-repeat;
   background-size: contain;
-  transform: translateY(2px);
-  margin-left: 5px;
 }
 
 .pin-tab-btn{  
-  height: 12px;
-  width: 12px;
-  border-radius: 50%;
-  transition: 0.2s;
-  cursor: pointer;
-  border:none;
   background: url(assets/pin_tab_btn.png) no-repeat;
   background-size: contain;
-  transform: translateY(2px);
 }
 
 .add-to-favourites-btn:hover, .pin-tab-btn:hover, .close-btn:hover{
-  transform: scale(1.4);
+  transform: scale(1.2);
 }
 
 .unpin-tab{
@@ -415,13 +385,6 @@ nav{
 .mute-btn{
   background: url(assets/unmuted.gif) no-repeat;
   background-size: contain;
-  border-radius: 50%;
-  border: none;
-  height: 12px;
-  width: 12px;
-  transform: translateY(2px);
-  margin-right: 5px;
-  transition: 0.2s;
 }
 
 .mute-btn:hover{
@@ -620,11 +583,6 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
 .delete-btn{
   background: url(assets/trash.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 12px;
-  width: 12px;
-  margin-right: 3px;
-  transition: 0.2s;
 }
 
 
@@ -636,56 +594,26 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
 .open-all-btn{
   background: url(assets/open_tab.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 13px;
-  width: 13px;
-  transform: translateY(1px);
-  margin-right: 7px;
-  transition: 0.2s;
 }
 
 .open-all-and-merge-btn{
   background: url(assets/open_tab.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 13px;
-  width: 13px;
-  transform: translateY(1px);
-  margin-right: 7px;
-  transition: 0.2s;
 }
 
 .open-all-in-new-window-btn{
   background: url(assets/open_in_new_window.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 13px;
-  width: 13px;
-  transform: translateY(1px);
-  margin-right: 7px;
-  transition: 0.2s;
 }
 
 .open-all-incognito-btn{
   background: url(assets/incognito.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 14px;
-  width: 14px;
-  transform: translateY(1px);
-  margin-right: 7px;
-  transition: 0.2s;
 }
 
 .edit-group-btn{
   background: url(assets/edit.png) no-repeat;
   background-size: contain;
-  border: none;
-  height: 12px;
-  width: 12px;
-  transform: translateY(1px);
-  margin-right: 7px;
-  transition: 0.2s;
 }
 
 .active, .active .inner-list-checkbox-label, .selected-group, .selected-group .inner-list-checkbox-label{
@@ -1159,7 +1087,22 @@ transform: scale(1.2);
 .pin-btn{
   background: none;
   border: none;
-  color: white
+  background: url("assets/pin_tab_btn.png") no-repeat;
+  background-size: contain;
+  height: 16px;
+  width: 16px;
+  transition: transform .2s;
+  cursor: pointer;
+  transform: translateY(2px);
+}
+
+.pin-btn.unpin{
+  background: url("assets/unpin_tab_btn.png");
+  background-size: contain;
+}
+
+.pin-btn:hover{
+  transform: scale(1.2);
 }
 
 .window-label{

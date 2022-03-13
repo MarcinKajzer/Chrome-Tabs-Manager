@@ -291,7 +291,8 @@ goToTabsBtn.addEventListener("click", (e) => {
   e.target.classList.add("selected-section")
 
   changeFavouritedDisplayBtn.style.display = "none";
-  groupTabsBtn.style.display = "block"
+  groupTabsBtn.style.display = "block";
+  createNewWindowBtn.style.display = "block"
 })
 
 goToGroupsBtn.addEventListener("click", (e) => {
@@ -307,7 +308,8 @@ goToGroupsBtn.addEventListener("click", (e) => {
   e.target.classList.add("selected-section")
 
   changeFavouritedDisplayBtn.style.display = "none";
-  groupTabsBtn.style.display = "none"
+  groupTabsBtn.style.display = "none";
+  createNewWindowBtn.style.display = "none"
 })
 
 goToFavouritesBtn.addEventListener("click", (e) => {
@@ -323,6 +325,7 @@ goToFavouritesBtn.addEventListener("click", (e) => {
 
   changeFavouritedDisplayBtn.style.display = "block";
   groupTabsBtn.style.display = "none"
+  createNewWindowBtn.style.display = "none"
 })
 
 goToSettingsBtn.addEventListener("click", (e) => {
@@ -338,6 +341,7 @@ goToSettingsBtn.addEventListener("click", (e) => {
 
   changeFavouritedDisplayBtn.style.display = "none";
   groupTabsBtn.style.display = "none"
+  createNewWindowBtn.style.display = "none"
 })
 
 grouped = false;
@@ -383,8 +387,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Do zrobienia:
 
 
-//54. Opcja przenieś zaznaczone do NOWEGO okna.
-//111. Opcja otwórz nowe okno z wtyczki.
+
 //112. Kliknięcie na okno przenosi nie niego.
 //113. Zmiana ikony podczas przeciągania hostów.
 
@@ -422,7 +425,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Refactor: 
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
-//76. Zmienić ikonki 
+
 //110. Zmiana CSS
 
 
@@ -493,6 +496,7 @@ groupTabsBtn.addEventListener("click", () => {
 //72. Jeśli dodajemy zduplikowane karty do grupy - dodadzą się wszystkie - nie zostają wychwycone powtórki. <- 
 //73. Obiekt ze stanami (rozwinięte/zwinięte) pobrać ze storage tylko raz i na nim operować
 //74. Taki sam w 2 różnych oknach = to samo id !!!
+//76. Zmienić ikonki 
 //77. Klikanie na karty - trzeba kliknąć w span, żeby zadziałało - zrobić klikanie na całym li.
 //79. Update kolekcji po przeniesieniu do innego okna
 //80. Po prawej stronie w headerze opcje zależne od sekcji - dla tabów => widok pogrupowanych/rozgrupowanych kart
@@ -520,7 +524,7 @@ groupTabsBtn.addEventListener("click", () => {
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
 //108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
 //109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
-
+//111. Opcja otwórz nowe okno z wtyczki.
 
 //Nowe pomysły: 
 
