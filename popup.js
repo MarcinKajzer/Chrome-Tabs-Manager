@@ -187,17 +187,17 @@ function mapAllOpenTabs(tabs){
 //..............................................................
 
 
-function hideSelectedCounter(){
-  selectedTabsCounter.querySelector("span").innerText = ""
-  selectedTabsCounter.style.opacity = "0"
+function hideSelectedCounter(counter){
+  counter.querySelector("span").innerText = ""
+  counter.style.opacity = "0"
   setTimeout(() => {
-    selectedTabsCounter.style.visibility = "hidden"
+    counter.style.visibility = "hidden"
   }, 200)
 }
 
-function showSelectedCounter(){
-  selectedTabsCounter.style.visibility = "visible"
-  selectedTabsCounter.style.opacity = "1"
+function showSelectedCounter(counter){
+  counter.style.visibility = "visible"
+  counter.style.opacity = "1"
 }
 
 function checkAllCheckboxes(checkboxes){
@@ -255,8 +255,15 @@ function handleSelectedCounterClick(className){
     currentTab.classList.remove(className, "grouped");
     let currentHostTabsList = currentTab.parentNode;
     
-    if(grouped && currentHostTabsList.getElementsByClassName(className).length == 0){
-      currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className, "grouped");
+    if(className == "active" ){
+      if(grouped && currentHostTabsList.getElementsByClassName(className).length == 0){
+        currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className, "grouped");
+      }
+    }
+    else{
+      if(currentHostTabsList.getElementsByClassName(className).length == 0){
+        currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className, "grouped");
+      }
     }
   }
 }
@@ -362,7 +369,7 @@ groupTabsBtn.addEventListener("click", () => {
 //In progress: 
 
 
-//102. Wyszukiwanie w grupach.
+
 
 
 
@@ -380,7 +387,7 @@ groupTabsBtn.addEventListener("click", () => {
 //92. Selectable w pinned kartach
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 //104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
-//106. Odznaczenie w grupach nie odznacza nazwy grupy
+
 
 
 
@@ -400,7 +407,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //88. Import/export ustawień/ulubionych/grup.
 //93. Rozwijalne opcje w grupach ( za dużo jest ikon )
-
+//107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
 
 
 
@@ -493,4 +500,6 @@ groupTabsBtn.addEventListener("click", () => {
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
 //100. Zamknięcie okna ma usuwać je z kolekcji.
 //101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
+//102. Wyszukiwanie w grupach.
 //103. Brak wyników napis w każdym oknie.
+//106. Odznaczenie w grupach nie odznacza nazwy grupy

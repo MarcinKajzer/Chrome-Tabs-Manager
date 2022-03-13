@@ -46,6 +46,7 @@ let groupsContainer = document.getElementById("groups-list");
 let expandAllGroupsBtn = document.getElementById("expand-all-groups-btn")
 let colapseAllGroupsBtn = document.getElementById("collapse-all-groups-btn");
 
+let searchInputGroup = document.getElementById("search-input-group")
 let createGroupBtn2 = document.getElementById("create-group-btn2");
 let confirmGroupCreationBtn2 = document.getElementById("confirm-group-creation-btn2")
 let createdGroupInput2 = document.getElementById("created-name-input");
@@ -77,7 +78,7 @@ expandAllGroupsBtn.onclick = () => checkAllCheckboxes(allGroupsCheckboxes)
 colapseAllGroupsBtn.onclick = () =>uncheckAllCheckboxes(allGroupsCheckboxes)
 
 createGroupBtn2.onclick = () => {
-  document.getElementById("search-input-group").style.display = "none";
+  searchInputGroup.style.display = "none";
   document.getElementById("groups-search-header").style.display = "block"
   createGroupBtn2.disabled = true;
 }
@@ -105,7 +106,7 @@ confirmGroupCreationBtn2.onclick = (e) => {
 
   buildSingleGroup(gr);
 
-  document.getElementById("search-input-group").style.display = "block";
+  searchInputGroup.style.display = "block";
   document.getElementById("groups-search-header").style.display = "none"
   createGroupBtn2.disabled = false;
 }
@@ -125,9 +126,60 @@ createdGroupInput2.addEventListener("input", (e) => {
 })
 
 
+searchInputGroup.addEventListener("input", (e) => {
+
+  let allTabs = document.querySelectorAll("#groups-list .inner-list-item")
+  let allGroups = document.querySelectorAll("#groups-list .outer-list-item");
+
+  for(let i = 0; i < allTabs.length; i++){
+      if(!allTabs[i].innerText.toLowerCase().includes(e.target.value.toLowerCase())){
+        allTabs[i].classList.add("display-none")
+      }
+      else{
+        allTabs[i].classList.remove("display-none")
+      }
+  }
+
+  for(let i = 0; i < allGroups.length; i++){
+    if(allGroups[i].querySelector(".inner-list-checkbox-label").innerText.toLowerCase().includes(e.target.value.toLowerCase())){
+      allGroups[i].classList.remove("display-none");
+
+        let tabs = allGroups[i].getElementsByClassName("inner-list-item");
+        for(let j = 0; j < tabs.length; j++){
+        tabs[j].classList.remove("display-none");
+        }
+    }
+    else if(allGroups[i].getElementsByClassName("inner-list-item").length == allGroups[i].getElementsByClassName("display-none").length){
+      allGroups[i].classList.add("display-none");
+    }
+    else{
+      allGroups[i].classList.remove("display-none");
+    }
+  }
+
+  //zmniejsz liczbę wybranych po search
+  let activeVisibleTabs = document.querySelectorAll("#groups-list .inner-list-item.selected-group:not(.display-none)");
+  selectedGroupsCounter.querySelector("span").innerText = activeVisibleTabs.length;
+
+  if(activeVisibleTabs.length > 0){
+    selectedGroupsCounter.style.visibility = "visible"
+    selectedGroupsCounter.style.opacity = "1"
+
+    enableGroupsButtons();
+  }
+  else{
+    selectedGroupsCounter.style.opacity = "0"
+    setTimeout(() => {
+      selectedGroupsCounter.style.visibility = "hidden"
+    }, 200)
+
+    disableGroupsButtons();
+  }
+})
+
 removeSelectedBtn.onclick = () => {
 
-  let activeVisibleTabs = document.querySelectorAll(".inner-list-item.selected-group:not(.display-none)");
+  let activeVisibleTabs = document.querySelectorAll("#groups-list .inner-list-item.selected-group:not(.display-none)");
 
   for(let tab of activeVisibleTabs){
       

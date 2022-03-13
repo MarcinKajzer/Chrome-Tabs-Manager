@@ -710,7 +710,7 @@ function showDuplicate(e){
             }
             catch{}
 
-            showSelectedCounter();
+            showSelectedCounter(selectedTabsCounter);
             selectedTabsCounter.querySelector("span").innerText = numberOfDuplicates;
             selectedTabsCounter.classList.add("duplicates")
 
@@ -748,7 +748,7 @@ function closeDuplicates(e){
                 }
             }, 200);
 
-            hideSelectedCounter();
+            hideSelectedCounter(selectedTabsCounter);
             selectedTabsCounter.classList.remove("duplicates")
 
             e.target.innerText = "Show duplicates"
@@ -1026,7 +1026,7 @@ function initializeGroupedTabsSelectables() {
                 searchInput.parentNode.classList.remove("group-name");
 
                 showDuplicatesBtn.disabled = false;
-                hideSelectedCounter();
+                hideSelectedCounter(selectedTabsCounter);
                 disableTabsButtons();
             }
             else {
@@ -1090,7 +1090,7 @@ function initializeUngroupedTabsSelectables() {
                 searchInput.parentNode.classList.remove("group-name");
 
                 showDuplicatesBtn.disabled = false;
-                hideSelectedCounter();
+                hideSelectedCounter(selectedTabsCounter);
                 disableTabsButtons();
             }
             else {
@@ -1147,7 +1147,7 @@ closeSelectedBtn.onclick = () => {
         deleteTabElementFromDOM("active", tab.id);
     }
 
-    hideSelectedCounter();
+    hideSelectedCounter(selectedTabsCounter);
     disableTabsButtons();
 }
 
@@ -1185,12 +1185,12 @@ selectedTabsCounter.addEventListener("click", () => {
         }
         showDuplicatesBtn.innerText = "Show duplicates"
         selectedTabsCounter.classList.remove("duplicates");
-        hideSelectedCounter();
+        hideSelectedCounter(selectedTabsCounter);
         showDuplicates = false;
     }
     else{
         handleSelectedCounterClick("active");
-        hideSelectedCounter();
+        hideSelectedCounter(selectedTabsCounter);
         disableTabsButtons();
         showDuplicatesBtn.disabled = false;
 
@@ -1204,53 +1204,53 @@ searchInput.addEventListener("focus", () => {
     searchContainer.classList.add("active-search")
   })
 
-  searchInput.addEventListener("blur", () => {
+searchInput.addEventListener("blur", () => {
     searchContainer.classList.remove("active-search")
-  })
+})
 
   
-  searchInput.addEventListener("input", (e) => {
+searchInput.addEventListener("input", (e) => {
 
     let allTabs = document.querySelectorAll(".window-container  .inner-list-item")
     let allHosts = document.querySelectorAll(".window-container .outer-list-item");
 
     console.log(ungroupedWindows)
-    
+
     for(let i = 0; i < allTabs.length; i++){
-      if(!allTabs[i].innerText.toLowerCase().includes(e.target.value.toLowerCase()) &&
-         !ungroupedWindows.filter(x => x.tabs.filter(y => y.id == allTabs[i].id).length > 0)[0].tabs
-                          .filter(z => z.id == allTabs[i].id)[0].host.toLowerCase()
-                          .includes(e.target.value.toLowerCase())
-         ){
-        allTabs[i].classList.add("display-none")
-      }
-      else{
-        allTabs[i].classList.remove("display-none")
-      }
+        if(!allTabs[i].innerText.toLowerCase().includes(e.target.value.toLowerCase()) &&
+            !ungroupedWindows.filter(x => x.tabs.filter(y => y.id == allTabs[i].id).length > 0)[0].tabs
+                            .filter(z => z.id == allTabs[i].id)[0].host.toLowerCase()
+                            .includes(e.target.value.toLowerCase())
+            ){
+            allTabs[i].classList.add("display-none")
+        }
+        else{
+            allTabs[i].classList.remove("display-none")
+        }
     }
 
     if(grouped){
         for(let i = 0; i < allHosts.length; i++){
 
             if(allHosts[i].querySelector(".inner-list-checkbox-label").innerText.toLowerCase().includes(e.target.value.toLowerCase())){
-              allHosts[i].classList.remove("display-none");
-      
-              let tabs = allHosts[i].getElementsByClassName("inner-list-item");
-              for(let j = 0; j < tabs.length; j++){
+                allHosts[i].classList.remove("display-none");
+        
+                let tabs = allHosts[i].getElementsByClassName("inner-list-item");
+                for(let j = 0; j < tabs.length; j++){
                 tabs[j].classList.remove("display-none");
-              }
+                }
             }
             else if(allHosts[i].getElementsByClassName("inner-list-item").length == allHosts[i].getElementsByClassName("display-none").length){
-              allHosts[i].classList.add("display-none");
+                allHosts[i].classList.add("display-none");
             }
             else{
-              allHosts[i].classList.remove("display-none");
+                allHosts[i].classList.remove("display-none");
             }
-          }
+            }
     }
-    
+
     let noResultsInfos = document.getElementsByClassName("no-results-info")
-    
+
     for(let noRes of noResultsInfos){
         if(noRes.parentNode.querySelector("li:not(.display-none)") == null){
             noRes.style.display = "block";
@@ -1265,20 +1265,20 @@ searchInput.addEventListener("focus", () => {
     selectedTabsCounter.querySelector("span").innerText = activeVisibleTabs.length;
 
     if(activeVisibleTabs.length > 0){
-      enableTabsButtons();
+        enableTabsButtons();
 
-      selectedTabsCounter.style.visibility = "visible"
-      selectedTabsCounter.style.opacity = "1"
+        selectedTabsCounter.style.visibility = "visible"
+        selectedTabsCounter.style.opacity = "1"
     }
     else{
-      disableTabsButtons();
+        disableTabsButtons();
 
-      selectedTabsCounter.style.opacity = "0"
+        selectedTabsCounter.style.opacity = "0"
         setTimeout(() => {
-          selectedTabsCounter.style.visibility = "hidden"
+            selectedTabsCounter.style.visibility = "hidden"
         }, 200)
     }
-  })
+})
 
 //..............................................................
 //................DEFINE MULTISELECT FOR GROUPS.................
