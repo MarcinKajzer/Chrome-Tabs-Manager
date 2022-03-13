@@ -215,7 +215,8 @@ function handleUngroupedTabDragover(e, tab){
 
     let centerY = enteredElement.top + enteredElement.height / 2;
 
-    if(e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
+    if(isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") != null || 
+       !isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
         if (e.clientY > centerY) {
             tab.after(draggingElement)
         }
@@ -225,10 +226,14 @@ function handleUngroupedTabDragover(e, tab){
     }
 }
 
+let isDraggingTabPinned;
+
 function hangleUngroupedTabDragstart(tab){
 
     tab.classList.add("dragging-ungrouped-tab");
     parentWindowId = parseInt(tab.parentNode.id.substring(7))
+
+    isDraggingTabPinned = !(tab.querySelector(".unpin-tab") == null)
 }
 
 function handleUngroupedTabDragEnd(e, tab, hostTab){
@@ -968,8 +973,8 @@ let grSel;
 
 function initializeGroupedTabsSelectables() {
     grSel = new Selectables({
-        elements: '.selectable',
-        zone: '#all-windows',
+        elements: '.window-list .selectable',
+        zone: '#app',
         selectedClass: 'active',
         key: "ctrlKey",
 
@@ -1075,8 +1080,8 @@ let ungrSel;
 
 function initializeUngroupedTabsSelectables() {
     ungrSel = new Selectables({
-        elements: '.selectable',
-        zone: '#all-windows',
+        elements: '.window-list .selectable',
+        zone: '#app',
         selectedClass: 'active',
         key: "ctrlKey",
 

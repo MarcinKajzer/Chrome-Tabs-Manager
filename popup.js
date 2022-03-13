@@ -379,6 +379,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
+
 //Do zrobienia:
 
 
@@ -389,7 +390,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Fix:
 
-//92. Selectable w pinned kartach
+
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 
 
@@ -422,6 +423,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 //76. Zmienić ikonki 
+//108. Zmiana CSS
 
 
 
@@ -499,6 +501,7 @@ groupTabsBtn.addEventListener("click", () => {
 //87. Selectable nie działa po zgrupowaniu kart => prawdopodobnie tracone są referencje do elementów html.
 //88. Wyłączenie Expand i Collapse gdy nie są zgrupowane karty.
 //89. Prawy klik na karte powoduje zniknięcie countera ???
+//92. Selectable w pinned kartach
 //95. Zachowanie aktywnych kart/duplikatów podczas przełączania między zgrupowanymi i nie.
 //90. FLaga pinned dla okna.
 //91. Show duplicates znika po kliknięciu na okno ???
