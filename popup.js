@@ -373,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
+//109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
 
 
 
@@ -384,15 +384,14 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
-//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
 
 
 //Fix:
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-//108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
-//109. Przeciąganie przypiętych kart do innego okna nie działa.
+
+
 
 
 
@@ -481,6 +480,7 @@ groupTabsBtn.addEventListener("click", () => {
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
+//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
 //65. Dodanie karty do listy po otwarciu grupy lub ulubionych
 //66. Wykrywanie zmiany tytułu strony 
 //68. Szybkie zaznaczenie powoduje, że counter się nie pojawia.
@@ -515,7 +515,7 @@ groupTabsBtn.addEventListener("click", () => {
 //104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
 //105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
-
+//108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
 
 
 //Nowe pomysły: 

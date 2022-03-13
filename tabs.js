@@ -215,13 +215,26 @@ function handleUngroupedTabDragover(e, tab){
 
     let centerY = enteredElement.top + enteredElement.height / 2;
 
-    if(isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") != null || 
-       !isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
-        if (e.clientY > centerY) {
-            tab.after(draggingElement)
+    if(dragOverWindowId == parentWindowId){
+        if(isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") != null || 
+            !isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
+            if (e.clientY > centerY) {
+                tab.after(draggingElement)
+            }
+            else {
+                tab.before(draggingElement);
+            }
         }
-        else {
-            tab.before(draggingElement);
+    }
+    else{
+        if(isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null ||
+            !isDraggingTabPinned){
+            if (e.clientY > centerY) {
+                tab.after(draggingElement)
+            }
+            else {
+                tab.before(draggingElement);
+            }
         }
     }
 }
@@ -240,7 +253,7 @@ function handleUngroupedTabDragEnd(e, tab, hostTab){
     tab.classList.remove("dragging-ungrouped-tab")
 
     let targetWindowId = parseInt(e.target.parentNode.id.substring(7))
-    let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
+    let index = Array.prototype.indexOf.call(tab.parentNode.children, tab) - 1;
     chrome.tabs.move(parseInt(tab.id), {windowId: targetWindowId, index: index});
 
     if(targetWindowId != parentWindowId){
@@ -249,6 +262,9 @@ function handleUngroupedTabDragEnd(e, tab, hostTab){
         ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs = 
         ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs
                         .filter(y => y.id != hostTab.id)
+
+        
+        tab.querySelector(".pin-tab-btn").classList.remove("unpin-tab");  
     }
     else{
         let indexOfElement = ungroupedWindows.filter(x => x.windowId == targetWindowId)[0].tabs.indexOf(hostTab);
@@ -1058,6 +1074,10 @@ function initializeGroupedTabsSelectables() {
                 showDuplicatesBtn.disabled = false;
                 hideSelectedCounter(selectedTabsCounter);
                 disableTabsButtons();
+
+                selectedTabsCounter.classList.remove("group-creation");
+                resetGroupNameInput();
+                hideGroupSelection();
             }
             else {
                 if (!groupCreating) {
@@ -1126,6 +1146,10 @@ function initializeUngroupedTabsSelectables() {
                 showDuplicatesBtn.disabled = false;
                 hideSelectedCounter(selectedTabsCounter);
                 disableTabsButtons();
+
+                selectedTabsCounter.classList.remove("group-creation");
+                resetGroupNameInput();
+                hideGroupSelection();
             }
             else {
                 if (!groupCreating) {
