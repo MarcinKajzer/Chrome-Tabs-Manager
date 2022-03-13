@@ -215,11 +215,13 @@ function handleUngroupedTabDragover(e, tab){
 
     let centerY = enteredElement.top + enteredElement.height / 2;
 
-    if (e.clientY > centerY) {
-        tab.after(draggingElement)
-    }
-    else {
-        tab.before(draggingElement);
+    if(e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
+        if (e.clientY > centerY) {
+            tab.after(draggingElement)
+        }
+        else {
+            tab.before(draggingElement);
+        }
     }
 }
 

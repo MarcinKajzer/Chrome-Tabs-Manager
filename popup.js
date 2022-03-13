@@ -373,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-//104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
+
 
 
 
@@ -381,7 +381,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
-//96. Zabronić przeciągania karty przed przypięte karty.
+
 
 
 
@@ -401,15 +401,9 @@ groupTabsBtn.addEventListener("click", () => {
 
 //24. Strona/sekcja do personalizacji wtyczki.
 //44. Przeciąganie kart między grupami
-
-
-//60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 //64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
-//76. Zmienić ikonki ???
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów.
-
-
 //88. Import/export ustawień/ulubionych/grup.
 //93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
@@ -420,6 +414,14 @@ groupTabsBtn.addEventListener("click", () => {
 
 //9. Unselect jednocześnie hosta i tabów
 //59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
+
+
+
+
+//Refactor: 
+
+//60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
+//76. Zmienić ikonki 
 
 
 
@@ -501,11 +503,21 @@ groupTabsBtn.addEventListener("click", () => {
 //90. FLaga pinned dla okna.
 //91. Show duplicates znika po kliknięciu na okno ???
 //94. Close duplicates - usunąć karty z kolekcji.
+//96. Zabronić przeciągania karty przed przypięte karty.
 //97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
 //100. Zamknięcie okna ma usuwać je z kolekcji.
 //101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
 //102. Wyszukiwanie w grupach.
 //103. Brak wyników napis w każdym oknie.
+//104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
 //105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
+
+
+
+//Nowe pomysły: 
+
+//1. Udostępnianie wielu linków jednym
+//2. Nagrywanie sesji/historia
+//3. Opcje na prawy klik na stronie (zapisywanie do grupy/ulubione itp)
