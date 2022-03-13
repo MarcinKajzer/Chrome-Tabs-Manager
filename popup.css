@@ -25,7 +25,7 @@ ul{
 header{
   position: fixed;
   z-index: 100;
-  padding: 15px 28px 15px 28px;
+  padding: 15px 22px 15px 26px;
   display: flex;
   justify-content: space-between;
   width: 350px;
@@ -33,10 +33,10 @@ header{
 }
 
 header #main-buttons button{
-  height: 20px;
-  width: 20px;
+  height: 25px;
+  width: 25px;
   border: none;
-  margin: 0 20px 0 0;
+  margin: 0 10px 0 0;
   transition: all .3s;
 }
 
@@ -48,6 +48,19 @@ header #main-buttons button{
   min-width: 30px;
   display: flex;
   justify-content: flex-end;
+}
+
+#dynamic-buttons button{
+  margin: 0 3px;
+}
+
+header #dynamic-buttons #create-new-window-btn{
+  height: 20px;
+  width: 20px;
+  border: none;
+  transition: all .3s;
+  background: url("assets/new_window_btn.png") no-repeat;
+  background-size: contain;
 }
 
 header #dynamic-buttons #group-tabs-btn{
@@ -86,7 +99,6 @@ header #dynamic-buttons #donate-btn{
   transition: all .3s;
   background: url("assets/donate.png") no-repeat;
   background-size: contain;
-  margin: 0 3px;
 }
 
 header button:hover, header a:hover{
@@ -267,6 +279,7 @@ nav{
   padding-bottom: 10px;
   width: 95%;
   margin: 0 auto;
+  flex-wrap: wrap;
 }
 
 .navigation button{
@@ -326,13 +339,7 @@ nav{
 }
 
 #search-container.group-name::before{
-  background-image: url(assets/gray_group.png) ;
-  left: 41px;
-  top: 5px;
-}
-
-#search-container.active-search.group-name::before{
-  background-image: url(assets/white_group.png)
+  display: none;
 }
 
 .search-input{

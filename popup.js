@@ -373,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-//109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
+
 
 
 
@@ -384,13 +384,16 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //54. Opcja przenieś zaznaczone do NOWEGO okna.
+//111. Opcja otwórz nowe okno z wtyczki.
+//112. Kliknięcie na okno przenosi nie niego.
+//113. Zmiana ikony podczas przeciągania hostów.
 
 
 
 //Fix:
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-
+//114. Przenoszenie do nowej pustej grupy i nowego okna.
 
 
 
@@ -420,7 +423,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 //76. Zmienić ikonki 
-//108. Zmiana CSS
+//110. Zmiana CSS
 
 
 
@@ -516,6 +519,7 @@ groupTabsBtn.addEventListener("click", () => {
 //105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
 //108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
+//109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
 
 
 //Nowe pomysły: 
