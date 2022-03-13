@@ -337,7 +337,7 @@ nav{
 
 .search-input{
   width: 80%;
-  margin: 10px auto;
+  margin: 0 auto;
   display: block;
   background: rgba(0,0,0,.2);
   border:none;
@@ -348,6 +348,9 @@ nav{
   border-radius: 15px;
   padding: 0 37px;
   box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
 }
 
 .close-btn{
@@ -1195,4 +1198,83 @@ transform: scale(1.2);
 }
 
 
+/* Wyszukiwarka w grupach */
 
+#search-container-groups{
+  position: relative;
+  margin: 10px 0;
+}
+
+#search-container-groups:before{
+  content: '';
+  width: 18px;
+  height: 18px;
+  background: red;
+  display: block;
+  position: absolute;
+  left: 38px;
+  top: 6px;
+  background: url(assets/gray_search.png) no-repeat;
+  background-position: center;
+  background-size: contain;
+  transition: all .2s;
+  z-index: 102;
+}
+
+#groups-search-header{
+  width: 80%;
+  margin: 0 auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: rgba(33,34,36,.98);
+  border-radius: 15px;
+  padding: 0 37px;
+  box-sizing: border-box;
+  z-index: 9;
+  height: 30px;
+  overflow: hidden;
+  transition: height .2s;
+  display: none;
+}
+
+#created-name-input{
+  background: none;
+    border: none;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    outline: none;
+    color: white;
+}
+
+#groups-search-header:focus-within{
+  height: 80px;
+}
+
+#groups-search-header:focus-within::before{
+  background: url(assets/search.png);
+}
+
+#confirm-group-creation-btn2{
+  width: 100%;
+  height: 20px;
+  background: green;
+  color: white;
+  transition: all .2s;
+  border:none;
+  margin: 10px 0 20px;
+}
+
+#confirm-group-creation-btn2:hover{
+  cursor: pointer;
+}
+
+#confirm-group-creation-btn2:disabled{
+  background: gray;
+  cursor: default;
+}
+
+#groups-list{
+  margin-top: 50px;
+}

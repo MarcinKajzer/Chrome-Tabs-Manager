@@ -46,6 +46,11 @@ let groupsContainer = document.getElementById("groups-list");
 let expandAllGroupsBtn = document.getElementById("expand-all-groups-btn")
 let colapseAllGroupsBtn = document.getElementById("collapse-all-groups-btn");
 
+let createGroupBtn2 = document.getElementById("create-group-btn2");
+let confirmGroupCreationBtn2 = document.getElementById("confirm-group-creation-btn2")
+let createdGroupInput2 = document.getElementById("created-name-input");
+
+
 let selectedGroupsCounter = document.getElementById("selected-groups-counter");
 
 let removeSelectedBtn = document.getElementById("remove-selected-btn");
@@ -70,6 +75,55 @@ function disableGroupsButtons(){
 
 expandAllGroupsBtn.onclick = () => checkAllCheckboxes(allGroupsCheckboxes)
 colapseAllGroupsBtn.onclick = () =>uncheckAllCheckboxes(allGroupsCheckboxes)
+
+createGroupBtn2.onclick = () => {
+  document.getElementById("search-input-group").style.display = "none";
+  document.getElementById("groups-search-header").style.display = "block"
+  createGroupBtn2.disabled = true;
+}
+
+confirmGroupCreationBtn2.onclick = (e) => {
+
+  gr = new Object();
+  gr.name = createdGroupInput2.value;
+  gr.color = "blue";
+  gr.tabs = [];
+  groups.push(gr)
+
+  if(groups != null){
+    chrome.storage.sync.set({groups: groups})
+  }
+  else{
+    chrome.storage.sync.set({groups: [groups]})
+  }
+  
+  let inputsList = document.getElementById("inputs");
+  addGroupToSelectList(inputsList, createdGroupInput2.value)
+
+  e.target.disabled = true;
+  createdGroupInput2.value = ""
+
+  buildSingleGroup(gr);
+
+  document.getElementById("search-input-group").style.display = "block";
+  document.getElementById("groups-search-header").style.display = "none"
+  createGroupBtn2.disabled = false;
+}
+
+createdGroupInput2.addEventListener("input", (e) => {
+  let allGroups = groups.map(x => x.name)
+
+  if(allGroups.includes(e.target.value.trim())){
+    confirmGroupCreationBtn2.disabled = true
+  }
+  else if(e.target.value.length > 0){
+    confirmGroupCreationBtn2.disabled = false;
+  }
+  else{
+    confirmGroupCreationBtn2.disabled = true;
+  }
+})
+
 
 removeSelectedBtn.onclick = () => {
 

@@ -361,8 +361,8 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-//47. Dodawanie nowej grupy w sekcji grup
 
+//102. Wyszukiwanie w grupach.
 
 
 
@@ -370,8 +370,7 @@ groupTabsBtn.addEventListener("click", () => {
 //Do zrobienia:
 
 //96. Zabronić przeciągania karty przed przypięte karty.
-//102. Wyszukiwanie w grupach.
-
+//105. Utrzymanie koloru żółtego przy duplikatach podczas grupowania.
 
 
 
@@ -380,8 +379,8 @@ groupTabsBtn.addEventListener("click", () => {
 
 //92. Selectable w pinned kartach
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
-
-
+//104. Gwiazdka się nie wypełnia gdy duplikaty występują w różnych oknach.
+//106. Odznaczenie w grupach nie odznacza nazwy grupy
 
 
 
@@ -454,6 +453,7 @@ groupTabsBtn.addEventListener("click", () => {
 //43. Rozdzielić każdą sekcję na osobny plik js.
 //45. Edytowanie nazwy grupy, nadanie koloru
 //46. Walidacja nazwy grupy - musi mieć długość minimum 1
+//47. Dodawanie nowej grupy w sekcji grup
 //48. Otwieranie w nowym oknie/tym samym/grupowanie
 //49. Zapisywanie zwinięcia/rozwinięcia grupy
 //50. Możliwość zmiany rozmiaru siatki dla ulubionych + widok jako lista
