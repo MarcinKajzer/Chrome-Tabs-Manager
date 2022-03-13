@@ -975,6 +975,8 @@ function initializeGroupedTabsSelectables() {
     grSel = new Selectables({
         elements: '.window-list .selectable',
         zone: '#app',
+        // elements: '.selectable',
+        // zone: '#all-windows',
         selectedClass: 'active',
         key: "ctrlKey",
 

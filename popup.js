@@ -373,7 +373,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //In progress: 
 
-
+//44. Przeciąganie kart między grupami
 
 
 
@@ -382,16 +382,16 @@ groupTabsBtn.addEventListener("click", () => {
 
 //Do zrobienia:
 
-
-
-
+//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
+//54. Opcja przenieś zaznaczone do NOWEGO okna.
+//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
 
 
 
 //Fix:
 
+//107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
 
-//99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 
 
 
@@ -401,13 +401,11 @@ groupTabsBtn.addEventListener("click", () => {
 //Opcjonalne: 
 
 //24. Strona/sekcja do personalizacji wtyczki.
-//44. Przeciąganie kart między grupami
-//64. Jeśli grupa pozostaje pusta - dodać informację zamiast przycisków.
-//54. Opcja przenieś zaznaczone do NOWEGO okna.
+//88. Import/export ustawień/ulubionych/grup. 
 //78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów.
-//88. Import/export ustawień/ulubionych/grup.
-//93. Rozwijalne opcje w grupach ( za dużo jest ikon )
-//107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
+
+
+
 
 
 
@@ -415,7 +413,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 //9. Unselect jednocześnie hosta i tabów
 //59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
-
+//99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 
 
 

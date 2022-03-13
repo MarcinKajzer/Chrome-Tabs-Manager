@@ -341,6 +341,7 @@ function buildSingleGroupTab(groupName, groupTab) {
   let tab = document.createElement("li");
   tab.classList.add("inner-list-item")
   tab.classList.add("selectable")
+  tab.draggable = true;
   tab.id = groupTab.id;
 
   let tabInfo = document.createElement("div")
@@ -349,14 +350,18 @@ function buildSingleGroupTab(groupName, groupTab) {
   tabFavIcon.classList.add("favIcon");
   tabFavIcon.src = groupTab.favIcon != null && groupTab.favIcon != "" ? groupTab.favIcon : "assets/default_favicon.png";
 
+  tab.addEventListener("dragover", (e) => handleGroupDragover(e, tab))
+  tab.addEventListener("dragstart", () => hangleGroupDragstart(tab));
+  tab.addEventListener("dragend", (e) => handleGroupDragEnd(e, tab, groupTab));
+
   let tabTitle = document.createElement("span");
   tabTitle.innerHTML = groupTab.title.length > 26 ? groupTab.title.substring(0, 23) + " ..." : groupTab.title;
-  tabTitle.onclick = () => {
+  tab.onclick = () => {
     openTabsOfGroup([groupTab], true)
   }
-  tabTitle.addEventListener("mousedown", (e) => {
-    e.preventDefault();
+  tab.addEventListener("mousedown", (e) => {
     if(e.button == 1){
+      e.preventDefault();
       openTabsOfGroup([groupTab], false)
     }
   })
@@ -390,6 +395,50 @@ function buildSingleGroupTab(groupName, groupTab) {
   tab.appendChild(tabButtons);
 
   return tab;
+}
+
+function handleGroupDragover(e, tab){
+  e.preventDefault();
+
+  let draggingElement = document.querySelector(".dragging-saved-group-tab")
+  let enteredElement = tab.getBoundingClientRect()
+
+  let centerY = enteredElement.top + enteredElement.height / 2;
+
+  if (e.clientY > centerY) {
+      tab.after(draggingElement)
+  }
+  else {
+      tab.before(draggingElement);
+  }
+}
+
+let previuosGroupName;
+
+function hangleGroupDragstart(tab){
+  tab.classList.add("dragging-saved-group-tab");
+  previuosGroupName = tab.closest(".outer-list-item").id.substring(6);
+}
+
+function handleGroupDragEnd(e, tab, groupTab){
+  tab.classList.remove("dragging-saved-group-tab")
+
+  let targetGroupIName = e.target.closest(".outer-list-item").id.substring(6);
+  let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
+  
+  if(previuosGroupName != targetGroupIName){
+    groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, groupTab)
+
+    groups.filter(x => x.name == previuosGroupName)[0].tabs = 
+    groups.filter(x => x.name == previuosGroupName)[0].tabs.filter(y => y.id != groupTab.id)
+  }
+  else{
+    let indexOfElement = groups.filter(x => x.name == targetGroupIName)[0].tabs.indexOf(groupTab);
+    let elem = groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(indexOfElement, 1)
+    groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, elem[0])
+  }
+
+  chrome.storage.sync.set({groups: groups})
 }
 
 //.then ? usunąć z drzewa dopiero gdy uda się akcja na storage ? 
