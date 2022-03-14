@@ -941,6 +941,10 @@ function buildWindowContainer(index, window){
     else{
         windowName.innerText = "Window " + index;
     }
+
+    windowName.onclick = () => {
+        chrome.windows.update(window.windowId, {focused: true})
+    }
     
     let buttonsWrapper = document.createElement("div")
 

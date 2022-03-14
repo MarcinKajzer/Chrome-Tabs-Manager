@@ -227,6 +227,7 @@ main{
   position: relative;
 }
 
+
 #pinned-windows-section{
   width: 0;
   transition: width .3s, opacity .3s;
@@ -773,9 +774,8 @@ color: green
 
 #favourites-section{
   width: 350px;
-  padding: 10px;
+  padding: 10px 0 0 10px;
   max-height: 500px;
-  overflow: auto;
 }
 
 #dragables-container{
@@ -784,7 +784,11 @@ color: green
   flex-wrap: wrap;
   justify-content: flex-start;
   transition: all 1s;
+  max-height: 510px;
   overflow: auto;
+  padding-right: 20px;
+  width: 310px;
+  margin-left: 10px;
 }
 
 .dragable{
@@ -793,7 +797,7 @@ color: green
   text-align: center;
   transition:  opacity .3s;
   box-sizing: border-box;
-  padding: 10px;
+  padding: 0 10px;
   font-size: 12px;
   overflow: hidden;
   position: relative;
@@ -1114,6 +1118,10 @@ transform: scale(1.2);
   justify-content: space-between;
 }
 
+.window-label span{
+  cursor: pointer;
+}
+
 #all-pinned-windows{
   padding-right: 20px;
   max-height: 530px;
@@ -1234,4 +1242,11 @@ transform: scale(1.2);
   color: gray;
   display: inline-block;
   padding-right: 10px;
+}
+
+#favourites-line{
+  height: 2px;
+  width: 90%;
+  background: rgba(0,0,0,.15);
+  margin: 0 auto 10px;
 }
