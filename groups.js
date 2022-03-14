@@ -234,6 +234,13 @@ function buildSingleGroup(group){
   groupItem.id = "group_" + group.name;
   groupItem.classList.add("outer-list-item");
 
+  groupItem.addEventListener("dragover", () => {
+    if(groupItem.getElementsByClassName("inner-list-item").length == 0){
+      let draggingElement = document.querySelector(".dragging-saved-group-tab")
+      groupItem.querySelector("ul").appendChild(draggingElement);
+    }
+  })
+
   let groupCheckbox = document.createElement("input");
   groupCheckbox.type = "checkbox";
   groupCheckbox.classList.add("inner-list-checkbox")
