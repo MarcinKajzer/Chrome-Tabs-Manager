@@ -1134,7 +1134,9 @@ transform: scale(1.2);
 }
 
 .drop-here-popup{
-  background: rgba(255,255,255,.4);
+  background: url(assets/drag_and_drop_black.png) no-repeat rgba(255,255,255,.4);
+  background-position: center;
+  background-size: 50%;
   height: calc(100% - 20px);
   position: absolute;
   width: 100%;

@@ -369,7 +369,6 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
     if(isMoreThenOneWindow){
         let dropHerePopup = document.createElement("div")
         dropHerePopup.classList.add("drop-here-popup")
-        dropHerePopup.innerText = "Drop here."
         windowContainer.appendChild(dropHerePopup);
     }
 

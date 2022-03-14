@@ -388,15 +388,15 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
-//112. Kliknięcie na okno przenosi nie niego.
-//113. Zmiana ikony podczas przeciągania hostów.
+
+
 
 
 
 //Fix:
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-//114. Przenoszenie do nowej pustej grupy i nowego okna.
+//114. Przenoszenie do nowej pustej grupy.
 
 
 
@@ -425,7 +425,6 @@ groupTabsBtn.addEventListener("click", () => {
 //Refactor: 
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
-
 //110. Zmiana CSS
 
 
@@ -525,6 +524,8 @@ groupTabsBtn.addEventListener("click", () => {
 //108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
 //109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
 //111. Opcja otwórz nowe okno z wtyczki.
+//112. Kliknięcie na okno przenosi nie niego.
+//113. Zmiana ikony podczas przeciągania hostów.
 
 //Nowe pomysły: 
 
