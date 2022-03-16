@@ -1252,3 +1252,8 @@ transform: scale(1.2);
   background: rgba(0,0,0,.15);
   margin: 0 auto 10px;
 }
+
+#current-tabs-wrapper{
+  display: flex;
+  width: 700px;
+}

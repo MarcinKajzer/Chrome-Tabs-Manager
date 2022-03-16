@@ -960,6 +960,7 @@ function buildWindowContainer(index, window){
             pinnedWindowsSection.classList.add("shown")
             document.querySelector("#app").style.width = "700px";
             document.querySelector("main").style.width = "1750px";
+            document.querySelector("#current-tabs-wrapper").style.width = "700px";
     
             pinnedWindowsContainer.appendChild(windowContainer)
             pinWindowBtn.classList.add("unpin")
@@ -973,6 +974,7 @@ function buildWindowContainer(index, window){
                 pinnedWindowsSection.classList.remove("shown")
                 document.querySelector("#app").style.width = "350px";
                 document.querySelector("main").style.width = "1400px";
+                document.querySelector("#current-tabs-wrapper").style.width = "350px";
             }
 
             ungroupedWindows.filter(x => x.windowId == window.windowId)[0].pinned = false;
@@ -1013,10 +1015,8 @@ let grSel;
 
 function initializeGroupedTabsSelectables() {
     grSel = new Selectables({
-        elements: '.window-list .selectable',
-        zone: '#app',
-        // elements: '.selectable',
-        // zone: '#all-windows',
+        elements: '.selectable',
+        zone: '#current-tabs-wrapper',
         selectedClass: 'active',
         key: "ctrlKey",
 

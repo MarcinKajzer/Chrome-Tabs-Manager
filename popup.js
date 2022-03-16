@@ -233,21 +233,24 @@ function deleteTabElementFromDOM(className, tabId){
   currentTab.classList.add("removed");
   setTimeout(() => {
     currentTab.remove();
-    if(currentHostTabsList.getElementsByClassName(className).length == 0){
-      currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className);
-    }
-    if(document.querySelectorAll(".inner-list-item:not(.display-none)").length == 0){
-      currentHostTabsList.parentNode.classList.add("display-none");
-    }
-    if(currentHostTabsList.childNodes.length == 0){
-      currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.add("remove-host");
-      
-      setTimeout(() => {
-        currentHostTabsList.parentNode.remove();
 
-        let currentHostName = currentHostTabsList.parentNode.querySelector("input").id;
-        chrome.storage.sync.remove(currentHostName);
-      }, 300);
+    if(grouped){
+      if(currentHostTabsList.getElementsByClassName(className).length == 0){
+        currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.remove(className);
+      }
+      if(document.querySelectorAll(".inner-list-item:not(.display-none)").length == 0){
+        currentHostTabsList.parentNode.classList.add("display-none");
+      }
+      if(currentHostTabsList.childNodes.length == 0){
+        currentHostTabsList.parentNode.querySelector(".inner-list-checkbox-label").classList.add("remove-host");
+        
+        setTimeout(() => {
+          currentHostTabsList.parentNode.remove();
+  
+          let currentHostName = currentHostTabsList.parentNode.querySelector("input").id;
+          chrome.storage.sync.remove(currentHostName);
+        }, 300);
+      }
     }
   }, 200);
 }
@@ -283,6 +286,7 @@ goToTabsBtn.addEventListener("click", (e) => {
     pinnedWindowsSection.classList.add("shown");
     document.querySelector("#app").style.width = "700px";
     document.querySelector("main").style.width = "1750px";
+    document.querySelector("#current-tabs-wrapper").style.width = "700px";
   }
 
   main.style.transform = "translateX(0)";
@@ -300,6 +304,7 @@ goToGroupsBtn.addEventListener("click", (e) => {
   pinnedWindowsSection.classList.remove("shown");
   document.querySelector("#app").style.width = "350px";
   document.querySelector("main").style.width = "1400px";
+  document.querySelector("#current-tabs-wrapper").style.width = "350px";
 
 
   main.style.transform = "translateX(-350px)"
@@ -317,6 +322,7 @@ goToFavouritesBtn.addEventListener("click", (e) => {
   pinnedWindowsSection.classList.remove("shown");
   document.querySelector("#app").style.width = "350px";
   document.querySelector("main").style.width = "1400px";
+  document.querySelector("#current-tabs-wrapper").style.width = "350px";
 
   main.style.transform = "translateX(-700px)"
 
@@ -333,6 +339,7 @@ goToSettingsBtn.addEventListener("click", (e) => {
   pinnedWindowsSection.classList.remove("shown");
   document.querySelector("#app").style.width = "350px";
   document.querySelector("main").style.width = "1400px";
+  document.querySelector("#current-tabs-wrapper").style.width = "350px";
 
   main.style.transform = "translateX(-1050px)"
 
@@ -384,10 +391,11 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 
+
 //Do zrobienia:
 
-
-
+//116. Minimalizacja/maksymalizacja okien + lista zminimalizowanych 
+//117. Skrócić długość nazw kart o 2-3 znaków (lub określić długość spanu i umieścić cały tytuł - na hover przesunięcie)
 
 
 
@@ -396,18 +404,16 @@ groupTabsBtn.addEventListener("click", () => {
 //Fix:
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-//114. Przenoszenie do nowej pustej grupy.
+//Po kliknięciu close -> usunąć widoczność hosta/grupy jeśli jest pusta | odpiąć klasy grouped/active gdy nie jest puste podczas wyszukiwania
 
 
-
-
+//118. Przeciąganie z nowego okna pozwala na ustawienie karty przez przypiątą :C
 
 
 //Opcjonalne: 
 
 //24. Strona/sekcja do personalizacji wtyczki.
 //88. Import/export ustawień/ulubionych/grup. 
-//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów.
 
 
 
@@ -417,7 +423,6 @@ groupTabsBtn.addEventListener("click", () => {
 //Na koniec:
 
 //9. Unselect jednocześnie hosta i tabów
-//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
 //99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 
 
@@ -482,6 +487,7 @@ groupTabsBtn.addEventListener("click", () => {
 //55. Usuwanie ulubionych z poziomu sekcji
 //56. Czasem podczas przenoszenia elementów pojawia się błąd "Uncaught NotFoundError: Failed to execute 'insertBefore' on 'Node': The node before which the new node is to be inserted is not a child of this node."
 //58. Dodanie loadrea gdy strony się dopiero ładują i późniejsze uzupełnienie favIcony ???? - raczej zbędne
+//59. Wtyczna otwarta w kilku oknach nie działa jak powinna.
 //61. Ochrona przed duplikowaniem kart w grupie
 //62. Otwieranie już zgrupowanych kart (oznaczone kolorem)
 //63. Gdy strony są usuwane z grupy -> owtieranie wszystkich na raz nie przechwytuje usunięcia.
@@ -526,9 +532,17 @@ groupTabsBtn.addEventListener("click", () => {
 //111. Opcja otwórz nowe okno z wtyczki.
 //112. Kliknięcie na okno przenosi nie niego.
 //113. Zmiana ikony podczas przeciągania hostów.
+//114. Przenoszenie do nowej pustej grupy.
+//115. Selectable nie działa jak trzeba po dodaniu zone jako całe #app. - zaznaczenie grup powoduje odznaczenie tabów.
+
+
 
 //Nowe pomysły: 
 
 //1. Udostępnianie wielu linków jednym
 //2. Nagrywanie sesji/historia
 //3. Opcje na prawy klik na stronie (zapisywanie do grupy/ulubione itp)
+
+//Wycofane pomysły:
+
+//78. Grupowanie kart hostami - ustawianie kolejności dla całych hostów.
