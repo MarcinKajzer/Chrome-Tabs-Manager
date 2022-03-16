@@ -408,7 +408,7 @@ groupTabsBtn.addEventListener("click", () => {
 
 
 //118. Przeciąganie z nowego okna pozwala na ustawienie karty przez przypiątą :C
-
+//119. Zamykanie okna gdy zamknięta jest ostatnia karta.
 
 //Opcjonalne: 
 
