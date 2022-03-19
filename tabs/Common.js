@@ -253,8 +253,8 @@ export function closeTab(tabId, host, windowId, deleteHost = true) {
         if (currentHostTabsList.childNodes.length == 0 && deleteHost) {
             deleteHostElementFromDOM(host, windowId);
         }
-        if(windowList.childNodes.length == 0){
-            currentHostTabsList.parentNode.remove();
+        if(windowList.querySelectorAll(".inner-list-item").length == 0){
+            windowList.closest(".window-container").remove();
             global.ungroupedWindows = global.ungroupedWindows.filter(x => x.windowId != windowId);
         }
     }, 200);
@@ -306,7 +306,7 @@ export function handleAddToFavouriteBtnClick(hostTab){
     }
 }
 
-function deleteHostElementFromDOM(host, windowId) {
+export function deleteHostElementFromDOM(host, windowId) {
     let hostElement = document.getElementById("host_" + host + "_window" + windowId)
     
     hostElement.classList.add("remove-host");

@@ -1,8 +1,8 @@
 import {global} from "../common/Global.js"
 import { tabsHooks } from "../common/hooks.js";
-import { hideSelectedCounter } from "../common/Functions.js";
+import { hideSelectedCounter  } from "../common/Functions.js";
 import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, 
-        hideGroupSelection, resetGroupNameInput, handleAddToFavouriteBtnClick, closeTab } from "./Common.js";
+        hideGroupSelection, resetGroupNameInput, handleAddToFavouriteBtnClick, closeTab, deleteHostElementFromDOM } from "./Common.js";
 
 let currentDraggingHostList;
 let dragOverHostList;
@@ -580,11 +580,27 @@ function defineOnClickMuteGroupBtn(btn, hostTabs) {
 }
 
 function closeAllTabsOfHost(host, windowId) {
-
-    for (let tab of global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host == host)) {
-        chrome.tabs.remove(tab.id);
-    }
+    let window = global.ungroupedWindows.filter(x => x.windowId == windowId)[0]
+    
+    console.log(window.tabs.filter(y => y.host == host).map(x => x.id))
+    chrome.tabs.remove(window.tabs.filter(y => y.host == host).map(x => x.id), () => {
+        chrome.tabs.query({windowId: windowId, active: true}, res => {
+            console.log(res)
+            if(res.length != 0){
+                window.tabs.filter(y => y.id == res[0].id)[0].active = true;
+                document.getElementById(res[0].id).classList.add("current-tab");
+                document.getElementById(res[0].id).closest(".outer-list-item").querySelector("label").classList.add("current-tab");
+            }
+        })
+    })
 
     deleteHostElementFromDOM(host, windowId)
-    chrome.storage.sync.remove(host);
+
+    //DRY
+    window.tabs = window.tabs.filter(y => y.host != host)
+
+    if(window.tabs.length == 0){
+        global.ungroupedWindows = global.ungroupedWindows.filter(x => x.windowId != windowId);
+        document.getElementById("window_" + windowId).closest(".window-container").remove();
+    }
 }
