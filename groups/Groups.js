@@ -1,3 +1,10 @@
+import { global } from "../common/Global.js";
+import { tabsHooks } from "../common/hooks.js";
+import { checkAllCheckboxes, uncheckAllCheckboxes, hideSelectedCounter, handleSelectedCounterClick } from "../common/Functions.js";
+import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "../tabs/UngroupedWindows.js";
+import { addGroupToSelectList } from "../tabs/Multiselect.js";
+
+
 const colors = [
   { 
     name: "grey",
@@ -85,17 +92,17 @@ createGroupBtn2.onclick = () => {
 
 confirmGroupCreationBtn2.onclick = (e) => {
 
-  gr = new Object();
+  let gr = new Object();
   gr.name = createdGroupInput2.value;
   gr.color = "blue";
   gr.tabs = [];
-  groups.push(gr)
+  global.groups.push(gr)
 
-  if(groups != null){
-    chrome.storage.sync.set({groups: groups})
+  if(global.groups != null){
+    chrome.storage.sync.set({groups: global.groups})
   }
   else{
-    chrome.storage.sync.set({groups: [groups]})
+    chrome.storage.sync.set({groups: [global.groups]})
   }
   
   let inputsList = document.getElementById("inputs");
@@ -112,7 +119,7 @@ confirmGroupCreationBtn2.onclick = (e) => {
 }
 
 createdGroupInput2.addEventListener("input", (e) => {
-  let allGroups = groups.map(x => x.name)
+  let allGroups = global.groups.map(x => x.name)
 
   if(allGroups.includes(e.target.value.trim())){
     confirmGroupCreationBtn2.disabled = true
@@ -187,49 +194,49 @@ removeSelectedBtn.onclick = () => {
       let currentHostTabsList = currentTab.parentNode;
       let groupName = currentHostTabsList.parentNode.id.substring(6) 
 
-      let deleteGroup = groups.find(x => x.name == groupName);
-      let deleteGroupIndex = groups.indexOf(deleteGroup);
-      let remainTabs = groups[deleteGroupIndex].tabs.filter(y => y.id != tab.id);
+      let deleteGroup = global.groups.find(x => x.name == groupName);
+      let deleteGroupIndex = global.groups.indexOf(deleteGroup);
+      let remainTabs = global.groups[deleteGroupIndex].tabs.filter(y => y.id != tab.id);
       
       if(remainTabs.length == 0){
-        groups.splice(deleteGroupIndex, 1);
+        global.groups.splice(deleteGroupIndex, 1);
       }
       else{
-        groups[deleteGroupIndex].tabs = remainTabs;
+        global.groups[deleteGroupIndex].tabs = remainTabs;
       }
 
       deleteTabElementFromDOM("selected-group", tab.id)
   }
 
-  chrome.storage.sync.set({groups: groups})
+  chrome.storage.sync.set({groups: global.groups})
 
   hideSelectedCounter(selectedGroupsCounter);
   disableGroupsButtons();
 }
 
 
-selectedGroupsCounter.addEventListener("click", () => {
+selectedGroupsCounter.onclick = () => {
   handleSelectedCounterClick("selected-group")
   hideSelectedCounter(selectedGroupsCounter);
   disableGroupsButtons();
-})
+}
 
 
 //..............................................................
 
 
-async function buildGroups() {
+export async function buildGroups() {
 
-  if (groups == null || groups.length == 0) {
+  if (global.groups == null || global.groups.length == 0) {
     return;
   }
 
-  for (const group of groups) {
+  for (const group of global.groups) {
     buildSingleGroup(group);
   }
 }
 
-function buildSingleGroup(group){
+export function buildSingleGroup(group){
   let groupItem = document.createElement("li");
   groupItem.id = "group_" + group.name;
   groupItem.classList.add("outer-list-item");
@@ -361,7 +368,7 @@ function buildSingleGroup(group){
 }
 
 
-function buildSingleGroupTab(groupName, groupTab) {
+export function buildSingleGroupTab(groupName, groupTab) {
   let tab = document.createElement("li");
   tab.classList.add("inner-list-item")
   tab.classList.add("selectable")
@@ -459,29 +466,29 @@ function handleGroupDragEnd(e, tab, groupTab){
   let index = Array.prototype.indexOf.call(tab.parentNode.children, tab);
   
   if(previuosGroupName != targetGroupIName){
-    groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, groupTab)
+    global.groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, groupTab)
 
-    groups.filter(x => x.name == previuosGroupName)[0].tabs = 
-    groups.filter(x => x.name == previuosGroupName)[0].tabs.filter(y => y.id != groupTab.id)
+    global.groups.filter(x => x.name == previuosGroupName)[0].tabs = 
+    global.groups.filter(x => x.name == previuosGroupName)[0].tabs.filter(y => y.id != groupTab.id)
   }
   else{
-    let indexOfElement = groups.filter(x => x.name == targetGroupIName)[0].tabs.indexOf(groupTab);
-    let elem = groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(indexOfElement, 1)
-    groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, elem[0])
+    let indexOfElement = global.groups.filter(x => x.name == targetGroupIName)[0].tabs.indexOf(groupTab);
+    let elem = global.groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(indexOfElement, 1)
+    global.groups.filter(x => x.name == targetGroupIName)[0].tabs.splice(index, 0, elem[0])
   }
 
-  chrome.storage.sync.set({groups: groups})
+  chrome.storage.sync.set({groups: global.groups})
 }
 
 //.then ? usunąć z drzewa dopiero gdy uda się akcja na storage ? 
 function deleteGroup(groupName) {
   deleteGroupElemetFromDOM(groupName)
 
-  let deleteGroup = groups.find(x => x.name == groupName);
-  let deleteGroupIndex = groups.indexOf(deleteGroup);
+  let deleteGroup = global.groups.find(x => x.name == groupName);
+  let deleteGroupIndex = global.groups.indexOf(deleteGroup);
 
-  groups.splice(deleteGroupIndex, 1);
-  chrome.storage.sync.set({ groups: groups })
+  global.groups.splice(deleteGroupIndex, 1);
+  chrome.storage.sync.set({ groups: global.groups })
 }
 
 function deleteGroupElemetFromDOM(groupName) {
@@ -495,12 +502,12 @@ function deleteGroupElemetFromDOM(groupName) {
 
 function deleteTab(groupName, tabId) {
   
-  let deleteGroup = groups.find(x => x.name == groupName);
-  let deleteGroupIndex = groups.indexOf(deleteGroup);
-  let remainTabs = groups[deleteGroupIndex].tabs.filter(y => y.id != tabId);
+  let deleteGroup = global.groups.find(x => x.name == groupName);
+  let deleteGroupIndex = global.groups.indexOf(deleteGroup);
+  let remainTabs = global.groups[deleteGroupIndex].tabs.filter(y => y.id != tabId);
 
-  groups[deleteGroupIndex].tabs = remainTabs;
-  chrome.storage.sync.set({ groups: groups })
+  global.groups[deleteGroupIndex].tabs = remainTabs;
+  chrome.storage.sync.set({ groups: global.groups })
   
   let currentTab = document.getElementById(tabId);
 
@@ -537,19 +544,19 @@ function updateWindowsContainers(){
   
   //opóźnienie wykonania 
   chrome.tabs.query({currentWindow: true}, () => {
-    hostsContainer.innerHTML = "";
-    pinnedWindowsContainer.innerHTML = ""
-    if(grouped){
+    tabsHooks.allWindowsContainer.innerHTML = "";
+    tabsHooks.pinnedWindowsContainer.innerHTML = ""
+    if(global.grouped){
       groupUngroupedTabs();
       buildAllGroupedWindows();
 
-      grSel.disable();
+      global.grSel.disable();
       initializeGroupedTabsSelectables();
     }
     else{
       buildAllUngroupedWindows();
 
-      ungrSel.disable();
+      global.ungrSel.disable();
       initializeUngroupedTabsSelectables(); // czy na pewno tworzyć za każdym razem nowy obiekt ??
     }
   })
@@ -563,21 +570,21 @@ function createSingleTabFromGroupTab(groupTab, createdTab){
     audible: createdTab.audible,
     active: createdTab.active,
     muted: createdTab.mutedInfo.muted,
-    duplicateNumber: duplicateNumber,
+    duplicateNumber: global.duplicateNumber,
     url: groupTab.url,
     host: groupTab.host,
     pinned: createdTab.pinned
   }
 
-  let duplicates = ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.filter(x => x.url == groupTab.url);
+  let duplicates = global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.filter(x => x.url == groupTab.url);
 
   if(duplicates.length > 0){
     ob.duplicateNumber = duplicates[0].duplicateNumber;
   }
 
-  ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.push(ob);
+  global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.push(ob);
   
-  duplicateNumber++;
+  global.duplicateNumber++;
 }
 
 function openTabsOfGroup(tabs, active) {
@@ -623,7 +630,7 @@ function openInNewWindow(tabs, incognito = false){
         o.focused = window.focused;
         o.tabs = [];
   
-        ungroupedWindows.push(o)
+        global.ungroupedWindows.push(o)
         
         for(let t of window.tabs){
           createSingleTabFromGroupTab(tabs.filter(x => x.url == t.url || x.url == t.pendingUrl)[0], t);
@@ -635,7 +642,7 @@ function openInNewWindow(tabs, incognito = false){
   }
 }
 
-function initializeGroupsSelectable() {
+export function initializeGroupsSelectable() {
   new Selectables({
     elements: '.selectable',
     zone: '#groups-list',
@@ -710,7 +717,7 @@ function showGroupOptions(group, groupLabel, groupColorDiv){
     x.remove();
   }
   
-  let groupIndex = groups.indexOf(group)
+  let groupIndex = global.groups.indexOf(group)
   //build
 
   let optionsContaier = document.createElement("div")
@@ -718,10 +725,10 @@ function showGroupOptions(group, groupLabel, groupColorDiv){
 
   let closeBtn = document.createElement("button")
   closeBtn.classList.add("close-group-edition-btn")
-  closeBtn.addEventListener("click", (e) => {
+  closeBtn.onclick = (e) => {
     e.stopPropagation();
     optionsContaier.remove();
-  })
+  }
   
  
   let groupNameInput = document.createElement("input")
@@ -729,11 +736,11 @@ function showGroupOptions(group, groupLabel, groupColorDiv){
   groupNameInput.value = group.name
   groupNameInput.addEventListener("input", (e) => {
 
-      if(groups.findIndex(x => x.name == e.target.value) == -1){
-        groups[groupIndex].name = e.target.value;
+      if(global.groups.findIndex(x => x.name == e.target.value) == -1){
+        global.groups[groupIndex].name = e.target.value;
         groupLabel.innerText = e.target.value;
 
-        chrome.storage.sync.set({groups: groups})
+        chrome.storage.sync.set({groups: global.groups})
       }
   })
 
@@ -757,9 +764,9 @@ function showGroupOptions(group, groupLabel, groupColorDiv){
     colorInput.addEventListener("change", (e) => {
       e.stopPropagation();
       if(e.target.checked == true){
-        groups[groupIndex].color = color.name;
+        global.groups[groupIndex].color = color.name;
         groupColorDiv.style.background = color.code;
-        chrome.storage.sync.set({groups: groups})
+        chrome.storage.sync.set({groups: global.groups})
       }
     })
 

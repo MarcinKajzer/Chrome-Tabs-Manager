@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="popup.css">
+    <link rel="stylesheet" href="style/index.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
@@ -9,11 +9,12 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
     
-    <script src="favourites.js" defer></script>
-    <script src="groups.js" defer></script>
-    <script src="tabs.js" defer></script>
-    <script src="popup.js" defer></script>
-    <script src="selectables.js"></script>
+    
+    <script type="module" src="favourities/Favourites.js" defer></script>
+    <script type="module" src="groups.js" defer></script>
+    <script type="module" src="tabs/Tabs.js" defer></script>
+    <script type="module" src="index.js" defer></script>
+    <script src="external/selectables.js"></script>
 </head>
   <body>
     
@@ -92,9 +93,7 @@
       </section>
 
       <section id="pinned-windows-section">
-        <div id="all-pinned-windows">
-         
-        </div>
+        <div id="all-pinned-windows"></div>
       </section>
 
     </div>

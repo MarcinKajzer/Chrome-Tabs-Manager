@@ -60,39 +60,39 @@ header #main-buttons button{
 header #dynamic-buttons #create-new-window-btn{
   border: none;
   transition: all .3s;
-  background: url("assets/new_window_btn.png") no-repeat;
+  background: url("../assets/new_window_btn.png") no-repeat;
   background-size: contain;
 }
 
 header #dynamic-buttons #group-tabs-btn{
   border: none;
   transition: all .3s;
-  background: url("assets/group_tabs_btn.png") no-repeat;
+  background: url("../assets/group_tabs_btn.png") no-repeat;
   background-size: contain;
 }
 
 header #dynamic-buttons #group-tabs-btn.ungroup-tabs{
-  background: url("assets/ungroup_tabs_btn2.png") no-repeat;
+  background: url("../assets/ungroup_tabs_btn2.png") no-repeat;
   background-size: contain;
 }
 
 header #dynamic-buttons #change-favourites-display-grid{
   border: none;
   transition: all .3s;
-  background: url("assets/grid.png") no-repeat;
+  background: url("../assets/grid.png") no-repeat;
   background-size: contain;
   display: none;
 }
 
 header #dynamic-buttons #change-favourites-display-grid.grid{
-  background: url("assets/ungroup_tabs_btn.png") no-repeat;
+  background: url("../assets/ungroup_tabs_btn.png") no-repeat;
   background-size: contain;
 }
 
 header #dynamic-buttons #donate-btn{
   border: none;
   transition: all .3s;
-  background: url("assets/donate.png") no-repeat;
+  background: url("../assets/donate.png") no-repeat;
   background-size: contain;
 }
 
@@ -102,42 +102,42 @@ header button:hover, header a:hover{
 }
 
 #go-to-tabs-btn{
-  background: url(assets/tab.png) no-repeat;
+  background: url(../assets/tab.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-tabs-btn.selected-section{
-  background: url(assets/tab_selected.png) no-repeat;
+  background: url(../assets/tab_selected.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-groups-btn{
-  background: url(assets/group_icon.png) no-repeat;
+  background: url(../assets/group_icon.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-groups-btn.selected-section{
-  background: url(assets/group_icon_selected.png) no-repeat;
+  background: url(../assets/group_icon_selected.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-favourites-btn{
-  background: url(assets/favourite_white.png) no-repeat;
+  background: url(../assets/favourite_white.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-favourites-btn.selected-section{
-  background: url(assets/favourites_selected.png) no-repeat;
+  background: url(../assets/favourites_selected.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-settings-btn{
-  background: url(assets/settings.png) no-repeat;
+  background: url(../assets/settings.png) no-repeat;
   background-size: contain;
 }
 
 #go-to-settings-btn.selected-section{
-  background: url(assets/settings_selected.png) no-repeat;
+  background: url(../assets/settings_selected.png) no-repeat;
   background-size: contain;
 }
 /* Koniec headera */
@@ -303,7 +303,7 @@ nav{
   position: absolute;
   left: 38px;
   top: 6px;
-  background: url(assets/gray_search.png) no-repeat;
+  background: url(../assets/gray_search.png) no-repeat;
   background-position: center;
   background-size: contain;
   transition: all .2s;
@@ -311,7 +311,7 @@ nav{
 }
 
 #search-container.active-search::before{
-  background-image: url(assets/search.png)
+  background-image: url(../assets/search.png)
 }
 
 #search-container.group-name::before{
@@ -347,25 +347,30 @@ nav{
   transform: translateY(2px);
 }
 
+#groups-list .inner-list-item button,#groups-list .outer-list-item button{
+  height: 16px;
+  width: 16px;
+}
+
 .close-btn{
   border: none;
   background: none;
   height: 14px;
   width: 14px;
   margin-left: 3px;
-  background: url(assets/close.png) no-repeat;
+  background: url(../assets/close.png) no-repeat;
   background-size: contain;
   transition: transform .2s;
   cursor: pointer;
 }
 
 .add-to-favourites-btn{  
-  background: url(assets/favourite_white.png) no-repeat;
+  background: url(../assets/favourite_white.png) no-repeat;
   background-size: contain;
 }
 
 .pin-tab-btn{  
-  background: url(assets/pin_tab_btn.png) no-repeat;
+  background: url(../assets/pin_tab_btn.png) no-repeat;
   background-size: contain;
 }
 
@@ -374,17 +379,17 @@ nav{
 }
 
 .unpin-tab{
-  background: url(assets/unpin_tab_btn.png) no-repeat;
+  background: url(../assets/unpin_tab_btn.png) no-repeat;
   background-size: contain;
 }
 
 .favourite-tab{
-  background: url(assets/favourite_filled.png) no-repeat;
+  background: url(../assets/favourite_filled.png) no-repeat;
   background-size: contain;
 }
 
 .mute-btn{
-  background: url(assets/unmuted.gif) no-repeat;
+  background: url(../assets/unmuted.gif) no-repeat;
   background-size: contain;
 }
 
@@ -394,7 +399,7 @@ nav{
 }
 
 .muted{
-  background-image: url(assets/mute.png);
+  background-image: url(../assets/mute.png);
 }
 
 .outer-list{
@@ -582,7 +587,7 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
 /* Style zakładki z grupami */
 
 .delete-btn{
-  background: url(assets/trash.png) no-repeat;
+  background: url(../assets/trash.png) no-repeat;
   background-size: contain;
 }
 
@@ -593,27 +598,27 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
 }
 
 .open-all-btn{
-  background: url(assets/open_tab.png) no-repeat;
+  background: url(../assets/open_tab.png) no-repeat;
   background-size: contain;
 }
 
 .open-all-and-merge-btn{
-  background: url(assets/open_tab.png) no-repeat;
+  background: url(../assets/open_tab.png) no-repeat;
   background-size: contain;
 }
 
 .open-all-in-new-window-btn{
-  background: url(assets/open_in_new_window.png) no-repeat;
+  background: url(../assets/open_in_new_window.png) no-repeat;
   background-size: contain;
 }
 
 .open-all-incognito-btn{
-  background: url(assets/incognito.png) no-repeat;
+  background: url(../assets/incognito.png) no-repeat;
   background-size: contain;
 }
 
 .edit-group-btn{
-  background: url(assets/edit.png) no-repeat;
+  background: url(../assets/edit.png) no-repeat;
   background-size: contain;
 }
 
@@ -919,7 +924,7 @@ color: green
   transform: translate(10px, 8px);
   border: none;
   z-index: 9;
-  background: url(assets/trash.png) no-repeat black;
+  background: url(../assets/trash.png) no-repeat black;
   background-size: 60%;
   opacity: 0;
   cursor: pointer;
@@ -941,7 +946,7 @@ color: green
   transform: none;
   right: 20px;
   top: 13px;
-  background: url(assets/trash.png) no-repeat; 
+  background: url(../assets/trash.png) no-repeat; 
   background-size: contain;
   padding: 0;
   border-radius: 0; 
@@ -979,7 +984,7 @@ transform: scale(1.2);
   position: absolute;
   right: 10px;
   border: none;
-  background: url(assets/close.png) no-repeat;
+  background: url(../assets/close.png) no-repeat;
   transition: transform .2s;
   background-size: cover;
 }
@@ -1091,7 +1096,7 @@ transform: scale(1.2);
 .pin-btn{
   background: none;
   border: none;
-  background: url("assets/pin_tab_btn.png") no-repeat;
+  background: url("../assets/pin_tab_btn.png") no-repeat;
   background-size: contain;
   height: 16px;
   width: 16px;
@@ -1101,7 +1106,7 @@ transform: scale(1.2);
 }
 
 .pin-btn.unpin{
-  background: url("assets/unpin_tab_btn.png");
+  background: url("../assets/unpin_tab_btn.png");
   background-size: contain;
 }
 
@@ -1134,7 +1139,7 @@ transform: scale(1.2);
 }
 
 .drop-here-popup{
-  background: url(assets/drag_and_drop_black.png) no-repeat rgba(255,255,255,.4);
+  background: url(../assets/drag_and_drop_black.png) no-repeat rgba(255,255,255,.4);
   background-position: center;
   background-size: 50%;
   height: calc(100% - 20px);
@@ -1175,7 +1180,7 @@ transform: scale(1.2);
   position: absolute;
   left: 38px;
   top: 6px;
-  background: url(assets/gray_search.png) no-repeat;
+  background: url(../assets/gray_search.png) no-repeat;
   background-position: center;
   background-size: contain;
   transition: all .2s;
@@ -1214,7 +1219,7 @@ transform: scale(1.2);
 }
 
 #groups-search-header:focus-within::before{
-  background: url(assets/search.png);
+  background: url(../assets/search.png);
 }
 
 #confirm-group-creation-btn2{
@@ -1238,6 +1243,7 @@ transform: scale(1.2);
 
 #groups-list{
   margin-top: 50px;
+  max-height: 430px;
 }
 
 .group-is-empty-info{

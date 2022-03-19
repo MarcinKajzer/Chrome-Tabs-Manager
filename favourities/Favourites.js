@@ -1,11 +1,11 @@
-const dragableContainer = document.getElementById("dragables-container")
+import { global } from "../common/Global.js";
+import { favouritiesHooks } from "../common/hooks.js";
 
 let animation = true;
-
 let favouritesGrid = true;
+
 //DRY
-let changeFavouritedDisplayBtn = document.getElementById("change-favourites-display-grid");
-changeFavouritedDisplayBtn.addEventListener("click", () => {
+favouritiesHooks.changeFavouritedDisplayBtn.onclick = () => {
 
     if(favouritesGrid){
         animation = false;
@@ -17,8 +17,8 @@ changeFavouritedDisplayBtn.addEventListener("click", () => {
         }
 
         favouritesGrid = false;
-        changeFavouritedDisplayBtn.classList.remove("grid");
-        changeFavouritedDisplayBtn.title = "Show grid."
+        favouritiesHooks.changeFavouritedDisplayBtn.classList.remove("grid");
+        favouritiesHooks.changeFavouritedDisplayBtn.title = "Show grid."
     }
     else{
         let dragables = document.getElementsByClassName("dragable");
@@ -33,10 +33,10 @@ changeFavouritedDisplayBtn.addEventListener("click", () => {
 
         favouritesGrid = true;
 
-        changeFavouritedDisplayBtn.classList.add("grid");
-        changeFavouritedDisplayBtn.title = "Show list."
+        favouritiesHooks.changeFavouritedDisplayBtn.classList.add("grid");
+        favouritiesHooks.changeFavouritedDisplayBtn.title = "Show list."
     }
-})
+}
 
 //DRY END
 
@@ -45,13 +45,13 @@ let firstDrag = 0;
 let previousIndex;
 let newIndex;
 
-function buildFavourites() {
-    for (let fav of favourities) {
+export function buildFavourites() {
+    for (let fav of global.favourities) {
         createSingeFavourite(fav)
     }
 }
 
-function createSingeFavourite(fav){
+export function createSingeFavourite(fav){
     let dragable = document.createElement("div");
     dragable.classList.add("dragable", "animated")
 
@@ -78,8 +78,8 @@ function createSingeFavourite(fav){
             dragable.remove();
         },300)
 
-        favourities = favourities.filter(x => x.url != fav.url)
-        chrome.storage.sync.set({favourities: favourities})
+        global.favourities = global.favourities.filter(x => x.url != fav.url)
+        chrome.storage.sync.set({favourities: global.favourities})
 
         let buttons = document.getElementsByClassName(fav.id)
         
@@ -109,7 +109,7 @@ function createSingeFavourite(fav){
     dragable.appendChild(deleteButton)
     dragable.appendChild(wrapper)
 
-    dragableContainer.appendChild(dragable);
+    favouritiesHooks.dragableContainer.appendChild(dragable);
 
 
     //dragable functionality
@@ -117,20 +117,20 @@ function createSingeFavourite(fav){
     dragable.addEventListener("dragstart", () => {
         dragable.classList.add("dragging");
 
-        previousIndex = Array.prototype.indexOf.call(dragableContainer.children, dragable);
+        previousIndex = Array.prototype.indexOf.call(favouritiesHooks.dragableContainer.children, dragable);
     })
 
     dragable.addEventListener("dragend", () => {
         dragable.classList.remove("dragging");
         firstDrag = 0
 
-        newIndex = Array.prototype.indexOf.call(dragableContainer.children, dragable);
+        newIndex = Array.prototype.indexOf.call(favouritiesHooks.dragableContainer.children, dragable);
 
-        let element = favourities[previousIndex];
-        favourities.splice(previousIndex, 1)
-        favourities.splice(newIndex, 0, element)
+        let element = global.favourities[previousIndex];
+        global.favourities.splice(previousIndex, 1)
+        global.favourities.splice(newIndex, 0, element)
         
-        chrome.storage.sync.set({favourities: favourities})
+        chrome.storage.sync.set({favourities: global.favourities})
     })
 
     dragable.addEventListener("dragover", (e) => dragANdDrop(e))
@@ -158,7 +158,7 @@ function dragANdDrop(e){
             let centerX = enteredElement.left + enteredElement.width / 2;
 
             if (e.clientX > centerX) {
-                if (Math.round(enteredElement.right) == dragableContainer.getBoundingClientRect().right && firstDrag < 2) {
+                if (Math.round(enteredElement.right) == favouritiesHooks.dragableContainer.getBoundingClientRect().right && firstDrag < 2) {
                     e.target.before(draggingElement)
                     firstDrag++;
                 }
@@ -168,8 +168,8 @@ function dragANdDrop(e){
                 }
             }
             else {
-                if (Math.round(enteredElement.left) == dragableContainer.getBoundingClientRect().left &&
-                    Math.round(enteredElement.top) != dragableContainer.getBoundingClientRect().top &&
+                if (Math.round(enteredElement.left) == favouritiesHooks.dragableContainer.getBoundingClientRect().left &&
+                    Math.round(enteredElement.top) != favouritiesHooks.dragableContainer.getBoundingClientRect().top &&
                     firstDrag < 2) {
 
                     e.target.after(draggingElement)
