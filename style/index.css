@@ -1,232 +1,62 @@
 *{
-  margin: 0;
-  padding: 0;
-  font-family: 'Roboto', sans-serif;
-}
-
-body{
-  background: rgba(41,42,45, 1);
-}
-
-#app{
-  width: 350px;
-  font-size: 13px;
-  box-sizing: border-box;
-  transition: width .3s;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+    box-sizing: border-box;
 }
 
 ul{
-  list-style: none;
+    list-style: none;
 }
 
-
-/* Header */
-
-header{
-  position: fixed;
-  z-index: 100;
-  padding: 15px 22px 15px 26px;
-  display: flex;
-  justify-content: space-between;
-  width: 350px;
-  box-sizing: border-box;
+button{
+    border: none;
+    background: none;
+    cursor: pointer;
+    transition: all .3s;
+    color: white;
 }
 
-header #main-buttons button{
-  height: 25px;
-  width: 25px;
-  border: none;
-  margin: 0 10px 0 0;
-  transition: all .3s;
+button:hover{
+    transform: scale(1.2);
 }
 
-#dynamic-buttons{
-  background: rgba(0,0,0,.2);
-  padding: 2px 5px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  min-width: 30px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+button:disabled{
+    cursor: auto;
 }
 
-#dynamic-buttons button{
-  margin: 0 3px;
-  height: 20px;
-  width: 20px;
+button:disabled:hover{
+    transform: none;
 }
 
-header #dynamic-buttons #create-new-window-btn{
-  border: none;
-  transition: all .3s;
-  background: url("../assets/new_window_btn.png") no-repeat;
-  background-size: contain;
+input{
+    color: white;
 }
 
-header #dynamic-buttons #group-tabs-btn{
-  border: none;
-  transition: all .3s;
-  background: url("../assets/group_tabs_btn.png") no-repeat;
-  background-size: contain;
+body{
+    background: rgba(41,42,45, 1);
+    color: white;
 }
 
-header #dynamic-buttons #group-tabs-btn.ungroup-tabs{
-  background: url("../assets/ungroup_tabs_btn2.png") no-repeat;
-  background-size: contain;
+#app{
+    width: 350px;
+    font-size: 13px;
+    transition: width .3s;
 }
-
-header #dynamic-buttons #change-favourites-display-grid{
-  border: none;
-  transition: all .3s;
-  background: url("../assets/grid.png") no-repeat;
-  background-size: contain;
-  display: none;
-}
-
-header #dynamic-buttons #change-favourites-display-grid.grid{
-  background: url("../assets/ungroup_tabs_btn.png") no-repeat;
-  background-size: contain;
-}
-
-header #dynamic-buttons #donate-btn{
-  border: none;
-  transition: all .3s;
-  background: url("../assets/donate.png") no-repeat;
-  background-size: contain;
-}
-
-header button:hover, header a:hover{
-  cursor: pointer;
-  transform: scale(1.2);
-}
-
-#go-to-tabs-btn{
-  background: url(../assets/tab.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-tabs-btn.selected-section{
-  background: url(../assets/tab_selected.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-groups-btn{
-  background: url(../assets/group_icon.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-groups-btn.selected-section{
-  background: url(../assets/group_icon_selected.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-favourites-btn{
-  background: url(../assets/favourite_white.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-favourites-btn.selected-section{
-  background: url(../assets/favourites_selected.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-settings-btn{
-  background: url(../assets/settings.png) no-repeat;
-  background-size: contain;
-}
-
-#go-to-settings-btn.selected-section{
-  background: url(../assets/settings_selected.png) no-repeat;
-  background-size: contain;
-}
-/* Koniec headera */
-
-.selected-counter{
-  left: -20px;
-  width: 25px;
-  height: 30px;
-  padding-right: 5px;
-  border-top-right-radius: 15px;
-  border-bottom-right-radius: 15px;
-  background: red;
-  z-index: 100;
-  color: white;
-  font-weight: bold;
-  display: flex;
-  visibility: hidden;
-  opacity: 0;
-  justify-content: center;
-  transition: visibility 0s, opacity 0.2s;
-  position: absolute;
-}
-
-.selected-counter.group-creation{
-  background: green;
-}
-
-.selected-counter.duplicates{
-  background: yellow;
-  color: black;
-}
-
-.selected-counter:hover{
-  cursor: pointer;
-}
-
-.selected-counter::before{
-  content: "x";
-  width: 20px;
-  height: 20px;
-  position:absolute;
-  background: red;
-  text-align: center;
-  top: 5px;
-  font-size: 15px;
-  visibility: hidden;
-  opacity: 0;
-  justify-content: center;
-  transition: visibility 0s, opacity 0.2s;
-}
-
-.selected-counter:hover::before{
-  visibility: visible;
-  opacity: 1;
-}
-
-.selected-counter.group-creation::before{
-  background: green;
-}
-
-.selected-counter.duplicates::before{
-  background: yellow;
-}
-
-.selected-counter span{
-  display: block;
-  margin-top: 8px
-}
-
-/* Koniec selected countera */
-
-/* Zakładki */
 
 main{
-  width: 1400px;
-  padding-top: 50px;
-  display: flex;
-  justify-content: left;
-  transition: transform .3s, width .3s;
+    width: 1400px;
+    padding-top: 50px;
+    display: flex;
+    justify-content: left;
+    transition: transform .3s, width .3s;
 }
 
 #current-tabs, #groups-section, #settings-section, #favourites-section{
-  padding: 0 0 20px 20px;
-  color: white;
-  width: 350px;
-  box-sizing: border-box;
-  position: relative;
+    padding: 0 0 20px 20px;
+    width: 350px;
+    position: relative;
 }
-
 
 #pinned-windows-section{
   width: 0;
@@ -237,15 +67,277 @@ main{
 #pinned-windows-section.shown{
   padding: 0 0 20px 20px;
   width: 350px;
-  box-sizing: border-box;
   position: relative;
-  color: white;
   opacity: 1;
 }
 
+
+
+/* ................SCROLL.................. */
+
+::-webkit-scrollbar {
+    width: 3px;
+}
+  
+::-webkit-scrollbar-track {
+    background: none;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.5);
+    border-radius: 10px;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+/* ...............SELECTABLE............... */
+
+#s-rectBox {
+    position: absolute;
+    z-index: 1090;
+    border: 2px dashed red;
+}
+  
+.s-noselect { 
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* ........................................ */
+/* ................HEADER.................. */
+/* ........................................ */
+
+header{
+    position: fixed;
+    z-index: 100;
+    padding: 15px 22px 15px 26px;
+    display: flex;
+    justify-content: space-between;
+    width: 350px;
+}
+
+/* ...............MAIN BUTTONS............. */
+
+#main-buttons button{
+    height: 25px;
+    width: 25px;
+    margin: 0 10px 0 0;
+}
+
+#go-to-tabs-btn{
+    background: url(../assets/tab.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-tabs-btn.selected-section{
+    background: url(../assets/tab_selected.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-groups-btn{
+    background: url(../assets/group_icon.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-groups-btn.selected-section{
+    background: url(../assets/group_icon_selected.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-favourites-btn{
+    background: url(../assets/favourite_white.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-favourites-btn.selected-section{
+    background: url(../assets/favourites_selected.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-settings-btn{
+    background: url(../assets/settings.png) no-repeat;
+    background-size: contain;
+}
+
+#go-to-settings-btn.selected-section{
+    background: url(../assets/settings_selected.png) no-repeat;
+    background-size: contain;
+}
+
+/* ............DYNAMIC BUTTONS............. */
+
+#dynamic-buttons{
+    background: rgba(0,0,0,.2);
+    padding: 2px 5px;
+    border-radius: 20px;
+    min-width: 30px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+#dynamic-buttons button{
+    margin: 0 3px;
+    height: 20px;
+    width: 20px;
+}
+
+#create-new-window-btn{
+    background: url("../assets/new_window_btn.png") no-repeat;
+    background-size: contain;
+}
+
+#group-tabs-btn{
+    background: url("../assets/group_tabs_btn.png") no-repeat;
+    background-size: contain;
+}
+
+#group-tabs-btn.ungroup-tabs{
+    background: url("../assets/ungroup_tabs_btn2.png") no-repeat;
+    background-size: contain;
+}
+
+#change-favourites-display-grid{
+    background: url("../assets/grid.png") no-repeat;
+    background-size: contain;
+    display: none;
+}
+
+#change-favourites-display-grid.grid{
+    background: url("../assets/ungroup_tabs_btn.png") no-repeat;
+    background-size: contain;
+}
+
+#donate-btn{
+    background: url("../assets/donate.png") no-repeat;
+    background-size: contain;
+}
+
+/* ........................................ */
+/* ............SEARCH SECTION.............. */
+/* ........................................ */
+
+/* ............SELECTED COUNTER............ */
+
+.selected-counter{
+    left: -20px;
+    width: 25px;
+    height: 30px;
+    padding-right: 5px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    background: red;
+    z-index: 100;
+    font-weight: bold;
+    display: flex;
+    visibility: hidden;
+    opacity: 0;
+    justify-content: center;
+    transition: visibility 0s, opacity 0.2s;
+    position: absolute;
+    cursor: pointer;
+}
+
+.selected-counter span{
+    display: block;
+    margin-top: 8px
+}
+
+.selected-counter.group-creation{
+     background: green;
+}
+
+.selected-counter.duplicates{
+    background: yellow;
+    color: black;
+}
+
+.selected-counter::before{
+    content: "x";
+    width: 20px;
+    height: 20px;
+    position:absolute;
+    background: red;
+    text-align: center;
+    top: 5px;
+    font-size: 15px;
+    visibility: hidden;
+    opacity: 0;
+    justify-content: center;
+    transition: visibility 0s, opacity 0.2s;
+}
+
+.selected-counter:hover::before{
+    visibility: visible;
+    opacity: 1;
+}
+
+.selected-counter.group-creation::before{
+    background: green;
+}
+
+.selected-counter.duplicates::before{
+    background: yellow;
+}
+
+/* ............SEARCH CONTAINER............ */
+
+#search-container{
+    position: relative;
+    height: 30px;
+    margin: 10px 0
+}
+  
+#search-container::before{
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: red;
+    display: block;
+    position: absolute;
+    left: 38px;
+    top: 6px;
+    background: url(../assets/gray_search.png) no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: all .2s;
+    z-index: 102;
+}
+  
+#search-container.active-search::before{
+    background-image: url(../assets/search.png)
+}
+
+#search-container.group-name::before{
+    display: none;
+}
+
+.search-input{
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    background: rgba(0,0,0,.2);
+    border:none;
+    height: 30px;
+    outline: none;
+    text-align: center;
+    border-radius: 15px;
+    padding: 0 37px;
+    position: absolute;
+    left: 0;
+    right: 0;
+}
+
+/* ............NAVIGATION............ */
+
 nav{
   width: 100%;
-  box-sizing: border-box;
   padding-right: 20px;
 }
 
@@ -258,343 +350,341 @@ nav{
   flex-wrap: wrap;
 }
 
-.navigation button{
-  background: none;
-  color: white;
-  border: none;
-  transition: all .2s;
-}
-
-.navigation button:disabled{
+.navigation button:disabled, .navigation button:disabled:hover{
   color: gray;
-}
-
-.navigation button:disabled:hover{
-  color: gray;
-  cursor: auto;
 }
 
 .navigation button:hover{
-  cursor: pointer;
   color: cyan;
+  transform: none;
 }
 
-#close-selected-container span{
-  background: red;
-  color: white;
-  display: inline-block;
-  text-align: center;
-  border-radius: 8px;
-  line-height: 17px;
+/* .................................... */
+/* ..........COMMON FOR LISTS.......... */
+/* .................................... */
+
+#all-windows button, #groups-list button{
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    margin-left: 5px;
+    transform: translateY(2px);
 }
 
-#search-container{
-  position: relative;
-  height: 30px;
-  margin: 10px 0
+#all-windows button:hover, #groups-list button:hover{
+    transform: scale(1.2);
 }
 
-#search-container::before{
-  content: '';
-  width: 18px;
-  height: 18px;
-  background: red;
-  display: block;
-  position: absolute;
-  left: 38px;
-  top: 6px;
-  background: url(../assets/gray_search.png) no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: all .2s;
-  z-index: 102;
-}
-
-#search-container.active-search::before{
-  background-image: url(../assets/search.png)
-}
-
-#search-container.group-name::before{
-  display: none;
-}
-
-.search-input{
-  width: 80%;
-  margin: 0 auto;
-  display: block;
-  background: rgba(0,0,0,.2);
-  border:none;
-  height: 30px;
-  outline: none;
-  text-align: center;
-  color: white;
-  border-radius: 15px;
-  padding: 0 37px;
-  box-sizing: border-box;
-  position: absolute;
-  left: 0;
-  right: 0;
-}
-
-.inner-list-item button, .outer-list-item button{
-  height: 14px;
-  width: 14px;
-  border-radius: 50%;
-  transition: 0.2s;
-  cursor: pointer;
-  border:none;
-  margin-left: 5px;
-  transform: translateY(2px);
-}
-
-#groups-list .inner-list-item button,#groups-list .outer-list-item button{
-  height: 16px;
-  width: 16px;
-}
-
-.close-btn{
-  border: none;
-  background: none;
-  height: 14px;
-  width: 14px;
-  margin-left: 3px;
-  background: url(../assets/close.png) no-repeat;
-  background-size: contain;
-  transition: transform .2s;
-  cursor: pointer;
-}
-
-.add-to-favourites-btn{  
-  background: url(../assets/favourite_white.png) no-repeat;
-  background-size: contain;
-}
-
-.pin-tab-btn{  
-  background: url(../assets/pin_tab_btn.png) no-repeat;
-  background-size: contain;
-}
-
-.add-to-favourites-btn:hover, .pin-tab-btn:hover, .close-btn:hover{
-  transform: scale(1.2);
-}
-
-.unpin-tab{
-  background: url(../assets/unpin_tab_btn.png) no-repeat;
-  background-size: contain;
-}
-
-.favourite-tab{
-  background: url(../assets/favourite_filled.png) no-repeat;
-  background-size: contain;
-}
-
-.mute-btn{
-  background: url(../assets/unmuted.gif) no-repeat;
-  background-size: contain;
-}
-
-.mute-btn:hover{
-  cursor: pointer;
-  transform: scale(1.2);
-}
-
-.muted{
-  background-image: url(../assets/mute.png);
+#groups-list button{
+    height: 16px;
+    width: 16px;
 }
 
 .outer-list{
-  overflow: auto;
-  padding-right: 30px;
-  padding-left: 10px;
-  box-sizing: border-box;
+    overflow: auto;
+    padding-right: 30px;
+    padding-left: 10px;
 }
-
+  
 .outer-list-item{
-  transition: .3s;
-  position: relative;
+    transition: .3s;
+    position: relative;
 }
 
-.inner-list-checkbox-label, .inner-list-item{
-  display: flex;
-  justify-content: space-between;
+.outer-list-item input:checked ~ ul .inner-list-item{
+    height: 30px;
+    padding: 5px 0px 10px 30px
 }
-
-.inner-list-checkbox-label{
-  cursor: pointer;
-  padding: 10px 0;
-  font-weight: bold;
-  transition: 0.2s;
-  border-bottom: solid 1px rgba(0,0,0,.1);
-}
-
-.inner-list-item {
-  transition: .2s;
-  height: 0;
-  overflow: hidden;
-  cursor: pointer;
-  line-height: 20px;
-  color: white;
-}
-
-.inner-list-item.ungrouped{
-  height: auto;
-  padding: 5px 0;
-}
-
-.inner-list-checkbox-label:hover div:first-child::after{
-  border-top-color: cyan; 
-}
-
-.inner-list-checkbox-label.selected-tab div:first-child::after{
-  border-top-color: lightgreen; 
-}
-
-.inner-list-checkbox-label.selected-tab:hover div:first-child::after{
-  border-top-color: green; 
-}
-
-.inner-list-checkbox-label.active div:first-child::after, .inner-list-checkbox-label.selected-group div:first-child::after{
-  border-top-color:red; 
-}
-
-.inner-list-checkbox-label.active:hover div:first-child::after, .inner-list-checkbox-label.selected-group:hover div:first-child::after{
-  border-top-color:pink; 
-}
-
-
-.inner-list-checkbox-label:hover, .inner-list-item:hover {
-  color: cyan;
-}
-
-.inner-list-checkbox-label div{
-  position: relative;
-  display: flex;
-}
-
-.inner-list-checkbox-label div:first-child::after{
-  content: '';
-  width: 0;
-  height: 0;
-  display: block;
-  position: absolute;
-  right: -20px;
-  top: 5px;
-  background-position: center;
-  background-size: contain;
-  transition: all .2s;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent; 
-  border-top:6px solid white; 
-}
-
-.inner-list-checkbox-label.active:hover, .inner-list-item.active:hover, .inner-list-checkbox-label.selected-group:hover, .inner-list-item.selected-group:hover {
-  color: pink;
-}
-
-li input:checked ~ ul .inner-list-item{
-  height: 13px;
-  padding: 5px 0px 10px 30px
-}
-
-li input:checked ~ .inner-list-checkbox-label div:first-child::after {
-  transform: rotate(180deg);
+  
+.outer-list-item input:checked ~ .inner-list-checkbox-label div:first-child::after {
+    transform: rotate(225deg) translate(3px ,4px);
 }
 
 .outer-list input[type="checkbox"]{
-  display: none;
+    display: none;
 }
 
-.inner-list-checkbox-label span{
-  position: relative;
+.inner-list-checkbox-label, .inner-list-item{
+    display: flex;
+    justify-content: space-between;
+}
+  
+.inner-list-checkbox-label{
+    cursor: pointer;
+    padding: 10px 0;
+    font-weight: bold;
+    transition: 0.2s;
+    border-bottom: solid 1px rgba(0,0,0,.1);
 }
 
-.favIcon{
-  width: 20px;
-  vertical-align:middle;
-  padding-right: 10px;
-  display: inline-block;
+.inner-list-checkbox-label div{
+    position: relative;
+    display: flex;
+}
+  
+.inner-list-item {
+    transition: .2s;
+    height: 0;
+    overflow: hidden;
+    cursor: pointer;
+    line-height: 20px;
+}
+  
+.inner-list-item.ungrouped{
+    height: auto;
+    padding: 5px 0;
 }
 
 .inner-list-item.removed{
-  height: 0 !important;
-  padding: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+}
+
+.inner-list-checkbox-label span{
+    position: relative;
+}
+
+.inner-list-checkbox-label:hover, .inner-list-item:hover {
+    color: cyan;
+}
+  
+.inner-list-checkbox-label.active:hover, .inner-list-item.active:hover, 
+.inner-list-checkbox-label.selected-group:hover, .inner-list-item.selected-group:hover {
+    color: pink;
+}
+
+.inner-list-checkbox-label div:first-child::after{
+    content: '';
+    width: 5px;
+    height: 5px;
+    display: block;
+    position: absolute;
+    right: -20px;
+    top: 7px;
+    background-position: center;
+    background-size: contain;
+    transition: all .2s;
+    border-left: 2px solid white;
+    border-top: 2px solid white;
+    transform: rotate(45deg);
+}
+
+.inner-list-checkbox-label:hover div:first-child::after{
+    border-left: 2px solid cyan;
+    border-top: 2px solid cyan;
+}
+
+.inner-list-checkbox-label.current-tab div:first-child::after{
+    border-left: 2px solid lightgreen;
+    border-top: 2px solid lightgreen;
+}
+
+.inner-list-checkbox-label.current-tab:hover div:first-child::after{
+    border-left: 2px solid green;
+    border-top: 2px solid green;
+}
+
+.inner-list-checkbox-label.active div:first-child::after, 
+.inner-list-checkbox-label.selected-group div:first-child::after{
+    border-left: 2px solid red;
+    border-top: 2px solid red; 
+}
+
+.inner-list-checkbox-label.active:hover div:first-child::after, 
+.inner-list-checkbox-label.selected-group:hover div:first-child::after{
+    border-left: 2px solid pink;
+    border-top: 2px solid pink; 
+}
+
+.favIcon{
+    width: 20px;
+    vertical-align:middle;
+    margin-right: 10px;
+    display: inline-block;
 }
 
 .remove-host{
-  transform: translateX(-130%);
-}
-
-#s-rectBox {
-  position: absolute;
-  z-index: 1090;
-  border: 2px dashed red;
-   
-}
-
-.s-noselect { 
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-
-
-::-webkit-scrollbar {
-  width: 3px;
-}
-
-::-webkit-scrollbar-track {
-  background: none;
-}
-
-::-webkit-scrollbar-thumb {
-  /* background: #f1f1f1; */
-  background: rgba(255,255,255,.5);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.selected-tab{
-  color: lightgreen;;
-  /* color:rgb(138,180, 248) */
-}
-
-.selected-tab.active{
-  color: red;
-}
-
-.selected-tab:hover{
-  color: green;
-}
-
-.display-none{
-  display: none;;
+    transform: translateX(-130%);
 }
 
 .no-results-info{
-  color: gray;
-  text-align: center;
-  padding-top: 10px;
-  display: none;
+    color: gray;
+    text-align: center;
+    padding-top: 10px;
+    display: none;
 }
 
-/* Style zakładki z grupami */
+.active, .active .inner-list-checkbox-label, .selected-group, .selected-group .inner-list-checkbox-label{
+    color: red
+}
+
+/* .................................... */
+/* ............CURRENT TABS............ */
+/* .................................... */
+
+#current-tabs-wrapper{
+    display: flex;
+    width: 700px;
+}
+
+#all-windows{
+    max-height: 452px;
+    overflow: auto;
+    padding-right: 20px;
+}
+  
+.window-container{
+    margin-top: 10px;
+    border: solid 1px rgba(0,0,0,.1);
+    position: relative;
+}
+  
+.window-list.outer-list{
+    padding: 0;
+}
+  
+.window-container .window-list{
+    padding: 10px;
+}
+  
+.pin-btn{
+    background: none;
+    border: none;
+    background: url("../assets/pin_tab_btn.png") no-repeat;
+    background-size: contain;
+    height: 16px;
+    width: 16px;
+    transition: transform .2s;
+    cursor: pointer;
+    transform: translateY(2px);
+}
+  
+.pin-btn.unpin{
+    background: url("../assets/unpin_tab_btn.png");
+    background-size: contain;
+}
+  
+.pin-btn:hover{
+    transform: scale(1.2);
+}
+  
+.window-label{
+    height: 20px;
+    background: rgba(0,0,0,.1);
+    line-height: 20px;
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-between;
+}
+  
+.window-label span{
+    cursor: pointer;
+}
+  
+#all-pinned-windows{
+    padding-right: 20px;
+    max-height: 530px;
+    overflow: auto;
+}
+  
+#all-pinned-windows .window-container:first-child{
+    margin-top: 0;
+}
+  
+.drop-here-popup{
+    background: url(../assets/drag_and_drop_black.png) no-repeat rgba(255,255,255,.4);
+    background-position: center;
+    background-size: 50%;
+    height: calc(100% - 20px);
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    color: black;
+    font-size: 30px;
+    z-index: 99;
+    justify-content: center;
+    align-items: center;
+    top: 20px;
+    display: none;
+}
+  
+.drop-here-popup.visible-popup{
+    display: flex;
+}
+  
+.dragging-host, .dragging-ungrouped-tab, .dragging-grouped-tab{
+    opacity: .5;
+}
+
+.close-btn{
+    background: url(../assets/close.png) no-repeat;
+    background-size: contain;
+}
+
+.add-to-favourites-btn{  
+    background: url(../assets/favourite_white.png) no-repeat;
+    background-size: contain;
+}
+
+.pin-tab-btn{  
+    background: url(../assets/pin_tab_btn.png) no-repeat;
+    background-size: contain;
+}
+
+.unpin-tab{
+    background: url(../assets/unpin_tab_btn.png) no-repeat;
+    background-size: contain;
+}
+
+.favourite-tab{
+    background: url(../assets/favourite_filled.png) no-repeat;
+    background-size: contain;
+}
+
+.mute-btn{
+    background: url(../assets/unmuted.gif) no-repeat;
+    background-size: contain;
+}
+
+.muted{
+    background-image: url(../assets/mute.png);
+}
+
+.current-tab{ 
+    color: lightgreen;;
+}
+
+.current-tab.active{
+     color: red;
+}
+
+.current-tab:hover{
+    color: green;
+}
+
+.active.grouped, .grouped .inner-list-checkbox-label{
+    color: green
+}
+    
+.active.grouped:hover{
+      color: lightgreen;
+}
+    
+.inner-list-checkbox-label.active.grouped div:first-child::after{
+      border-top-color:green; 
+}
+    
+.inner-list-checkbox-label.active.grouped:hover div:first-child::after{
+      border-top-color:lightgreen; 
+}
+
+/* ...................................... */
+/* ................GROUPS................ */
+/* ...................................... */
 
 .delete-btn{
-  background: url(../assets/trash.png) no-repeat;
-  background-size: contain;
-}
-
-
-.delete-btn:hover, .open-all-btn:hover, .open-all-in-new-window-btn:hover, .open-all-incognito-btn:hover, .open-all-and-merge-btn:hover, .edit-group-btn:hover{
-  cursor: pointer;
-  transform: scale(1.2);
+    background: url(../assets/trash.png) no-repeat;
+    background-size: contain;
 }
 
 .open-all-btn{
@@ -622,165 +712,339 @@ li input:checked ~ .inner-list-checkbox-label div:first-child::after {
   background-size: contain;
 }
 
-.active, .active .inner-list-checkbox-label, .selected-group, .selected-group .inner-list-checkbox-label{
-  color: red
+/* ........GROUPS EDITION........ */
+
+.group-options-container{
+    width: 250px;
+    position: absolute;
+    border: solid 1px gray;
+    top: 35px;
+    right: -80px;
+    transform: translateX(-46%);
+    padding: 10px;
+    background: rgba(41,42,45, 1);
+    z-index: 99;
+}
+  
+.close-group-edition-btn{
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    right: 10px;
+    border: none;
+    background: url(../assets/close.png) no-repeat;
+    transition: transform .2s;
+    background-size: cover;
+}
+  
+.close-group-edition-btn:hover{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+  
+.group-name-input{
+    margin: 19px auto;
+    display: block;
+    border: none;
+    background: rgba(0,0,0,.2);
+    height: 30px;
+    border-radius: 15px;
+    padding: 0 10px;
+    text-align: center;
+}
+  
+.colors-container input{
+    height: 20px;
+    width: 20px;
+    display: none;
+}
+  
+.colors-container {
+    display: flex;
+    justify-content: space-around;
+  
+}
+  
+.colors-container label{
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: .3s;
+    cursor: pointer;
+    position: relative;
+}
+  
+.colors-container input:checked ~ label::before{
+    opacity: 1;
+}
+  
+.colors-container label::before{
+    content: "";
+    height: 80%;
+    width: 80%;
+    position: absolute;
+    background: none;
+    border: solid 2px black;
+    border-radius: 50%;
+    transform: translate(2px, 2px);
+    opacity: 0;
+    transition: opacity .2s;
+}
+  
+#cyan-color ~ label{
+    background: cyan;
+}
+  
+#orange-color ~ label{
+    background: orange;
+}
+  
+#red-color ~ label{
+    background: red;
+}
+  
+.group-color-div{
+    background: red;
+    display: inline-block;
+    height: 20px;
+    border-radius: 50%;
+    width: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
 }
 
-.active.grouped , .grouped .inner-list-checkbox-label{
-color: green
+/* ..........GROUPS SEARCHING............. */
+
+#search-container-groups{
+    position: relative;
+    margin: 10px 0;
+  }
+  
+#search-container-groups:before{
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: red;
+    display: block;
+    position: absolute;
+    left: 38px;
+    top: 6px;
+    background: url(../assets/gray_search.png) no-repeat;
+    background-position: center;
+    background-size: contain;
+    transition: all .2s;
+    z-index: 102;
+}
+  
+#groups-search-header{
+    width: 80%;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: rgba(33,34,36,.98);
+    border-radius: 15px;
+    padding: 0 37px;
+    z-index: 9;
+    height: 30px;
+    overflow: hidden;
+    transition: height .2s;
+    display: none;
+}
+  
+#created-name-input{
+    background: none;
+      border: none;
+      text-align: center;
+      width: 100%;
+      height: 30px;
+      outline: none;
+}
+  
+#groups-search-header:focus-within{
+    height: 80px;
+}
+  
+#groups-search-header:focus-within::before{
+    background: url(../assets/search.png);
+}
+  
+#confirm-group-creation-btn2{
+    width: 100%;
+    height: 20px;
+    background: green;
+    transition: all .2s;
+    border:none;
+    margin: 10px 0 20px;
+}
+  
+#confirm-group-creation-btn2:hover{
+    cursor: pointer;
+}
+  
+#confirm-group-creation-btn2:disabled{
+    background: gray;
+    cursor: default;
+}
+  
+#groups-list{
+    margin-top: 50px;
+    max-height: 430px;
+}
+  
+.group-is-empty-info{
+    color: gray;
+    display: inline-block;
+    padding-right: 10px;
 }
 
-.active.grouped:hover{
-  color: lightgreen;
-}
+/* .................................... */
+/* ......ADD TO GROUP MULTISELECT...... */
+/* .................................... */
 
-.inner-list-checkbox-label.active.grouped div:first-child::after{
-  border-top-color:green; 
-}
-
-.inner-list-checkbox-label.active.grouped:hover div:first-child::after{
-  border-top-color:lightgreen; 
-}
-
-
-/* Style do multiselekta grup */
-
-#search-header{
-  width: 80%;
-  margin: 0 auto;
-  position: absolute;
-  left: 0; 
-  right: 0;
-  background: rgba(33,34,36,.98);
-  color: white;
-  border-radius: 15px;
-  padding: 0 37px;
-  box-sizing: border-box;
-  z-index: 101;
-  display: none;
+#add-to-group-container{
+    width: 80%;
+    margin: 0 auto;
+    position: absolute;
+    left: 0; 
+    right: 0;
+    background: rgba(33,34,36,.98);
+    border-radius: 15px;
+    padding: 0 37px;
+    z-index: 101;
+    display: none;
 }
 
 #expand-select-group{
-  display: none;
+    display: none;
 }
 
 #select-group-label{
-  height: 30px;
-  display: block;
-  line-height: 30px;
-  text-align: center;
-  color: gray;
+    height: 30px;
+    display: block;
+    line-height: 30px;
+    text-align: center;
+    color: gray;
 }
 
 #select-group-label:hover{
-  cursor: pointer;
+    cursor: pointer;
 }
 
 #new-group-name-input{
-  background: none;
-  border: none;
-  outline: none;
-  color: white;
-  padding-bottom: 20px;
-  text-align: center;
-  display: block;
-  width: 100%;
+    background: none;
+    border: none;
+    outline: none;
+    padding-bottom: 20px;
+    text-align: center;
+    display: block;
+    width: 100%;
 }
+
 #select-group-container{
-  max-height: 0;
-  transition: all .3s;
-  overflow: hidden;
+    max-height: 0;
+    transition: all .3s;
+    overflow: hidden;
 }
 
 #confirm-saving-tabs-btn, #confirm-group-creation-btn{
-  width: 100%;
-  height: 20px;
-  background: green;
-  color: white;
-  transition: all .2s;
-  border:none;
+    width: 100%;
+    height: 20px;
+    background: green;
+    transition: all .2s;
 }
 
 #confirm-saving-tabs-btn:hover, #confirm-group-creation-btn:hover{
-  background: rgb(38, 158, 38);
-  cursor: pointer;
+     background: rgb(38, 158, 38);
 }
 
 #confirm-saving-tabs-btn:disabled, #confirm-group-creation-btn:disabled{
-  background: gray;
-  cursor: auto;
+    background: gray;
 }
 
 #confirm-group-creation-btn{
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 #create-new-group-section{
-  padding-top: 10px;
+     padding-top: 10px;
 }
+
 #create-new-group-section #create-new-group-btn{
-  display: none;
+     display: none;
 }
 
 #create-new-group-section label{
-  padding: 20px 0;
-  display: block;
-  border-top: solid 1px gray
+    padding: 20px 0;
+    display: block;
+    border-top: solid 1px gray
 }
 
 #create-new-group-section label:hover{
-  cursor:pointer
+    cursor:pointer
 }
 
 #create-new-group-btn~div{
-  max-height: 0;
-  overflow: hidden;
-  transition: all .3s;
+    max-height: 0;
+    overflow: hidden;
+    transition: all .3s;
 }
 
 #create-new-group-btn:checked~div {
-  max-height: 100px;
+     max-height: 100px;
 }
 
 #expand-select-group:checked~#select-group-container{
-  max-height: 300px;
+    max-height: 300px;
 }
+
 #inputs{
-  overflow-y: scroll;
-  max-height: 100px;
-  margin: 10px 0 20px;
+    overflow-y: scroll;
+    max-height: 100px;
+    margin: 10px 0 20px;
 }
 
 #inputs div{
-  padding-bottom: 10px;
-  display: flex;
+    padding-bottom: 10px;
+    display: flex;
 }
 
 #inputs div span:last-child{
-  color: gray;
+    color: gray;
 }
 
 #inputs div:last-child{
-  padding-bottom: 0;
+    padding-bottom: 0;
 }
 
 #inputs label{
-  display: flex;
-  justify-content: space-between;
-  width: 80%;
-  padding-left: 10px;
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+    padding-left: 10px;
 }
 
 #inputs label:hover, #inputs input:hover{
-  cursor: pointer;
+    cursor: pointer;
 }
 
-/* FAVOURITES SECTION */
+/* .................................... */
+/* ............FAVOURITIES............. */
+/* .................................... */
 
 #favourites-section{
   width: 350px;
   padding: 10px 0 0 10px;
   max-height: 500px;
+}
+
+#favourites-line{
+    height: 2px;
+    width: 90%;
+    background: rgba(0,0,0,.15);
+    margin: 0 auto 10px;
 }
 
 #dragables-container{
@@ -792,7 +1056,7 @@ color: green
   max-height: 510px;
   overflow: auto;
   padding-right: 20px;
-  width: 310px;
+  width: 330px;
   margin-left: 10px;
 }
 
@@ -801,7 +1065,6 @@ color: green
   width: 25%;
   text-align: center;
   transition:  opacity .3s;
-  box-sizing: border-box;
   padding: 0 10px;
   font-size: 12px;
   overflow: hidden;
@@ -856,6 +1119,7 @@ color: green
   justify-content: center;
   align-items: center;
 }
+
 .icon-container:before {
   content: '';
   position: absolute;
@@ -872,19 +1136,6 @@ color: green
     height: 70%;
     width: 70%;
 }
-
-.dragable.x3{
-  width: 33.33%
-}
-
-.dragable.x4{
-  width: 25%;
-}
-
-.dragable.x5{
-  width: 20%;
-}
-
 
 .dragable.vertical{
   width: 100%;
@@ -957,309 +1208,10 @@ color: green
 transform: scale(1.2);
 } 
 
-.yellow{
+.duplicated-tab{
   color: yellow;
 }
 
-
-/* groups options */
-
-.group-options-container{
-  width: 250px;
-  position: absolute;
-  border: solid 1px gray;
-  top: 35px;
-  right: -80px;
-  transform: translateX(-46%);
-  padding: 10px;
-  box-sizing: border-box;
-  background: rgba(41,42,45, 1);
-  z-index: 99;
-}
-
-
-.close-group-edition-btn{
-  height: 16px;
-  width: 16px;
-  position: absolute;
-  right: 10px;
-  border: none;
-  background: url(../assets/close.png) no-repeat;
-  transition: transform .2s;
-  background-size: cover;
-}
-
-.close-group-edition-btn:hover{
-  transform: scale(1.2);
-  cursor: pointer;
-}
-
-.group-name-input{
-  margin: 19px auto;
-  display: block;
-  border: none;
-  background: rgba(0,0,0,.2);
-  height: 30px;
-  border-radius: 15px;
-  color: white;
-  padding: 0 10px;
-  text-align: center;
-}
-
-.colors-container input{
-  height: 20px;
-  width: 20px;
-  display: none;
-}
-
-.colors-container {
-  display: flex;
-  justify-content: space-around;
-
-}
-
-.colors-container label{
-  display: block;
-  width: 20px;
-  height: 20px;
-  background: white;
-  border-radius: 50%;
-  transition: .3s;
-  cursor: pointer;
-  position: relative;
-}
-
-.colors-container input:checked ~ label::before{
-  opacity: 1;
-}
-
-.colors-container label::before{
-  content: "";
-  height: 80%;
-  width: 80%;
-  position: absolute;
-  background: none;
-  border: solid 2px black;
-  border-radius: 50%;
-  box-sizing: border-box;
-  transform: translate(2px, 2px);
-  opacity: 0;
-  transition: opacity .2s;
-}
-
-#cyan-color ~ label{
-  background: cyan;
-}
-
-#orange-color ~ label{
-  background: orange;
-}
-
-#red-color ~ label{
-  background: red;
-}
-
-.group-color-div{
-  background: red;
-  display: inline-block;
-  height: 20px;
-  border-radius: 50%;
-  width: 20px;
-  margin-right: 10px;
-  vertical-align: middle;
-}
-
-/* nowa struktura - obsługa wszystkich okien */
-
-#all-windows{
-  max-height: 452px;
-  overflow: auto;
-  padding-right: 20px;
-}
-
-.window-container{
-  margin-top: 10px;
-  border: solid 1px rgba(0,0,0,.1);
-  position: relative;
-}
-
-.window-list.outer-list{
-  padding: 0;
-}
-
-
-
-.window-container .window-list{
-  padding: 10px;
-}
-
-.pin-btn{
-  background: none;
-  border: none;
-  background: url("../assets/pin_tab_btn.png") no-repeat;
-  background-size: contain;
-  height: 16px;
-  width: 16px;
-  transition: transform .2s;
-  cursor: pointer;
-  transform: translateY(2px);
-}
-
-.pin-btn.unpin{
-  background: url("../assets/unpin_tab_btn.png");
-  background-size: contain;
-}
-
-.pin-btn:hover{
-  transform: scale(1.2);
-}
-
-.window-label{
-  height: 20px;
-  background: rgba(0,0,0,.1);
-  line-height: 20px;
-  padding: 0 10px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.window-label span{
-  cursor: pointer;
-}
-
-#all-pinned-windows{
-  padding-right: 20px;
-  max-height: 530px;
-  overflow: auto;
-  box-sizing: border-box;
-}
-
-#all-pinned-windows .window-container:first-child{
-  margin-top: 0;
-}
-
-.drop-here-popup{
-  background: url(../assets/drag_and_drop_black.png) no-repeat rgba(255,255,255,.4);
-  background-position: center;
-  background-size: 50%;
-  height: calc(100% - 20px);
-  position: absolute;
-  width: 100%;
-  text-align: center;
-  color: black;
-  font-size: 30px;
-  z-index: 99;
-  justify-content: center;
-  align-items: center;
-  top: 20px;
-  display: none;
-}
-
-.drop-here-popup.visible-popup{
-  display: flex;
-}
-
-.dragging-host, .dragging-ungrouped-tab, .dragging-grouped-tab{
-  opacity: .5;
-}
-
-
-/* Wyszukiwarka w grupach */
-
-#search-container-groups{
-  position: relative;
-  margin: 10px 0;
-}
-
-#search-container-groups:before{
-  content: '';
-  width: 18px;
-  height: 18px;
-  background: red;
-  display: block;
-  position: absolute;
-  left: 38px;
-  top: 6px;
-  background: url(../assets/gray_search.png) no-repeat;
-  background-position: center;
-  background-size: contain;
-  transition: all .2s;
-  z-index: 102;
-}
-
-#groups-search-header{
-  width: 80%;
-  margin: 0 auto;
-  position: absolute;
-  left: 0;
-  right: 0;
-  background: rgba(33,34,36,.98);
-  border-radius: 15px;
-  padding: 0 37px;
-  box-sizing: border-box;
-  z-index: 9;
-  height: 30px;
-  overflow: hidden;
-  transition: height .2s;
-  display: none;
-}
-
-#created-name-input{
-  background: none;
-    border: none;
-    text-align: center;
-    width: 100%;
-    height: 30px;
-    outline: none;
-    color: white;
-}
-
-#groups-search-header:focus-within{
-  height: 80px;
-}
-
-#groups-search-header:focus-within::before{
-  background: url(../assets/search.png);
-}
-
-#confirm-group-creation-btn2{
-  width: 100%;
-  height: 20px;
-  background: green;
-  color: white;
-  transition: all .2s;
-  border:none;
-  margin: 10px 0 20px;
-}
-
-#confirm-group-creation-btn2:hover{
-  cursor: pointer;
-}
-
-#confirm-group-creation-btn2:disabled{
-  background: gray;
-  cursor: default;
-}
-
-#groups-list{
-  margin-top: 50px;
-  max-height: 430px;
-}
-
-.group-is-empty-info{
-  color: gray;
-  display: inline-block;
-  padding-right: 10px;
-}
-
-#favourites-line{
-  height: 2px;
-  width: 90%;
-  background: rgba(0,0,0,.15);
-  margin: 0 auto 10px;
-}
-
-#current-tabs-wrapper{
-  display: flex;
-  width: 700px;
+.display-none{
+    display: none;;
 }

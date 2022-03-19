@@ -29,7 +29,9 @@ export let tabsHooks = {
     allHostsCheckboxes : document.getElementById("all-windows").getElementsByClassName("inner-list-checkbox"),
     allPinedHostsCheckboxes : document.getElementById("all-pinned-windows").getElementsByClassName("inner-list-checkbox"),
 
-    groupTabsBtn : document.getElementById("group-tabs-btn")
+    groupTabsBtn : document.getElementById("group-tabs-btn"),
+
+    addToGroupContainer : document.getElementById('add-to-group-container'),
 }
 
 export let groupsHooks = {

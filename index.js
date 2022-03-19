@@ -25,6 +25,9 @@ chrome.tabs.onUpdated.addListener(
 //..................PROGRAM INICIALIZATION......................
 //..............................................................
 
+let favourities = await chrome.storage.sync.get("favourities");
+global.favourities = favourities.favourities != null && favourities.favourities != undefined ? favourities.favourities : [];
+
 let windows = await chrome.windows.getAll();
 
 for(let window of windows){
@@ -40,10 +43,7 @@ for(let window of windows){
 buildAllUngroupedWindows();
 initializeUngroupedTabsSelectables();
 
-chrome.storage.sync.get("favourities", (res) => {
-  global.favourities = res.favourities != null && res.favourities != undefined ? res.favourities : [];
-  buildFavourites();
-})
+buildFavourites();
 
 chrome.storage.sync.get("groups", (res) => {
   global.groups = res.groups != null && res.groups != undefined ? res.groups : [];
@@ -57,7 +57,7 @@ chrome.storage.sync.get("expandedHosts", (res) => {
 });
 
 window.onclick = (e) => {   
-  if (!document.getElementById('search-header').contains(e.target)){
+  if (!tabsHooks.addToGroupContainer.contains(e.target)){
     document.getElementById('expand-select-group').checked = false;
   }
 };
@@ -187,7 +187,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //Refactor: 
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
-//110. Zmiana CSS
+
 
 
 
@@ -286,6 +286,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //106. Odznaczenie w grupach nie odznacza nazwy grupy
 //108. Odznaczenie grouped wszystkich nie usuwa klasy goruped z nich.
 //109. Przeciąganie przypiętych kart do innego okna nie działa + indeksy 
+//110. Zmiana CSS
 //111. Opcja otwórz nowe okno z wtyczki.
 //112. Kliknięcie na okno przenosi nie niego.
 //113. Zmiana ikony podczas przeciągania hostów.

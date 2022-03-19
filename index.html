@@ -1,149 +1,132 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <link rel="stylesheet" href="style/index.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
-    
-    
-    <script type="module" src="favourities/Favourites.js" defer></script>
-    <script type="module" src="groups.js" defer></script>
-    <script type="module" src="tabs/Tabs.js" defer></script>
-    <script type="module" src="index.js" defer></script>
-    <script src="external/selectables.js"></script>
-</head>
+    <head>
+        <link rel="stylesheet" href="style/index.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;1,100&display=swap" rel="stylesheet">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,300&display=swap" rel="stylesheet">
+
+
+        <script type="module" src="favourities/Favourites.js" defer></script>
+        <script type="module" src="groups.js" defer></script>
+        <script type="module" src="tabs/Tabs.js" defer></script>
+        <script type="module" src="index.js" defer></script>
+        <script src="external/selectables.js"></script>
+    </head>
   <body>
-    
+
     <div id="app">
 
     <header>
-      <div id="main-buttons"> 
-        <button id="go-to-tabs-btn" class="selected-section" title="Opened tabs"></button>
-        <button id="go-to-groups-btn" title="Groups"></button>
-        <button id="go-to-favourites-btn" title="Favourites"></button>
-        <button id="go-to-settings-btn" title="Settings"></button>
-      </div>
-      <div id="dynamic-buttons">
-        <button id="create-new-window-btn" title="Create new window"></button>
-        <button id="group-tabs-btn" title="Group tabs"></button>
-        <button id="change-favourites-display-grid" class="grid" title="Show list."></button>
-        <button id="donate-btn" title="Donate"></button>
-      </div>
+        <div id="main-buttons"> 
+            <button id="go-to-tabs-btn" class="selected-section" title="Opened tabs"></button>
+            <button id="go-to-groups-btn" title="Groups"></button>
+            <button id="go-to-favourites-btn" title="Favourites"></button>
+            <button id="go-to-settings-btn" title="Settings"></button>
+        </div>
+        <div id="dynamic-buttons">
+            <button id="create-new-window-btn" title="Create new window"></button>
+            <button id="group-tabs-btn" title="Group tabs"></button>
+            <button id="change-favourites-display-grid" class="grid" title="Show list."></button>
+            <button id="donate-btn" title="Donate"></button>
+        </div>
     </header>
 
     <main>
-      <div id="current-tabs-wrapper">
-      <section id="current-tabs">
-        <nav>
-          <div class="navigation">
-            <div>
-              <button id="expand-all-hosts-btn" disabled>Expand</button>
-            </div>
-            <div>
-              <button id="colapse-all-hosts-btn" disabled>Collapse</button>
-            </div>
-            <div>
-              <button id="show-duplicates-btn" >Show duplicates</button>
-            </div>
-            <div id="close-selected-container">
-              <button id="close-selected-btn" disabled>Close</button>
-            </div>
-            <div>
-              <button id="create-group-btn" disabled>Save</button>
-            </div>
-          </div>
+        <div id="current-tabs-wrapper">
+            <section id="current-tabs">
+                <nav>
+                    <div class="navigation">
+                        <div>
+                            <button id="expand-all-hosts-btn" disabled>Expand</button>
+                        </div>
+                        <div>
+                            <button id="colapse-all-hosts-btn" disabled>Collapse</button>
+                        </div>
+                        <div>
+                            <button id="show-duplicates-btn" >Show duplicates</button>
+                        </div>
+                        <div>
+                            <button id="close-selected-btn" disabled>Close</button>
+                        </div>
+                        <div>
+                            <button id="create-group-btn" disabled>Save</button>
+                        </div>
+                    </div>
+                    <div id="search-container">
+                        <div id="selected-tabs-counter" class="selected-counter">
+                            <span></span>
+                        </div>
 
-          <!-- ffrf -->
-          <div id="search-container">
-            <div id="selected-tabs-counter" class="selected-counter">
-              <span></span>
-            </div>
+                        <input type="text" id="search-input" class="search-input" placeholder="Search">
 
-            <input type="text" id="search-input" class="search-input" placeholder="Search">
+                        <div id="add-to-group-container">
+                            <input type="checkbox" id="expand-select-group">
+                            <label for="expand-select-group" id="select-group-label">Select group</label>
+                            <div id="select-group-container">
+                                <div id="inputs"></div>
+                                <button id="confirm-saving-tabs-btn" disabled>Save</button>
+                                <div id="create-new-group-section">
+                                    <input type="checkbox" id="create-new-group-btn">
+                                    <label for="create-new-group-btn">+ New group</label>
+                                    <div>
+                                        <input type="text" id="new-group-name-input" placeholder="Group name">
+                                        <button id="confirm-group-creation-btn" disabled>Create</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <div id="all-windows"></div>
+            </section>
 
-            <div id="search-header">
-              <input type="checkbox" id="expand-select-group">
-              <label for="expand-select-group" id="select-group-label">Select group</label>
-              <div id="select-group-container">
-                  <div id="inputs"></div>
-                  <button id="confirm-saving-tabs-btn" disabled>Save</button>
-                  <div id="create-new-group-section">
-                      <input type="checkbox" id="create-new-group-btn">
-                      <label for="create-new-group-btn">+ New group</label>
-                      <div>
-                          <input type="text" id="new-group-name-input" placeholder="Group name">
-                          <button id="confirm-group-creation-btn" disabled>Create</button>
-                      </div>
-                  </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- sdfjlsdkjf -->
-        </nav>
-
-        <div id="all-windows">
-         
+            <section id="pinned-windows-section">
+                <div id="all-pinned-windows"></div>
+            </section>
         </div>
 
-      </section>
+        <section id="groups-section">
+            <nav>
+                <div class="navigation">
+                    <div>
+                        <button id="expand-all-groups-btn">Expand</button>
+                    </div>
+                    <div>
+                        <button id="collapse-all-groups-btn">Collapse</button>
+                    </div>
+                    <div>
+                        <button id="create-group-btn2">Create group</button>
+                    </div>
+                    <div>
+                        <button id="remove-selected-btn" disabled>Remove selected</button>
+                    </div>
+                </div>
+                <div id="search-container-groups">
+                    <div id="selected-groups-counter" class="selected-counter">
+                        <span></span>
+                    </div>
 
-      <section id="pinned-windows-section">
-        <div id="all-pinned-windows"></div>
-      </section>
+                    <input type="text" id="search-input-group" class="search-input" placeholder="Search">
 
-    </div>
-      <section id="groups-section">
-        <nav>
-          <div class="navigation">
-            <div>
-              <button id="expand-all-groups-btn">Expand</button>
-            </div>
-            <div>
-              <button id="collapse-all-groups-btn">Collapse</button>
-            </div>
-            <div>
-              <button id="create-group-btn2">Create group</button>
-            </div>
-            <div>
-              <button id="remove-selected-btn" disabled>Remove selected</button>
-            </div>
-          </div>
+                    <div id="groups-search-header">
+                        <input type="text" placeholder="Group name" id="created-name-input">
+                        <button id="confirm-group-creation-btn2" disabled>Create</button>
+                    </div>
+                </div>
+            </nav>
 
-          <!-- fsdfsdfsdf -->
-          <div id="search-container-groups">
-            <div id="selected-groups-counter" class="selected-counter">
-              <span></span>
-            </div>
+            <ul class="outer-list" id="groups-list"></ul>
+        </section>
 
-            <input type="text" id="search-input-group" class="search-input" placeholder="Search">
-
-            <div id="groups-search-header">
-                <input type="text" placeholder="Group name" id="created-name-input">
-                <button id="confirm-group-creation-btn2" disabled>Create</button>
-            </div>
-          </div>
-          <!-- ddsfsdf -->
-
-
-        </nav>
-
-        <ul class="outer-list" id="groups-list"></ul>
-      </section>
-
-      <section id="favourites-section">
-        <div id="favourites-line"></div>
-        <div id="dragables-container">
-
-        </div>
-      </section>
-      <section id="settings-section">
-       
-      </section>
+        <section id="favourites-section">
+            <div id="favourites-line"></div>
+            <div id="dragables-container"></div>
+        </section>
+        <section id="settings-section"> </section>
     </main>  
   </div>
   </body>

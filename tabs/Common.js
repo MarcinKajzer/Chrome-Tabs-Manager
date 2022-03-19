@@ -1,5 +1,6 @@
 import { global } from "../common/Global.js";
-import { tabsHooks } from "../common/hooks.js";
+import { tabsHooks, favouritiesHooks } from "../common/hooks.js";
+import { createSingeFavourite} from "../favourities/Favourites.js"
 
 export function groupUngroupedTabs(){
     global.groupedWindows = [];
@@ -114,7 +115,7 @@ export function hideGroupSelection(){
     document.getElementById("expand-select-group").checked = false;
     document.getElementById("create-new-group-btn").checked = false;
     tabsHooks.searchInput.style.display = "block";
-    document.getElementById("search-header").style.display = "none"
+    tabsHooks.addToGroupContainer.style.display = "none"
 
     let inputs = document.getElementById("inputs").querySelectorAll("input");
     for(let input of inputs){
@@ -259,6 +260,50 @@ export function closeTab(tabId, host, windowId, deleteHost = true) {
     }, 200);
 
     groupUngroupedTabs();
+}
+
+export function handleAddToFavouriteBtnClick(hostTab){
+   
+    let fav = new Object();
+    fav.name = hostTab.title,
+    fav.favIcon = hostTab.favIcon,
+    fav.url = hostTab.url
+    fav.id = "fav_" + Date.now();
+
+    if(global.favourities != null){
+        let indexOfRemovedFav = global.favourities.findIndex(x => x.url == fav.url);
+        
+        if(indexOfRemovedFav != -1){
+            console.log(indexOfRemovedFav)
+            console.log(favouritiesHooks.dragableContainer.childNodes[indexOfRemovedFav])
+            favouritiesHooks.dragableContainer.removeChild(favouritiesHooks.dragableContainer.childNodes[indexOfRemovedFav])
+
+            for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+                button.classList.remove("favourite-tab")
+                button.classList.remove(fav.id)
+            }
+
+            global.favourities = global.favourities.filter(x => x.url != fav.url)
+        }
+        else{
+            global.favourities.push(fav);
+            for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+                button.classList.add("favourite-tab")
+                button.classList.add(fav.id)
+            }
+
+            createSingeFavourite(fav);
+        }
+        chrome.storage.sync.set({favourities: global.favourities})
+    }
+    else{
+        chrome.storage.sync.set({favourities: [fav]})
+        for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
+            button.classList.add("favourite-tab")
+            button.classList.add(fav.id)
+        }
+        createSingeFavourite(fav);
+    }
 }
 
 function deleteHostElementFromDOM(host, windowId) {

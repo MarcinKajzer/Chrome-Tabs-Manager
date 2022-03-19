@@ -1,6 +1,7 @@
 import {global} from "../common/Global.js"
 import { tabsHooks } from "../common/hooks.js";
-import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, hideGroupSelection } from "./Common.js";
+import { hideSelectedCounter } from "../common/Functions.js";
+import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, hideGroupSelection, resetGroupNameInput, handleAddToFavouriteBtnClick } from "./Common.js";
 
 let currentDraggingHostList;
 let dragOverHostList;
@@ -64,13 +65,13 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         }
 
         if(hostTabs.filter(x => x.shownDuplicate).length > 0){
-            hostLabel.classList.add("yellow");
+            hostLabel.classList.add("duplicated-tab");
         }
 
         hostLabel.htmlFor = host + window.windowId;
 
         if (hostTabs.some(x => x.active)) {
-            hostLabel.classList.add("selected-tab")
+            hostLabel.classList.add("current-tab")
         }
 
         hostLabel.onclick = () => {
@@ -154,7 +155,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     }
 
     if(hostTab.shownDuplicate){
-        tab.classList.add("yellow");
+        tab.classList.add("duplicated-tab");
     }
 
     tab.id = hostTab.id;
@@ -162,7 +163,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         chrome.tabs.update(hostTab.id, { selected: true });
     }
     if (hostTab.active) {
-        tab.classList.add("selected-tab")
+        tab.classList.add("current-tab")
     }
 
     tab.draggable = true;
@@ -428,14 +429,14 @@ export function initializeGroupedTabsSelectables() {
             //wyłączenie duplikatów
             global.showDuplicates = false;
 
-            let yellow = document.getElementsByClassName("yellow");
+            let duplicatedTabs = document.getElementsByClassName("duplicated-tab");
 
-            if(yellow.length > 0){
-                selectedTabsCounter.querySelector("span").innerText = 0;
+            if(duplicatedTabs.length > 0){
+                tabsHooks.selectedTabsCounter.querySelector("span").innerText = 0;
             }
 
-            while(yellow.length > 0){
-                yellow[0].classList.remove("yellow")
+            while(duplicatedTabs.length > 0){
+                duplicatedTabs[0].classList.remove("duplicated-tab")
             }
             //..........
 
@@ -474,7 +475,7 @@ export function initializeGroupedTabsSelectables() {
                 tabsHooks.searchInput.parentNode.classList.remove("group-name");
 
                 tabsHooks.showDuplicatesBtn.disabled = false;
-                hideSelectedCounter(selectedTabsCounter);
+                hideSelectedCounter(tabsHooks.selectedTabsCounter);
                 disableTabsButtons();
 
                 tabsHooks.selectedTabsCounter.classList.remove("group-creation");

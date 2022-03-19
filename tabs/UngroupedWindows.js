@@ -1,7 +1,7 @@
 import {global} from "../common/Global.js"
-import { tabsHooks, favouritiesHooks } from "../common/hooks.js"
-import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, closeTab, hideGroupSelection } from "./Common.js";
-import { createSingeFavourite} from "../favourities/Favourites.js"
+import { tabsHooks } from "../common/hooks.js"
+import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, closeTab, hideGroupSelection, handleAddToFavouriteBtnClick } from "./Common.js";
+
 
 let parentWindowId;
 let dragOverWindowId;
@@ -50,7 +50,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
     }
 
     if(hostTab.shownDuplicate){
-        tab.classList.add("yellow");
+        tab.classList.add(".duplicated-tab");
     }
 
     tab.draggable = true;
@@ -65,7 +65,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
     }
 
     if (hostTab.active) {
-        tab.classList.add("selected-tab")
+        tab.classList.add("current-tab")
     }
 
     let tabInfo = document.createElement("div")
@@ -245,48 +245,6 @@ function handleUngroupedTabDragEnd(e, tab, hostTab){
     }
 }
 
-function handleAddToFavouriteBtnClick(hostTab){
-   
-    let fav = new Object();
-    fav.name = hostTab.title,
-    fav.favIcon = hostTab.favIcon,
-    fav.url = hostTab.url
-    fav.id = "fav_" + Date.now();
-
-    if(global.favourities != null){
-        let indexOfRemovedFav = global.favourities.findIndex(x => x.url == fav.url);
-
-        if(indexOfRemovedFav != -1){
-            favouritiesHooks.dragableContainer.removeChild(favouritiesHooks.dragableContainer.childNodes[indexOfRemovedFav+1])
-
-            for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
-                button.classList.remove("favourite-tab")
-                button.classList.remove(fav.id)
-            }
-
-            global.favourities = global.favourities.filter(x => x.url != fav.url)
-        }
-        else{
-            global.favourities.push(fav);
-            for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
-                button.classList.add("favourite-tab")
-                button.classList.add(fav.id)
-            }
-
-            createSingeFavourite(fav);
-        }
-        chrome.storage.sync.set({favourities: global.favourities})
-    }
-    else{
-        chrome.storage.sync.set({favourities: [fav]})
-        for(let button of document.getElementsByClassName("duplicate_" + hostTab.duplicateNumber)){
-            button.classList.add("favourite-tab")
-            button.classList.add(fav.id)
-        }
-        createSingeFavourite(fav);
-    }
-}
-
 //______________________________________________________________
 
 
@@ -312,14 +270,14 @@ export function initializeUngroupedTabsSelectables() {
 
             global.showDuplicates = false;
 
-            let yellow = document.getElementsByClassName("yellow");
+            let duplicatedTabs = document.getElementsByClassName(".duplicated-tab");
 
-            if(yellow.length > 0){
+            if(duplicatedTabs.length > 0){
                 tabsHooks.selectedTabsCounter.querySelector("span").innerText = 0;
             }
 
-            while(yellow.length > 0){
-                yellow[0].classList.remove("yellow")
+            while(duplicatedTabs.length > 0){
+                duplicatedTabs[0].classList.remove(".duplicated-tab")
             }
 
             unactiveAllTabsInColection();

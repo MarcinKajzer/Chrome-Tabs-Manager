@@ -72,7 +72,7 @@ tabsHooks.closeSelectedBtn.onclick = () => {
 tabsHooks.createGroupBtn.onclick = () => {
 
     tabsHooks.searchInput.style.display = "none";
-    document.getElementById("search-header").style.display = "block"
+    tabsHooks.addToGroupContainer.style.display = "block"
 
     global.groupCreating = true;
 
@@ -97,9 +97,9 @@ tabsHooks.selectedTabsCounter.onclick = () => {
     }
     else if(global.showDuplicates){
         //DRY schowaj duplikaty
-        let yellow = document.getElementsByClassName("yellow");
-        while(yellow.length > 0){
-            yellow[0].classList.remove("yellow")
+        let duplicatedTabs = document.getElementsByClassName("duplicated-tab");
+        while(duplicatedTabs.length > 0){
+            duplicatedTabs[0].classList.remove("duplicated-tab")
         }
         tabsHooks.showDuplicatesBtn.innerText = "Show duplicates"
         tabsHooks.selectedTabsCounter.classList.remove("duplicates");
@@ -231,7 +231,7 @@ function showDuplicate(e){
         let elements = document.getElementsByClassName("duplicate_" + i);
         if(elements.length > 1){
             for(let el of elements){
-                el.closest(".inner-list-item").classList.add("yellow")
+                el.closest(".inner-list-item").classList.add("duplicated-tab")
                 global.numberOfDuplicates++;
 
                 let tabId = el.closest(".inner-list-item").id;
@@ -240,7 +240,7 @@ function showDuplicate(e){
             global.numberOfDuplicates--
 
             try{
-                elements[0].closest(".outer-list-item").classList.add("yellow")
+                elements[0].closest(".outer-list-item").classList.add("duplicated-tab")
             }
             catch{}
 
@@ -259,11 +259,11 @@ function closeDuplicates(e){
         let elements = document.getElementsByClassName("duplicate_" + i);
         if(elements.length > 1){
             try{
-                elements[0].closest(".outer-list-item").classList.remove("yellow")
+                elements[0].closest(".outer-list-item").classList.remove("duplicated-tab")
             }
             catch{}
 
-            elements[0].closest(".inner-list-item").classList.remove("yellow")
+            elements[0].closest(".inner-list-item").classList.remove("duplicated-tab")
 
             for(let i = 1; i<elements.length; i++){
 
