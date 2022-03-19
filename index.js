@@ -140,7 +140,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 //In progress: 
 
-
+//121. Kiedy przenoszone jest aktywna karta z innego okna trzeba odpiąć jej klasę current-tab i przypiąć innej karcie.
 
 
 
@@ -151,7 +151,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //Do zrobienia:
 
 //116. Minimalizacja/maksymalizacja okien + lista zminimalizowanych 
-//117. Skrócić długość nazw kart o 2-3 znaków (lub określić długość spanu i umieścić cały tytuł - na hover przesunięcie)
+
 
 
 
@@ -292,7 +292,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //113. Zmiana ikony podczas przeciągania hostów.
 //114. Przenoszenie do nowej pustej grupy.
 //115. Selectable nie działa jak trzeba po dodaniu zone jako całe #app. - zaznaczenie grup powoduje odznaczenie tabów.
-
+//117. Skrócić długość nazw kart o 2-3 znaków 
 
 
 //Nowe pomysły: 

@@ -1,6 +1,7 @@
 import {global} from "../common/Global.js"
 import { tabsHooks } from "../common/hooks.js"
-import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, closeTab, hideGroupSelection, handleAddToFavouriteBtnClick } from "./Common.js";
+import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons,
+         closeTab, hideGroupSelection, handleAddToFavouriteBtnClick } from "./Common.js";
 
 
 let parentWindowId;
@@ -62,6 +63,11 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     tab.onclick = () => {
         chrome.tabs.update(hostTab.id, { selected: true });
+        tab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
+        tab.classList.add("current-tab")
+
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.active)[0].active = false;
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.id == hostTab.id)[0].active = true;
     }
 
     if (hostTab.active) {
@@ -75,8 +81,10 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tabFavIcon.src = hostTab.favIcon != null && hostTab.favIcon != "" ? hostTab.favIcon : "assets/default_favicon.png";
 
     let tabTitle = document.createElement("span");
-    tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
+    tabTitle.innerHTML = hostTab.title.length > 27 ? hostTab.title.substring(0, 24) + " ..." : hostTab.title;
     
+    tabTitle.title = hostTab.title;
+
     let tabButtons = document.createElement("div");
 
     if (hostTab.audible) {
@@ -229,14 +237,28 @@ function handleUngroupedTabDragEnd(e, tab, hostTab){
     chrome.tabs.move(parseInt(tab.id), {windowId: targetWindowId, index: index});
 
     if(targetWindowId != parentWindowId){
+        hostTab.active = false;
+
+        let parentWindow = global.ungroupedWindows.filter(x => x.windowId == parentWindowId)[0];
+
         global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.splice(index, 0, hostTab)
 
-        global.ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs = 
-        global.ungroupedWindows.filter(x => x.windowId == parentWindowId)[0].tabs
-                               .filter(y => y.id != hostTab.id)
+        parentWindow.tabs = parentWindow.tabs.filter(y => y.id != hostTab.id)
 
-        
         tab.querySelector(".pin-tab-btn").classList.remove("unpin-tab");  
+        tab.classList.remove("current-tab");
+
+        chrome.tabs.query({windowId: parentWindowId, active: true}, res => {
+            if(res.length != 0){
+                parentWindow.tabs.filter(y => y.id == res[0].id)[0].active = true;
+                document.getElementById(res[0].id).classList.add("current-tab");
+            }
+        })
+
+        if(parentWindow.tabs.length == 0){
+            global.ungroupedWindows = global.ungroupedWindows.filter(x => x.windowId != parentWindowId);
+            document.getElementById("window_" + parentWindowId).closest(".window-container").remove();
+        }
     }
     else{
         let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == targetWindowId)[0].tabs.indexOf(hostTab);

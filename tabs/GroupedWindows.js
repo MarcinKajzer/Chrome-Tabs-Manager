@@ -1,7 +1,8 @@
 import {global} from "../common/Global.js"
 import { tabsHooks } from "../common/hooks.js";
 import { hideSelectedCounter } from "../common/Functions.js";
-import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, hideGroupSelection, resetGroupNameInput, handleAddToFavouriteBtnClick } from "./Common.js";
+import { buildWindowContainer, unactiveAllTabsInColection, enableTabsButtons, disableTabsButtons, 
+        hideGroupSelection, resetGroupNameInput, handleAddToFavouriteBtnClick, closeTab } from "./Common.js";
 
 let currentDraggingHostList;
 let dragOverHostList;
@@ -147,6 +148,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
 
+    console.log(hostTab)
     if(hostTab.selected){
         tab.classList.add("active");
         if(global.groupCreating){
@@ -161,6 +163,14 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.id = hostTab.id;
     tab.onclick = () => {
         chrome.tabs.update(hostTab.id, { selected: true });
+        for(let currTab of tab.closest(".window-list").querySelectorAll(".current-tab")){
+            currTab.classList.remove("current-tab")
+        }
+        tab.classList.add("current-tab")
+        tab.closest(".outer-list-item").querySelector("label").classList.add("current-tab")
+
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.active)[0].active = false;
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.id == hostTab.id)[0].active = true;
     }
     if (hostTab.active) {
         tab.classList.add("current-tab")
@@ -172,7 +182,9 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.addEventListener("dragend", (e) => handleGroupedTabDragend(tab, e, host, hostTab))
 
     let tabTitle = document.createElement("span");
-    tabTitle.innerHTML = hostTab.title.length > 29 ? hostTab.title.substring(0, 26) + " ..." : hostTab.title;
+    tabTitle.innerHTML = hostTab.title.length > 27 ? hostTab.title.substring(0, 24) + " ..." : hostTab.title;
+
+    tabTitle.title = hostTab.title;
 
     let tabButtons = document.createElement("div");
 
@@ -311,12 +323,24 @@ function handleHostItmDragend(host, hostItem, hostTabs){
     if(dragOverHostList != null){
         let windowId = parseInt(hostItem.parentNode.id.substring(7))
 
-        global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs = 
-        global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.concat(global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host == host))
+        let parentWindow = global.ungroupedWindows.filter(x => x.windowId == windowId)[0];
 
-        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host != host)
+        for(let cur of global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs){
+            cur.active = false;
+        }
+
+        global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs = 
+        global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs
+        .concat(global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host == host))
+
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = 
+        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.host != host)
         
         let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
+
+        for(let currElem of hostItem.querySelectorAll(".current-tab")){
+            currElem.classList.remove("current-tab")
+        }
 
         if(matchingHost.length > 0){
             let tabsToMove = hostItem.getElementsByClassName("inner-list-item")
@@ -330,6 +354,20 @@ function handleHostItmDragend(host, hostItem, hostTabs){
         }
         
         chrome.tabs.move(hostTabs.map(x => x.id), {index : -1, windowId : dragOverWindowId})
+
+        //DRY
+        chrome.tabs.query({windowId: windowId, active: true}, res => {
+            if(res.length != 0){
+                parentWindow.tabs.filter(y => y.id == res[0].id)[0].active = true;
+                document.getElementById(res[0].id).classList.add("current-tab");
+                document.getElementById(res[0].id).closest(".outer-list-item").querySelector("label").classList.add("current-tab");
+            }
+        })
+
+        if(parentWindow.tabs.length == 0){
+            global.ungroupedWindows = global.ungroupedWindows.filter(x => x.windowId != windowId);
+            document.getElementById("window_" + windowId).closest(".window-container").remove();
+        }
     }
 }
 
@@ -351,18 +389,22 @@ function handleGroupedTabDragend(tab, e, host, hostTab){
         let matchingHost = Array.from(dragOverHostList.getElementsByClassName("outer-list-item")).filter(x => x.id.includes(host))
         
         let hostId = tab.parentNode.parentNode.id;
-        let windowId = parseInt(tab.parentNode.parentNode.parentNode.id.substring(7))
+        let windowId = parseInt(tab.closest(".window-list").id.substring(7))
 
-        //DRY
+        tab.classList.remove("current-tab");
+        hostTab.active = false;
+
+        let parentWindow = global.ungroupedWindows.filter(x => x.windowId == windowId)[0];
+
         global.ungroupedWindows.filter(x => x.windowId == dragOverWindowId)[0].tabs.push(hostTab);
-        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(y => y.id != hostTab.id)
-        //DRY END
-
+        parentWindow.tabs = parentWindow.tabs.filter(y => y.id != hostTab.id)
+       
         if(matchingHost.length > 0){
             matchingHost[0].querySelector("ul").appendChild(tab);
         }
         else{
             let hostItemCopy = tab.parentNode.parentNode.cloneNode(true);
+            hostItemCopy.querySelector("label").classList.remove("current-tab")
             hostItemCopy.id += "_copy";
             hostItemCopy.querySelector("ul").innerHTML = ""
             hostItemCopy.querySelector("ul").appendChild(tab);
@@ -385,6 +427,20 @@ function handleGroupedTabDragend(tab, e, host, hostTab){
         }
 
         chrome.tabs.move(hostTab.id, {index : -1, windowId : dragOverWindowId})
+
+        //DRY
+        chrome.tabs.query({windowId: windowId, active: true}, res => {
+            if(res.length != 0){
+                parentWindow.tabs.filter(y => y.id == res[0].id)[0].active = true;
+                document.getElementById(res[0].id).classList.add("current-tab");
+                document.getElementById(res[0].id).closest(".outer-list-item").querySelector("label").classList.add("current-tab");
+            }
+        })
+
+        if(parentWindow.tabs.length == 0){
+            global.ungroupedWindows = global.ungroupedWindows.filter(x => x.windowId != windowId);
+            document.getElementById("window_" + windowId).closest(".window-container").remove();
+        }
     }
 }
 

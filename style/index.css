@@ -363,7 +363,7 @@ nav{
 /* ..........COMMON FOR LISTS.......... */
 /* .................................... */
 
-#all-windows button, #groups-list button{
+#all-windows button, #groups-list button, #all-pinned-windows button{
     height: 14px;
     width: 14px;
     border-radius: 50%;
@@ -371,7 +371,7 @@ nav{
     transform: translateY(2px);
 }
 
-#all-windows button:hover, #groups-list button:hover{
+#all-windows button:hover, #groups-list button:hover, #all-pinned-windows button:hover{
     transform: scale(1.2);
 }
 

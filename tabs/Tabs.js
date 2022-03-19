@@ -1,6 +1,6 @@
 import { global } from "../common/Global.js"
 import { tabsHooks } from "../common/hooks.js"
-import { showSelectedCounter, hideSelectedCounter, handleSelectedCounterClick, checkAllCheckboxes, uncheckAllCheckboxes } from "../common/Functions.js"
+import { showSelectedCounter, hideSelectedCounter, handleSelectedCounterClick, checkAllCheckboxes, uncheckAllCheckboxes, deleteTabElementFromDOM } from "../common/Functions.js"
 import { disableTabsButtons, unactiveAllTabsInColection } from "./Common.js"
 import { buildAllGroupedWindows, initializeGroupedTabsSelectables } from "./GroupedWindows.js"
 import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables, buildSingleUngroupedWindow } from "./UngroupedWindows.js"
