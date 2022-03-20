@@ -239,9 +239,11 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
             let pinned = !t.pinned;
             chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
                 if(pinned){
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
                     pinTabBtn.classList.add("unpin-tab")
                 }
                 else{
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
                     pinTabBtn.classList.remove("unpin-tab")
                 }
 

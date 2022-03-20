@@ -3,6 +3,8 @@ import { tabsHooks, favouritiesHooks } from "../common/hooks.js";
 import { createSingeFavourite} from "../favourities/Favourites.js"
 
 export function groupUngroupedTabs(){
+
+    console.log(global.ungroupedWindows)
     global.groupedWindows = [];
     for(let window of global.ungroupedWindows){
   

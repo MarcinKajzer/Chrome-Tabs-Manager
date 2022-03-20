@@ -129,17 +129,19 @@ function buildSingleUngroupedTab(hostTab, windowId){
             let pinned = !t.pinned;
             chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
                 if(pinned){
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
                     tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index]);
                     pinTabBtn.classList.add("unpin-tab")
                 }
                 else{
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
                     tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index+1])
                     pinTabBtn.classList.remove("unpin-tab")
                 }
 
                 //DRY - zmiana kolejności elementu - osobna funkcji
                 let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
-                let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1)
+                let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1);
                 global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
             })
         })
@@ -212,7 +214,7 @@ function handleUngroupedTabDragover(e, tab){
     }
     else{
         if(isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null ||
-            !isDraggingTabPinned){
+            !isDraggingTabPinned && e.target.closest(".inner-list-item").querySelector(".unpin-tab") == null){
             if (e.clientY > centerY) {
                 tab.after(draggingElement)
             }

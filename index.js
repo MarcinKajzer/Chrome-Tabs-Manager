@@ -55,6 +55,7 @@ chrome.tabs.onUpdated.addListener(
       }
 
       if(global.grouped && !properTab.muted){
+      
         let muteBtns = targetTab.parentNode.querySelectorAll(".mute-btn")
         let muteBtnsHidden = targetTab.parentNode.querySelectorAll(".mute-btn.display-none")
         
@@ -65,9 +66,10 @@ chrome.tabs.onUpdated.addListener(
           targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.remove("display-none")
         }
       }
+    }
 
       //..............................
-    }
+    
   }
 )
 
@@ -77,16 +79,22 @@ chrome.tabs.onActivated.addListener(
     let targetTab = document.getElementById(data.tabId);
     let properTab = global.ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.id == tab.id)[0]
 
-    console.log(tab)
-
+    global.ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.active)[0].active = false;
     properTab.active = true;
 
-    targetTab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
-    targetTab.classList.add("current-tab")
+    if(!global.grouped){
+      targetTab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
+    }
+    else{
+      for(let curr of targetTab.closest(".window-list").querySelectorAll(".current-tab")){
+        curr.classList.remove("current-tab")
+      }
+      targetTab.closest(".outer-list-item").querySelector("label").classList.add("current-tab");
+    }
     
-})
-
-
+    targetTab.classList.add("current-tab")
+  }
+)
 
 //..............................................................
 //..................PROGRAM INICIALIZATION......................
@@ -228,10 +236,8 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-//Po kliknięciu close -> usunąć widoczność hosta/grupy jeśli jest pusta | odpiąć klasy grouped/active gdy nie jest puste podczas wyszukiwania
 
 
-//118. Przeciąganie z nowego okna pozwala na ustawienie karty przez przypiątą :C
 
 
 //Opcjonalne: 
@@ -361,6 +367,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //114. Przenoszenie do nowej pustej grupy.
 //115. Selectable nie działa jak trzeba po dodaniu zone jako całe #app. - zaznaczenie grup powoduje odznaczenie tabów.
 //117. Skrócić długość nazw kart o 2-3 znaków 
+//118. Przeciąganie z nowego okna pozwala na ustawienie karty przez przypiątą :C
 //119. Zamykanie okna gdy zamknięta jest ostatnia karta.
 //120. Zamknięcie nowego okna powoduje błąd
 //121. Kiedy przenoszone jest aktywna karta z innego okna trzeba odpiąć jej klasę current-tab i przypiąć innej karcie.
