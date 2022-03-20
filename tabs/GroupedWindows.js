@@ -102,17 +102,19 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         closeAllTabsOfHostBtn.classList.add("close-btn")
         closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(host, window.windowId)
 
-        if (hostTabs.some(x => x.audible) || hostTabs.some(x => x.muted)) {
-            let muteAllTabsOfHostBtn = document.createElement("button");
-            muteAllTabsOfHostBtn.classList.add("mute-btn");
+        let muteAllTabsOfHostBtn = document.createElement("button");
+        muteAllTabsOfHostBtn.classList.add("mute-btn");
 
-            if (hostTabs.filter(x => x.muted).length == hostTabs.filter(x => x.audible || x.muted).length) {
-                muteAllTabsOfHostBtn.classList.add("muted")
-            }
-
-            muteAllTabsOfHostBtn.onclick = (e) => defineOnClickMuteGroupBtn(e.target, hostTabs);
-            hostButtons.appendChild(muteAllTabsOfHostBtn);
+        if(!hostTabs.some(x => x.muted || x.audible)){
+            muteAllTabsOfHostBtn.classList.add("display-none")
         }
+        
+        if (hostTabs.filter(x => x.muted).length == hostTabs.filter(x => x.audible || x.muted).length) {
+            muteAllTabsOfHostBtn.classList.add("muted")
+        }
+
+        muteAllTabsOfHostBtn.onclick = (e) => defineOnClickMuteGroupBtn(e.target, hostTabs);
+        hostButtons.appendChild(muteAllTabsOfHostBtn);
 
         let hostTabsList = document.createElement("ul");
 
@@ -188,38 +190,39 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
 
     let tabButtons = document.createElement("div");
 
-    if (hostTab.audible || host.muted) {
-        let muteTabButton = document.createElement("button");
-        muteTabButton.classList.add("mute-btn");
+    let muteTabButton = document.createElement("button");
+    muteTabButton.classList.add("mute-btn");
 
-        chrome.tabs.get(hostTab.id, (tab) => {
-            if (hostTab.muted) {
-                muteTabButton.classList.add("muted");
-            }
-        })
+    if (!hostTab.audible && !hostTab.muted) {
+        muteTabButton.classList.add("display-none")
+    }
 
-        muteTabButton.onclick = (e) => {
-            e.stopPropagation();
-            if (!e.target.classList.contains("muted")) {
-                chrome.tabs.update(hostTab.id, { muted: true })
-                e.target.classList.add("muted");
+    if (hostTab.muted) {
+        muteTabButton.classList.add("muted");
+    }
 
-                let mutedTabs = hostItem.querySelector("ul").getElementsByClassName("mute-btn muted");
-                let muteButtons = hostItem.querySelector("ul").getElementsByClassName("mute-btn");
-                
-                if (mutedTabs.length == muteButtons.length) {
-                    hostItem.querySelector(".mute-btn").classList.add("muted");
-                }
-            }
-            else {
-                chrome.tabs.update(hostTab.id, { muted: false })
-                e.target.classList.remove("muted");
-                hostItem.querySelector(".mute-btn").classList.remove("muted");
+    muteTabButton.onclick = (e) => {
+        e.stopPropagation();
+        if (!e.target.classList.contains("muted")) {
+            chrome.tabs.update(hostTab.id, { muted: true })
+            e.target.classList.add("muted");
+
+            let mutedTabs = hostItem.querySelector("ul").querySelectorAll(".mute-btn.muted, .mute-btn.display-none");
+            let muteButtons = hostItem.querySelector("ul").getElementsByClassName("mute-btn");
+            
+            if (mutedTabs.length == muteButtons.length) {
+                hostItem.querySelector(".mute-btn").classList.add("muted");
             }
         }
-
-        tabButtons.appendChild(muteTabButton);
+        else {
+            chrome.tabs.update(hostTab.id, { muted: false })
+            e.target.classList.remove("muted");
+            hostItem.querySelector(".mute-btn").classList.remove("muted");
+        }
     }
+
+    tabButtons.appendChild(muteTabButton);
+    
 
     //DRY..............
 
@@ -556,7 +559,6 @@ export function initializeGroupedTabsSelectables() {
         }
     });
 }
-
 
 function defineOnClickMuteGroupBtn(btn, hostTabs) {
     if (!btn.classList.contains("muted")) {

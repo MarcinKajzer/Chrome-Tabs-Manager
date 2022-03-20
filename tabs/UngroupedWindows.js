@@ -87,30 +87,32 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     let tabButtons = document.createElement("div");
 
-    if (hostTab.audible) {
-        let muteTabButton = document.createElement("button");
-        muteTabButton.classList.add("mute-btn");
+    let muteTabButton = document.createElement("button");
+    muteTabButton.classList.add("mute-btn");
 
-        chrome.tabs.get(hostTab.id, (tab) => {
-            if (hostTab.muted) {
-                muteTabButton.classList.add("muted");
-            }
-        })
-
-        muteTabButton.onclick = (e) => {
-            e.stopPropagation();
-            if (!e.target.classList.contains("muted")) {
-                chrome.tabs.update(hostTab.id, { muted: true })
-                e.target.classList.add("muted");
-            }
-            else {
-                chrome.tabs.update(hostTab.id, { muted: false })
-                e.target.classList.remove("muted");
-            }
-        }
-
-        tabButtons.appendChild(muteTabButton);
+    if (!hostTab.audible && !hostTab.muted) {
+        muteTabButton.classList.add("display-none")
     }
+
+    if (hostTab.muted) {
+        muteTabButton.classList.add("muted");
+    }
+    
+    muteTabButton.onclick = (e) => {
+        e.stopPropagation();
+        if (!e.target.classList.contains("muted")) {
+            chrome.tabs.update(hostTab.id, { muted: true })
+            e.target.classList.add("muted");
+        }
+        else {
+            chrome.tabs.update(hostTab.id, { muted: false })
+            e.target.classList.remove("muted");
+        }
+    }
+
+    tabButtons.appendChild(muteTabButton);
+    
+    
 
     //DRY..............
 

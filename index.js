@@ -7,19 +7,86 @@ import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "./
 import { mapAllOpenTabs } from "./tabs/Common.js"
 
 
-//Być może przeniść gdzieś indziej ??? BACKGROUND ? 
-//Być może wprowadzić jakieś warunki, żeby nie zawsze odbywał się update
+//..............................................................
+//..................HANDLE TAB CHANGED EVENT....................
+//..............................................................
+
 chrome.tabs.onUpdated.addListener(
-  (tabId) => {
-    chrome.tabs.get(tabId, tab => {
-      let targerTab = document.getElementById(tabId);
-      if(targerTab != null){
-        targerTab.querySelector("span").innerText = tab.title.length > 29 ? tab.title.substring(0, 26) + " ..." : tab.title;
-        global.ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.id == tab.id)[0].title = tab.title;
+  async (tabId) => {
+    
+    let tab;
+    try{
+      tab = await chrome.tabs.get(tabId);
+    }
+    catch{}
+
+    let targetTab = document.getElementById(tabId);
+      
+    if(targetTab != null && tab){
+      let properTab = global.ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.id == tab.id)[0];
+
+      //.....TAB TITLE CHANGE HANDLING.....
+
+      if(tab.title != properTab.title){
+        
+        targetTab.querySelector("span").innerText = tab.title.length > 27 ? tab.title.substring(0, 24) + " ..." : tab.title;
+        targetTab.querySelector("span").title = tab.title;
+        properTab.title = tab.title;
       }
-    })
+
+      //.....MUTE BTN CHANGE HANDLING......
+
+      if(tab.mutedInfo.muted){
+        properTab.muted = true;
+      }
+      else{
+        properTab.muted = false;
+      }
+
+      if(tab.audible){
+        targetTab.querySelector(".mute-btn").classList.remove("display-none");
+        properTab.audible = true;
+      }
+      else{
+        if(!tab.mutedInfo.muted){
+          targetTab.querySelector(".mute-btn").classList.add("display-none");
+        }
+        properTab.audible = false;
+      }
+
+      if(global.grouped && !properTab.muted){
+        let muteBtns = targetTab.parentNode.querySelectorAll(".mute-btn")
+        let muteBtnsHidden = targetTab.parentNode.querySelectorAll(".mute-btn.display-none")
+        
+        if (muteBtns.length == muteBtnsHidden.length) {
+          targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.add("display-none")
+        }
+        else{
+          targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.remove("display-none")
+        }
+      }
+
+      //..............................
+    }
   }
 )
+
+chrome.tabs.onActivated.addListener(
+  async (data) => {
+    let tab = await chrome.tabs.get(data.tabId);
+    let targetTab = document.getElementById(data.tabId);
+    let properTab = global.ungroupedWindows.filter(x => x.windowId == tab.windowId)[0].tabs.filter(y => y.id == tab.id)[0]
+
+    console.log(tab)
+
+    properTab.active = true;
+
+    targetTab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
+    targetTab.classList.add("current-tab")
+    
+})
+
+
 
 //..............................................................
 //..................PROGRAM INICIALIZATION......................
@@ -159,13 +226,13 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 //Fix:
 
-//120. Zamknięcie nowego okna powoduje błąd
+
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
 //Po kliknięciu close -> usunąć widoczność hosta/grupy jeśli jest pusta | odpiąć klasy grouped/active gdy nie jest puste podczas wyszukiwania
 
 
 //118. Przeciąganie z nowego okna pozwala na ustawienie karty przez przypiątą :C
-//119. Zamykanie okna gdy zamknięta jest ostatnia karta.
+
 
 //Opcjonalne: 
 
@@ -180,7 +247,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //Na koniec:
 
 //9. Unselect jednocześnie hosta i tabów
-//99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
+
 
 
 
@@ -277,6 +344,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //96. Zabronić przeciągania karty przed przypięte karty.
 //97. Zamknięcie najpierw pojedynczej karty a potem całego hosta powoduje błąd.
 //98. Usunięcie kontenera window gdy zamknięta jest ostatnia karta.
+//99. Zamykanie zgrupowanych kart powoduje najpierw podniesienie eventu o zmianie numeru grupy. 
 //100. Zamknięcie okna ma usuwać je z kolekcji.
 //101. Selectable przestaje działać po dodaniu karty z grupy lub ulubionych.
 //102. Wyszukiwanie w grupach.
@@ -293,6 +361,8 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //114. Przenoszenie do nowej pustej grupy.
 //115. Selectable nie działa jak trzeba po dodaniu zone jako całe #app. - zaznaczenie grup powoduje odznaczenie tabów.
 //117. Skrócić długość nazw kart o 2-3 znaków 
+//119. Zamykanie okna gdy zamknięta jest ostatnia karta.
+//120. Zamknięcie nowego okna powoduje błąd
 //121. Kiedy przenoszone jest aktywna karta z innego okna trzeba odpiąć jej klasę current-tab i przypiąć innej karcie.
 
 //Nowe pomysły: 
