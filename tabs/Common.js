@@ -62,35 +62,35 @@ export function mapAllOpenTabs(tabs){
         let url;
         let domain;
         try{
-        domain = (new URL(tab.url));
-        url = tab.url;
+            domain = (new URL(tab.url));
+            url = tab.url;
         }
         catch{
-        domain = (new URL(tab.pendingUrl));
-        url = tab.pendingUrl
+            domain = (new URL(tab.pendingUrl));
+            url = tab.pendingUrl
         }
 
         let ob = {
-        id: tab.id,
-        favIcon: tab.favIconUrl,
-        title: tab.title,
-        audible: tab.audible,
-        active: tab.active,
-        muted: tab.mutedInfo.muted,
-        url: url,
-        duplicateNumber: global.duplicateNumber,
-        host: domain.hostname,
-        pinned: tab.pinned
+            id: tab.id,
+            favIcon: tab.favIconUrl,
+            title: tab.title,
+            audible: tab.audible,
+            active: tab.active,
+            muted: tab.mutedInfo.muted,
+            url: url,
+            duplicateNumber: global.duplicateNumber,
+            host: domain.hostname,
+            pinned: tab.pinned
         }
 
         let duplcatesInAllWindows = global.ungroupedWindows.filter(x => x.tabs.filter(y => y.url == tab.url).length > 0)
         let duplicates = t.filter(x => x.url == tab.url);
 
         if(duplcatesInAllWindows.length > 0){
-        ob.duplicateNumber = duplcatesInAllWindows[0].tabs.filter(x => x.url == tab.url)[0].duplicateNumber;
+            ob.duplicateNumber = duplcatesInAllWindows[0].tabs.filter(x => x.url == tab.url)[0].duplicateNumber;
         }
         else if(duplicates.length > 0){
-        ob.duplicateNumber = duplicates[0].duplicateNumber;
+            ob.duplicateNumber = duplicates[0].duplicateNumber;
         }
 
         t.push(ob)
@@ -183,6 +183,29 @@ export function buildWindowContainer(index, window){
         }
     }
 
+    // let minimizeOrShowWindowBtn = document.createElement("button")
+    // minimizeOrShowWindowBtn.classList.add("minimize-window-btn");
+    // minimizeOrShowWindowBtn.onclick = () => {
+    //     chrome.windows.update(window.windowId, { state: "minimized" })
+    // }
+
+    // let changeWindowStateBtn = document.createElement("button")
+    // changeWindowStateBtn.classList.add("change-window-state-btn");
+    // changeWindowStateBtn.onclick = () => {
+
+    //     let state;
+    //     if(changeWindowStateBtn.classList.contains("normal-state-btn")){
+    //         state = "normal";
+    //         changeWindowStateBtn.classList.remove("normal-state-btn");
+    //     }
+    //     else{
+    //         state = "maximized";
+    //         changeWindowStateBtn.classList.add("normal-state-btn");
+    //     }
+
+    //     chrome.windows.update(window.windowId, { state: state })
+    // }
+
     let closeWindowBtn = document.createElement("button")
     closeWindowBtn.classList.add("close-btn")
     closeWindowBtn.onclick = () => {
@@ -200,6 +223,8 @@ export function buildWindowContainer(index, window){
     noResultInfo.innerText = "No results."
 
     buttonsWrapper.appendChild(pinWindowBtn)
+    // buttonsWrapper.appendChild(minimizeOrShowWindowBtn)
+    //buttonsWrapper.appendChild(changeWindowStateBtn)
     buttonsWrapper.appendChild(closeWindowBtn)
     
     windowLabel.appendChild(windowName);

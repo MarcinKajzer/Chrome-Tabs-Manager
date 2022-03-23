@@ -1,5 +1,6 @@
 import { global } from "../common/Global.js";
 import { favouritiesHooks } from "../common/hooks.js";
+import { openTabsOfGroup } from "../groups/Groups.js"
 
 let animation = true;
 let favouritesGrid = true;

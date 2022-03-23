@@ -210,8 +210,6 @@ async function buildNewWindow(){
         o.focused = newWindow.focused;
         o.tabs = mapAllOpenTabs(tabs);
         global.ungroupedWindows.push(o);
-
-        buildSingleUngroupedWindow(o, global.ungroupedWindows.length)
     })
 }
 

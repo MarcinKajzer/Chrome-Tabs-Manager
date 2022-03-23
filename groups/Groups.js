@@ -1,7 +1,5 @@
 import { global } from "../common/Global.js";
-import { tabsHooks } from "../common/hooks.js";
 import { checkAllCheckboxes, uncheckAllCheckboxes, hideSelectedCounter, handleSelectedCounterClick } from "../common/Functions.js";
-import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "../tabs/UngroupedWindows.js";
 import { addGroupToSelectList } from "../tabs/Multiselect.js";
 
 
@@ -540,62 +538,11 @@ function deleteTab(groupName, tabId) {
 
 }
 
-function updateWindowsContainers(){
-  
-  //opóźnienie wykonania 
-  chrome.tabs.query({currentWindow: true}, () => {
-    tabsHooks.allWindowsContainer.innerHTML = "";
-    tabsHooks.pinnedWindowsContainer.innerHTML = ""
-    if(global.grouped){
-      groupUngroupedTabs();
-      buildAllGroupedWindows();
-
-      global.grSel.disable();
-      initializeGroupedTabsSelectables();
-    }
-    else{
-      buildAllUngroupedWindows();
-
-      global.ungrSel.disable();
-      initializeUngroupedTabsSelectables(); // czy na pewno tworzyć za każdym razem nowy obiekt ??
-    }
-  })
-}
-
-function createSingleTabFromGroupTab(groupTab, createdTab){
-  let ob = {
-    id: createdTab.id,
-    favIcon: groupTab.favIcon,
-    title: createdTab.title,
-    audible: createdTab.audible,
-    active: createdTab.active,
-    muted: createdTab.mutedInfo.muted,
-    duplicateNumber: global.duplicateNumber,
-    url: groupTab.url,
-    host: groupTab.host,
-    pinned: createdTab.pinned
-  }
-
-  let duplicates = global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.filter(x => x.url == groupTab.url);
-
-  if(duplicates.length > 0){
-    ob.duplicateNumber = duplicates[0].duplicateNumber;
-  }
-
-  global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.push(ob);
-  
-  global.duplicateNumber++;
-}
-
-function openTabsOfGroup(tabs, active) {
+export function openTabsOfGroup(tabs, active) {
   
   for (let t of tabs) {
-    chrome.tabs.create({ url: t.url, active: active }, tab => {
-      createSingleTabFromGroupTab(t, tab)
-    })
+    chrome.tabs.create({ url: t.url, active: active })
   }
-
-  updateWindowsContainers();
 }
 
 async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
@@ -606,12 +553,9 @@ async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
     for(let t of tabs){
   
       let tab = await chrome.tabs.create({url: t.url, active: false})
-      createSingleTabFromGroupTab(t, tab);
       tabsToGroup.push(tab);
     }
     
-    updateWindowsContainers()
-  
     chrome.tabs.group({ tabIds: tabsToGroup.map(x => x.id)}, (groupId) => {
       chrome.tabGroups.update(groupId, { collapsed: false, title: groupName, color: color });
     });
@@ -621,24 +565,7 @@ async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
 function openInNewWindow(tabs, incognito = false){
 
   if(tabs.length > 0){
-    chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito, focused: false}, window => {
-    
-      if(!incognito){
-  
-        let o = new Object();
-        o.windowId = window.id;
-        o.focused = window.focused;
-        o.tabs = [];
-  
-        global.ungroupedWindows.push(o)
-        
-        for(let t of window.tabs){
-          createSingleTabFromGroupTab(tabs.filter(x => x.url == t.url || x.url == t.pendingUrl)[0], t);
-        }
-  
-        updateWindowsContainers()
-      }
-    })
+    chrome.windows.create({url: tabs.map(x => x.url), incognito: incognito, focused: false})
   }
 }
 

@@ -1,10 +1,11 @@
 import { global } from "./common/Global.js"
 import { buildFavourites} from "./favourities/Favourites.js"
 import { createMultiselect} from "./tabs/Multiselect.js"
-import { buildGroups, initializeGroupsSelectable} from "./groups/Groups.js"
+import { buildGroups, initializeGroupsSelectable } from "./groups/Groups.js"
 import { tabsHooks, favouritiesHooks, commonHooks } from "./common/hooks.js"
-import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "./tabs/UngroupedWindows.js"
-import { mapAllOpenTabs } from "./tabs/Common.js"
+import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "./tabs/UngroupedWindows.js";
+import { buildAllGroupedWindows, initializeGroupedTabsSelectables } from "./tabs/GroupedWindows.js"
+import { mapAllOpenTabs, groupUngroupedTabs } from "./tabs/Common.js"
 
 
 //..............................................................
@@ -32,6 +33,21 @@ chrome.tabs.onUpdated.addListener(
         targetTab.querySelector("span").innerText = tab.title.length > 27 ? tab.title.substring(0, 24) + " ..." : tab.title;
         targetTab.querySelector("span").title = tab.title;
         properTab.title = tab.title;
+      }
+
+      //.....TAB FAVICON CHANGE HANDLING......
+
+      if(tab.favIconUrl != properTab.favIcon){
+        if(tab.favIconUrl != ""){
+          properTab.favIcon = tab.favIconUrl;
+
+          if(!global.grouped){
+            targetTab.querySelector("img").src = tab.favIconUrl;
+          }
+          else{
+            targetTab.closest(".outer-list-item").querySelector(".favIcon").src = tab.favIconUrl;
+          }
+        }
       }
 
       //.....MUTE BTN CHANGE HANDLING......
@@ -73,6 +89,13 @@ chrome.tabs.onUpdated.addListener(
   }
 )
 
+
+chrome.tabs.onCreated.addListener(tab => {
+  appendSingleTabToExistingWindow(tab);
+  updateWindowsContainers();
+})
+
+
 chrome.tabs.onActivated.addListener(
   async (data) => {
     let tab = await chrome.tabs.get(data.tabId);
@@ -83,7 +106,10 @@ chrome.tabs.onActivated.addListener(
     properTab.active = true;
 
     if(!global.grouped){
-      targetTab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
+      let currentTab = targetTab.parentElement.querySelector(".current-tab");
+      if (currentTab != null){
+        currentTab.classList.remove("current-tab");
+      }
     }
     else{
       for(let curr of targetTab.closest(".window-list").querySelectorAll(".current-tab")){
@@ -96,6 +122,20 @@ chrome.tabs.onActivated.addListener(
   }
 )
 
+chrome.tabs.onRemoved.addListener(
+  async (tabId) => {
+    let targetTab = document.getElementById(tabId);
+
+    if(targetTab != null){
+      targetTab.remove();
+    }
+  }
+)
+
+// chrome.tabs.onMoved.addListener(t => {
+  
+// })
+
 //..............................................................
 //..................PROGRAM INICIALIZATION......................
 //..............................................................
@@ -106,6 +146,10 @@ global.favourities = favourities.favourities != null && favourities.favourities 
 let windows = await chrome.windows.getAll();
 
 for(let window of windows){
+
+  //chrome.windows.update(window.id, { state: 'minimized' })
+  console.log(window)
+
   let tabs = await chrome.tabs.query({windowId: window.id});
   
   let o = new Object();
@@ -208,22 +252,93 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
   }
 }
 
+function appendSingleTabToExistingWindow(createdTab){
+
+  if(global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0] == null){
+    let o = new Object();
+    o.windowId = createdTab.windowId;
+    o.tabs = [];
+  
+    global.ungroupedWindows.push(o)
+  }
+
+  let url;
+  let domain;
+
+  try{
+      domain = (new URL(createdTab.url));
+      url = createdTab.url;
+  }
+  catch{
+      domain = (new URL(createdTab.pendingUrl));
+      url = createdTab.pendingUrl
+  }
+
+  let ob = {
+    id: createdTab.id,
+    favIcon: createdTab.favIcon,
+    title: createdTab.title,
+    audible: createdTab.audible,
+    active: createdTab.active,
+    muted: createdTab.mutedInfo.muted,
+    duplicateNumber: global.duplicateNumber,
+    url: url,
+    host: domain.host,
+    pinned: createdTab.pinned
+  }
+
+  let duplcatesInAllWindows = global.ungroupedWindows.filter(x => x.tabs.filter(y => y.url == url).length > 0)
+  
+  if(duplcatesInAllWindows.length > 0){
+      ob.duplicateNumber = duplcatesInAllWindows[0].tabs.filter(x => x.url == url)[0].duplicateNumber;
+  }
+ 
+  global.ungroupedWindows.filter(x => x.windowId == createdTab.windowId)[0].tabs.push(ob);
+  
+  global.duplicateNumber++;
+}
+
+function updateWindowsContainers(){
+  
+  //opóźnienie wykonania 
+  chrome.tabs.query({currentWindow: true}, () => {
+    tabsHooks.allWindowsContainer.innerHTML = "";
+    tabsHooks.pinnedWindowsContainer.innerHTML = ""
+    if(global.grouped){
+      groupUngroupedTabs();
+      buildAllGroupedWindows();
+
+      global.grSel.disable();
+      initializeGroupedTabsSelectables();
+    }
+    else{
+      buildAllUngroupedWindows();
+
+      global.ungrSel.disable();
+      initializeUngroupedTabsSelectables(); // czy na pewno tworzyć za każdym razem nowy obiekt ??
+    }
+  })
+}
+
+
+
+//.......IN PROGRESS......
+
+
+
+//.........TO DO..........
 
 
 
 
 
-//In progress: 
+//..........FIX...........
+
+//107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
+//9. Unselect jednocześnie hosta i tabów
 
 
-
-
-
-
-
-
-
-//Do zrobienia:
+//........OPTIONAL........ 
 
 //116. Minimalizacja/maksymalizacja okien + lista zminimalizowanych 
 
@@ -232,15 +347,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 
 
-//Fix:
-
-
-//107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
-
-
-
-
-//Opcjonalne: 
+//.........FOR THE END......
 
 //24. Strona/sekcja do personalizacji wtyczki.
 //88. Import/export ustawień/ulubionych/grup. 
@@ -248,16 +355,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 
 
-
-
-//Na koniec:
-
-//9. Unselect jednocześnie hosta i tabów
-
-
-
-
-//Refactor: 
+//........REFACTOR..........
 
 //60. Ogarnąć jak tworzone są identyfikatory dla poszczególnych elementów wtyczki + rozkminić jak przechowywane są dane w storage - ujednolicić
 
@@ -266,7 +364,7 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 
 
 
-//Zrobione:
+//.........DONE.............
 
 //1. Wyciszanie kart
 //2. Zamykanie wszystkich wybranych
@@ -371,6 +469,9 @@ function changeDynamicButtonsDisplay(buttons, displayMode){
 //119. Zamykanie okna gdy zamknięta jest ostatnia karta.
 //120. Zamknięcie nowego okna powoduje błąd
 //121. Kiedy przenoszone jest aktywna karta z innego okna trzeba odpiąć jej klasę current-tab i przypiąć innej karcie.
+//122. Synchronizacja - tworzenie nowej grupy 
+
+
 
 //Nowe pomysły: 
 

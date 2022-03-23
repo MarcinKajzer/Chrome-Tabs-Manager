@@ -548,15 +548,8 @@ nav{
 }
   
 .pin-btn{
-    background: none;
-    border: none;
     background: url("../assets/pin_tab_btn.png") no-repeat;
     background-size: contain;
-    height: 16px;
-    width: 16px;
-    transition: transform .2s;
-    cursor: pointer;
-    transform: translateY(2px);
 }
   
 .pin-btn.unpin{
@@ -564,10 +557,21 @@ nav{
     background-size: contain;
 }
   
-.pin-btn:hover{
-    transform: scale(1.2);
+.minimize-window-btn{
+    background: url("../assets/minimize-btn.png");
+    background-size: contain;
 }
-  
+
+.change-window-state-btn{
+    background: url("../assets/maximalize-btn.png");
+    background-size: contain;
+}
+
+.change-window-state-btn.normal-state-btn{
+    background: url("../assets/normal-state-btn.png");
+    background-size: contain;
+}
+
 .window-label{
     height: 20px;
     background: rgba(0,0,0,.1);
@@ -782,8 +786,8 @@ nav{
   
 .colors-container label::before{
     content: "";
-    height: 80%;
-    width: 80%;
+    height: 60%;
+    width: 60%;
     position: absolute;
     background: none;
     border: solid 2px black;
@@ -1215,3 +1219,83 @@ transform: scale(1.2);
 .display-none{
     display: none;;
 }
+
+
+/* settngs */
+
+
+
+#settings-container{
+    overflow-y: auto;
+    max-height: 520px;
+    margin-top: 10px;
+    position: relative;
+    padding: 0 20px 0 10px;
+}
+
+.single-option{
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+.single-option input{
+    display: none;
+}
+
+.single-option label{
+    height: 20px;
+    width: 40px;
+    background: darkgray;
+    display: block;
+    border-radius: 15px;
+    position: relative;
+    font-size: 10px;
+    line-height: 20px;
+    margin: 0 auto;
+    text-align: center;
+    transition: all .2s;
+    cursor: pointer;
+}
+
+.single-option span{
+    color: white;
+}
+
+#settings-container p{
+    font-size: 16px;
+    color: lightgreen;
+    border-bottom: solid 1px rgba(0,0,0,.2);
+    padding: 10px 0;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.single-option label span::selection, .single-option label::selection{
+    background: none;
+}
+
+.single-option label::before{
+    content: '';
+    height: 16px;
+    width: 16px;
+    position: absolute;
+    background: white;
+    top: 0;
+    border-radius: 50%;
+    left: 2px;
+    top: 2px;
+    transition: transform .2s;
+}
+
+.single-option input:checked + label{
+    background: green;
+}
+
+.single-option input:checked + label::before{
+    transform: translateX(20px);
+}
+
+
+
