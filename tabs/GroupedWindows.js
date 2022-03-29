@@ -12,9 +12,12 @@ let dragOverWindowId;
 export function buildAllGroupedWindows(){
     let currentWindow = global.groupedWindows.filter(x => x.focused)[0];
 
-    buildSingleGroupedWindow(currentWindow, null, global.groupedWindows.length > 1)
+    let index = 1;
+    if(currentWindow != null){
+        buildSingleGroupedWindow(currentWindow, null, global.groupedWindows.length > 1)
+        index++;
+    }
 
-    let index = 2;
     for(let window of global.groupedWindows.filter(x => !x.focused)){
         buildSingleGroupedWindow(window, index, true);
         index++;

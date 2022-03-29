@@ -44,7 +44,26 @@ export let favouritiesHooks = {
 }
 
 export let settingsHooks = {
+    pinTabOption : document.getElementById("pin-tab-option"),
+    muteTabOption : document.getElementById("mute-tab-option"),
+    openNewWindowOption : document.getElementById("open-new-window-option"),
+    groupByDefaultOption : document.getElementById("group-by-default-option"),
+    keepLastGroupingModeOption : document.getElementById("keep-last-grouping-mode-option"),
+    rememberLastGroupingModeOption : document.getElementById("remember-expanded-websites-option"),
 
+    openAllInThisWindowOption : document.getElementById("open-all-in-this-window-option"),
+    openAllInThisWindowAsGroupOption : document.getElementById("open-all-in-this-window-as-group-option"),
+    openAllInNewWindowOption : document.getElementById("open-all-in-new-window-option"),
+    openAllInNewWindowAsGroupOption : document.getElementById("open-all-in-new-window-as-group-option"),
+    openAllIncognitoOption : document.getElementById("open-all-incognito-option"),
+    rememberExpandedGroupsWebsite : document.getElementById("remember-expanded-groups-website"),
+
+    displayAsGroupOption : document.getElementById("display-as-grid-option"),
+    rememberLastDisplayModeOption : document.getElementById("remember-last-display-mode-option"),
+    groupsFunctionalityOption : document.getElementById("groups-functionality-option"),
+    favouritiesFunctionalityOption : document.getElementById("favourities-functionality-option"),
+    darkmodeOption : document.getElementById("darkmode-option"),
+    keepLastOpenedSection : document.getElementById("keep-last-opened-section")
 }
 
 

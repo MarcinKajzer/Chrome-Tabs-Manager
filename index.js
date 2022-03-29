@@ -147,9 +147,6 @@ let windows = await chrome.windows.getAll();
 
 for(let window of windows){
 
-  //chrome.windows.update(window.id, { state: 'minimized' })
-  console.log(window)
-
   let tabs = await chrome.tabs.query({windowId: window.id});
   
   let o = new Object();

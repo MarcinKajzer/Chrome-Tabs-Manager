@@ -12,9 +12,12 @@ let isDraggingTabPinned;
 export function buildAllUngroupedWindows(){
     let currentWindow = global.ungroupedWindows.filter(x => x.focused)[0];
 
-    buildSingleUngroupedWindow(currentWindow, null)
-
-    let index = 2;
+    let index = 1;
+    if(currentWindow != null){
+        buildSingleUngroupedWindow(currentWindow, null)
+        index++;
+    }
+    
     for(let window of global.ungroupedWindows.filter(x => !x.focused)){
         buildSingleUngroupedWindow(window, index, true);
         index++;
