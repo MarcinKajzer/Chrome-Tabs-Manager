@@ -63,7 +63,7 @@ export let settingsHooks = {
     groupsFunctionalityOption : document.getElementById("groups-functionality-option"),
     favouritiesFunctionalityOption : document.getElementById("favourities-functionality-option"),
     darkmodeOption : document.getElementById("darkmode-option"),
-    keepLastOpenedSection : document.getElementById("keep-last-opened-section")
+    keepLastOpenedSectionOption : document.getElementById("keep-last-opened-section-option")
 }
 
 

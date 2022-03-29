@@ -6,7 +6,7 @@ import { tabsHooks, favouritiesHooks, commonHooks } from "./common/hooks.js"
 import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "./tabs/UngroupedWindows.js";
 import { buildAllGroupedWindows, initializeGroupedTabsSelectables } from "./tabs/GroupedWindows.js"
 import { mapAllOpenTabs, groupUngroupedTabs } from "./tabs/Common.js"
-
+import { initializeSettings } from "./settings/Settings.js"
 
 //..............................................................
 //..................HANDLE TAB CHANGED EVENT....................
@@ -140,8 +140,18 @@ chrome.tabs.onRemoved.addListener(
 //..................PROGRAM INICIALIZATION......................
 //..............................................................
 
+// chrome.storage.sync.set({settings: global.settings})
+
+let x = await chrome.storage.sync.get("asdsad")
+console.log(Object.keys(x).length == 0);
+
 let favourities = await chrome.storage.sync.get("favourities");
 global.favourities = favourities.favourities != null && favourities.favourities != undefined ? favourities.favourities : [];
+
+let settings = await chrome.storage.sync.get("settings");
+global.settings = settings.settings;
+
+console.log(settings)
 
 let windows = await chrome.windows.getAll();
 
@@ -160,6 +170,8 @@ buildAllUngroupedWindows();
 initializeUngroupedTabsSelectables();
 
 buildFavourites();
+initializeSettings();
+
 
 chrome.storage.sync.get("groups", (res) => {
   global.groups = res.groups != null && res.groups != undefined ? res.groups : [];
