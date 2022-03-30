@@ -22,4 +22,10 @@ export function initializeSettings(){
             chrome.storage.sync.set({settings: global.settings})
         })
     }
+
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(global.settings));
+    var dlAnchorElem = document.getElementById('export');
+    dlAnchorElem.setAttribute("href", dataStr);
+    dlAnchorElem.setAttribute("download", "settings.json");
 }
+
