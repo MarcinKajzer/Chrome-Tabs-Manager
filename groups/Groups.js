@@ -292,38 +292,54 @@ export function buildSingleGroup(group){
   }
   editGroupBtn.title = "Edit group."
 
-  let openAllGroupInNewWindowBtn = document.createElement("button");
-  openAllGroupInNewWindowBtn.classList.add("open-all-in-new-window-btn")
-  openAllGroupInNewWindowBtn.onclick = (e) => {
-    e.stopPropagation();
-    openInNewWindow(group.tabs)
-  }
-  openAllGroupInNewWindowBtn.title = "Open in new window."
+  if(global.settings.openAllInThisWindowOption){
+    let openAllGroupBtn = document.createElement("button");
+    openAllGroupBtn.classList.add("open-all-btn")
+    openAllGroupBtn.onclick = (e) => {
+      e.stopPropagation();
+      openTabsOfGroup(group.tabs, false)
+    }
+    openAllGroupBtn.title = "Open in this window."
 
-  let openAllGroupBtn = document.createElement("button");
-  openAllGroupBtn.classList.add("open-all-btn")
-  openAllGroupBtn.onclick = (e) => {
-    e.stopPropagation();
-    openTabsOfGroup(group.tabs, false)
+    noConstatnButtons.appendChild(openAllGroupBtn);
   }
-  openAllGroupBtn.title = "Open in this window."
+  
+  if(global.settings.openAllInThisWindowAsGroupOption){
+    let openAllGroupAndMergeBtn = document.createElement("button");
+    openAllGroupAndMergeBtn.classList.add("open-all-and-merge-btn")
+    openAllGroupAndMergeBtn.onclick = (e) => {
+      e.stopPropagation();
+      openAllTabsOfGroupAndMerge(group.tabs, group.name, group.color)
+    }
+    openAllGroupAndMergeBtn.title = "Open in this window as group.";
 
-  let openAllGroupAndMergeBtn = document.createElement("button");
-  openAllGroupAndMergeBtn.classList.add("open-all-and-merge-btn")
-  openAllGroupAndMergeBtn.onclick = (e) => {
-    e.stopPropagation();
-    openAllTabsOfGroupAndMerge(group.tabs, group.name, group.color)
+    noConstatnButtons.appendChild(openAllGroupAndMergeBtn);
   }
-  openAllGroupAndMergeBtn.title = "Open in this window as group."
+  
+  if(global.settings.openAllInNewWindowOption){
+    let openAllGroupInNewWindowBtn = document.createElement("button");
+    openAllGroupInNewWindowBtn.classList.add("open-all-in-new-window-btn")
+    openAllGroupInNewWindowBtn.onclick = (e) => {
+      e.stopPropagation();
+      openInNewWindow(group.tabs)
+    }
+    openAllGroupInNewWindowBtn.title = "Open in new window.";
 
-  let openAllGroupIncognitoBtn = document.createElement("button");
-  openAllGroupIncognitoBtn.classList.add("open-all-incognito-btn")
-  openAllGroupIncognitoBtn.onclick = (e) => {
-    e.stopPropagation();
-    openInNewWindow(group.tabs, true)
+    noConstatnButtons.appendChild(openAllGroupInNewWindowBtn);
   }
-  openAllGroupIncognitoBtn.title = "Open in incognito window."
 
+  if(global.settings.openAllIncognitoOption){
+    let openAllGroupIncognitoBtn = document.createElement("button");
+    openAllGroupIncognitoBtn.classList.add("open-all-incognito-btn")
+    openAllGroupIncognitoBtn.onclick = (e) => {
+      e.stopPropagation();
+      openInNewWindow(group.tabs, true)
+    }
+    openAllGroupIncognitoBtn.title = "Open in incognito window."
+  
+    noConstatnButtons.appendChild(openAllGroupIncognitoBtn)
+  }
+  
   let deleteGroupBtn = document.createElement("button");
   deleteGroupBtn.classList.add("delete-btn")
   deleteGroupBtn.onclick = () => deleteGroup(group.name)
@@ -339,11 +355,7 @@ export function buildSingleGroup(group){
   groupInfo.appendChild(favIcon);
   groupInfo.appendChild(groupName);
 
-  noConstatnButtons.appendChild(openAllGroupBtn);
-  noConstatnButtons.appendChild(openAllGroupAndMergeBtn);
-  noConstatnButtons.appendChild(openAllGroupInNewWindowBtn);
-  noConstatnButtons.appendChild(openAllGroupIncognitoBtn)
-
+  
   groupButtons.appendChild(groupIsEmptyInfo)
   groupButtons.appendChild(editGroupBtn);
   groupButtons.appendChild(noConstatnButtons)
@@ -405,24 +417,28 @@ export function buildSingleGroupTab(groupName, groupTab) {
   }
   deleteTabBtn.title = "Remove tab."
 
-  let openInNewWindowBtn = document.createElement("button");
-  openInNewWindowBtn.classList.add("open-all-in-new-window-btn")
-  openInNewWindowBtn.onclick = (e) => {
-    e.stopPropagation();
-    openInNewWindow([groupTab])
+  if(global.settings.openTabInNewWindowOption){
+    let openInNewWindowBtn = document.createElement("button");
+    openInNewWindowBtn.classList.add("open-all-in-new-window-btn")
+    openInNewWindowBtn.onclick = (e) => {
+      e.stopPropagation();
+      openInNewWindow([groupTab])
+    }
+    openInNewWindowBtn.title = "Open in new window."
+    tabButtons.appendChild(openInNewWindowBtn)
   }
-  openInNewWindowBtn.title = "Open in new window."
-
-  let openIncognitoBtn = document.createElement("button");
-  openIncognitoBtn.classList.add("open-all-incognito-btn")
-  openIncognitoBtn.onclick = (e) => {
-    e.stopPropagation();
-    openInNewWindow([groupTab], true)
+  
+  if(global.settings.openTabIncognitoOption){
+    let openIncognitoBtn = document.createElement("button");
+    openIncognitoBtn.classList.add("open-all-incognito-btn")
+    openIncognitoBtn.onclick = (e) => {
+      e.stopPropagation();
+      openInNewWindow([groupTab], true)
+    }
+    openIncognitoBtn.title = "Open in incognito window."
+    tabButtons.appendChild(openIncognitoBtn)
   }
-  openIncognitoBtn.title = "Open in incognito window."
-
-  tabButtons.appendChild(openInNewWindowBtn)
-  tabButtons.appendChild(openIncognitoBtn)
+  
   tabButtons.appendChild(deleteTabBtn)
 
   tabInfo.appendChild(tabFavIcon);
@@ -539,14 +555,12 @@ function deleteTab(groupName, tabId) {
 }
 
 export function openTabsOfGroup(tabs, active) {
-  
   for (let t of tabs) {
     chrome.tabs.create({ url: t.url, active: active })
   }
 }
 
 async function openAllTabsOfGroupAndMerge(tabs, groupName, color){
-  
   if(tabs.length > 0){
     let tabsToGroup = [];
 

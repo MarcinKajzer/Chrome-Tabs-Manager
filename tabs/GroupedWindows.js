@@ -105,20 +105,22 @@ function buildSingleGroupedWindow(window, index, isMoreThenOneWindow) {
         closeAllTabsOfHostBtn.classList.add("close-btn")
         closeAllTabsOfHostBtn.onclick = () => closeAllTabsOfHost(host, window.windowId)
 
-        let muteAllTabsOfHostBtn = document.createElement("button");
-        muteAllTabsOfHostBtn.classList.add("mute-btn");
-
-        if(!hostTabs.some(x => x.muted || x.audible)){
-            muteAllTabsOfHostBtn.classList.add("display-none")
+        if(global.settings.muteTabOption){
+            let muteAllTabsOfHostBtn = document.createElement("button");
+            muteAllTabsOfHostBtn.classList.add("mute-btn");
+    
+            if(!hostTabs.some(x => x.muted || x.audible)){
+                muteAllTabsOfHostBtn.classList.add("display-none")
+            }
+            
+            if (hostTabs.filter(x => x.muted).length == hostTabs.filter(x => x.audible || x.muted).length) {
+                muteAllTabsOfHostBtn.classList.add("muted")
+            }
+    
+            muteAllTabsOfHostBtn.onclick = (e) => defineOnClickMuteGroupBtn(e.target, hostTabs);
+            hostButtons.appendChild(muteAllTabsOfHostBtn);
         }
         
-        if (hostTabs.filter(x => x.muted).length == hostTabs.filter(x => x.audible || x.muted).length) {
-            muteAllTabsOfHostBtn.classList.add("muted")
-        }
-
-        muteAllTabsOfHostBtn.onclick = (e) => defineOnClickMuteGroupBtn(e.target, hostTabs);
-        hostButtons.appendChild(muteAllTabsOfHostBtn);
-
         let hostTabsList = document.createElement("ul");
 
         hostInfo.appendChild(favIcon);
@@ -153,7 +155,6 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.classList.add("inner-list-item")
     tab.classList.add("selectable")
 
-    console.log(hostTab)
     if(hostTab.selected){
         tab.classList.add("active");
         if(global.groupCreating){
@@ -193,71 +194,75 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
 
     let tabButtons = document.createElement("div");
 
-    let muteTabButton = document.createElement("button");
-    muteTabButton.classList.add("mute-btn");
-
-    if (!hostTab.audible && !hostTab.muted) {
-        muteTabButton.classList.add("display-none")
-    }
-
-    if (hostTab.muted) {
-        muteTabButton.classList.add("muted");
-    }
-
-    muteTabButton.onclick = (e) => {
-        e.stopPropagation();
-        if (!e.target.classList.contains("muted")) {
-            chrome.tabs.update(hostTab.id, { muted: true })
-            e.target.classList.add("muted");
-
-            let mutedTabs = hostItem.querySelector("ul").querySelectorAll(".mute-btn.muted, .mute-btn.display-none");
-            let muteButtons = hostItem.querySelector("ul").getElementsByClassName("mute-btn");
-            
-            if (mutedTabs.length == muteButtons.length) {
-                hostItem.querySelector(".mute-btn").classList.add("muted");
+    if(global.settings.muteTabOption){
+        let muteTabButton = document.createElement("button");
+        muteTabButton.classList.add("mute-btn");
+    
+        if (!hostTab.audible && !hostTab.muted) {
+            muteTabButton.classList.add("display-none")
+        }
+    
+        if (hostTab.muted) {
+            muteTabButton.classList.add("muted");
+        }
+    
+        muteTabButton.onclick = (e) => {
+            e.stopPropagation();
+            if (!e.target.classList.contains("muted")) {
+                chrome.tabs.update(hostTab.id, { muted: true })
+                e.target.classList.add("muted");
+    
+                let mutedTabs = hostItem.querySelector("ul").querySelectorAll(".mute-btn.muted, .mute-btn.display-none");
+                let muteButtons = hostItem.querySelector("ul").getElementsByClassName("mute-btn");
+                
+                if (mutedTabs.length == muteButtons.length) {
+                    hostItem.querySelector(".mute-btn").classList.add("muted");
+                }
+            }
+            else {
+                chrome.tabs.update(hostTab.id, { muted: false })
+                e.target.classList.remove("muted");
+                hostItem.querySelector(".mute-btn").classList.remove("muted");
             }
         }
-        else {
-            chrome.tabs.update(hostTab.id, { muted: false })
-            e.target.classList.remove("muted");
-            hostItem.querySelector(".mute-btn").classList.remove("muted");
-        }
-    }
-
-    tabButtons.appendChild(muteTabButton);
     
-
+        tabButtons.appendChild(muteTabButton);
+    }
+   
     //DRY..............
 
-    let pinTabBtn = document.createElement("button");
-    pinTabBtn.classList.add("pin-tab-btn");
-
-    if(hostTab.pinned){
-        pinTabBtn.classList.add("unpin-tab");
-    }
-
-    pinTabBtn.onclick = (e) => {
-        e.stopPropagation();
-        chrome.tabs.get(hostTab.id, (t) => {
-            let pinned = !t.pinned;
-            chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
-                if(pinned){
-                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
-                    pinTabBtn.classList.add("unpin-tab")
-                }
-                else{
-                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
-                    pinTabBtn.classList.remove("unpin-tab")
-                }
-
-                //DRY - zmiana kolejności elementu - osobna funkcji
-                let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
-                let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1)
-                global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+    if(global.settings.pinTabOption){
+        let pinTabBtn = document.createElement("button");
+        pinTabBtn.classList.add("pin-tab-btn");
+    
+        if(hostTab.pinned){
+            pinTabBtn.classList.add("unpin-tab");
+        }
+    
+        pinTabBtn.onclick = (e) => {
+            e.stopPropagation();
+            chrome.tabs.get(hostTab.id, (t) => {
+                let pinned = !t.pinned;
+                chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
+                    if(pinned){
+                        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
+                        pinTabBtn.classList.add("unpin-tab")
+                    }
+                    else{
+                        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
+                        pinTabBtn.classList.remove("unpin-tab")
+                    }
+    
+                    //DRY - zmiana kolejności elementu - osobna funkcji
+                    let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
+                    let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1)
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+                })
             })
-        })
-    }
+        }
 
+        tabButtons.appendChild(pinTabBtn)
+    }
 
     let addToFavouritesButton = document.createElement("button");
     addToFavouritesButton.classList.add("add-to-favourites-btn")
@@ -277,6 +282,9 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         e.stopPropagation();
         handleAddToFavouriteBtnClick(hostTab);
     }
+
+    tabButtons.appendChild(addToFavouritesButton)
+    
     //DRY END.............
 
     let closeTabButton = document.createElement("button");
@@ -287,8 +295,6 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
         closeTab(hostTab.id, host, windowId)
     }
 
-    tabButtons.appendChild(pinTabBtn)
-    tabButtons.appendChild(addToFavouritesButton)
     tabButtons.appendChild(closeTabButton)
 
     tab.appendChild(tabTitle);

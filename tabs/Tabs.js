@@ -15,11 +15,14 @@ tabsHooks.createNewWindowBtn.onclick = () => {
 }
 
 tabsHooks.groupTabsBtn.onclick = () => {
+    createUngroupedOtherwiseGrouped(global.grouped);
+}
 
+export function createUngroupedOtherwiseGrouped(condition){
     tabsHooks.allWindowsContainer.innerHTML = "";
     tabsHooks.pinnedWindowsContainer.innerHTML = ""
 
-    if(global.grouped){
+    if(condition){
         buildAllUngroupedWindows();
         global.grouped = false;
         tabsHooks.groupTabsBtn.classList.remove("ungroup-tabs")
@@ -28,7 +31,9 @@ tabsHooks.groupTabsBtn.onclick = () => {
         tabsHooks.expandAllHostsBtn.disabled = true;
 
         initializeUngroupedTabsSelectables();
-        global.grSel.disable();
+        global.grSel ? global.grSel.disable() : '';
+
+        global.settings.previouslyGrouped = false;
     }
     else{
         groupUngroupedTabs();
@@ -40,8 +45,12 @@ tabsHooks.groupTabsBtn.onclick = () => {
         tabsHooks.expandAllHostsBtn.disabled = false;
 
         initializeGroupedTabsSelectables();
-        global.ungrSel.disable();
+        global.ungrSel ? global.ungrSel.disable() : '';
+
+        global.settings.previouslyGrouped = true;
     }
+
+    chrome.storage.sync.set({settings: global.settings});
 }
 
 tabsHooks.showDuplicatesBtn.onclick = (e) => handleDuplicates(e);

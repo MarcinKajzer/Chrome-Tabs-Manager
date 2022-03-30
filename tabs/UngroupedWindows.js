@@ -90,66 +90,70 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     let tabButtons = document.createElement("div");
 
-    let muteTabButton = document.createElement("button");
-    muteTabButton.classList.add("mute-btn");
-
-    if (!hostTab.audible && !hostTab.muted) {
-        muteTabButton.classList.add("display-none")
-    }
-
-    if (hostTab.muted) {
-        muteTabButton.classList.add("muted");
-    }
+    if(global.settings.muteTabOption){
+        let muteTabButton = document.createElement("button");
+        muteTabButton.classList.add("mute-btn");
     
-    muteTabButton.onclick = (e) => {
-        e.stopPropagation();
-        if (!e.target.classList.contains("muted")) {
-            chrome.tabs.update(hostTab.id, { muted: true })
-            e.target.classList.add("muted");
+        if (!hostTab.audible && !hostTab.muted) {
+            muteTabButton.classList.add("display-none")
         }
-        else {
-            chrome.tabs.update(hostTab.id, { muted: false })
-            e.target.classList.remove("muted");
+    
+        if (hostTab.muted) {
+            muteTabButton.classList.add("muted");
         }
+        
+        muteTabButton.onclick = (e) => {
+            e.stopPropagation();
+            if (!e.target.classList.contains("muted")) {
+                chrome.tabs.update(hostTab.id, { muted: true })
+                e.target.classList.add("muted");
+            }
+            else {
+                chrome.tabs.update(hostTab.id, { muted: false })
+                e.target.classList.remove("muted");
+            }
+        }
+    
+        tabButtons.appendChild(muteTabButton);
     }
-
-    tabButtons.appendChild(muteTabButton);
-    
-    
 
     //DRY..............
 
-    let pinTabBtn = document.createElement("button");
-    pinTabBtn.classList.add("pin-tab-btn");
-
-    if(hostTab.pinned){
-        pinTabBtn.classList.add("unpin-tab");
-    }
-
-    pinTabBtn.onclick = (e) => {
-        e.stopPropagation();
-        chrome.tabs.get(hostTab.id, (t) => {
-            let pinned = !t.pinned;
-            chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
-                if(pinned){
-                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
-                    tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index]);
-                    pinTabBtn.classList.add("unpin-tab")
-                }
-                else{
-                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
-                    tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index+1])
-                    pinTabBtn.classList.remove("unpin-tab")
-                }
-
-                //DRY - zmiana kolejności elementu - osobna funkcji
-                let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
-                let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1);
-                global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+    if(global.settings.pinTabOption){
+        let pinTabBtn = document.createElement("button");
+        pinTabBtn.classList.add("pin-tab-btn");
+    
+        if(hostTab.pinned){
+            pinTabBtn.classList.add("unpin-tab");
+        }
+    
+        pinTabBtn.onclick = (e) => {
+            e.stopPropagation();
+            chrome.tabs.get(hostTab.id, (t) => {
+                let pinned = !t.pinned;
+                chrome.tabs.update(hostTab.id, {pinned: pinned}, (result) => {
+                    if(pinned){
+                        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = true;
+                        tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index]);
+                        pinTabBtn.classList.add("unpin-tab")
+                    }
+                    else{
+                        global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.filter(x => x.id == hostTab.id)[0].pinned = false;
+                        tab.parentNode.insertBefore(tab, tab.parentNode.children[result.index+1])
+                        pinTabBtn.classList.remove("unpin-tab")
+                    }
+    
+                    //DRY - zmiana kolejności elementu - osobna funkcji
+                    let indexOfElement = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.findIndex(x => x.id == hostTab.id);
+                    let elem = global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(indexOfElement, 1);
+                    global.ungroupedWindows.filter(x => x.windowId == windowId)[0].tabs.splice(result.index, 0, elem[0])
+                })
             })
-        })
+        }
+    
+        tabButtons.appendChild(pinTabBtn)
     }
-
+    
     let addToFavouritesButton = document.createElement("button");
     addToFavouritesButton.classList.add("add-to-favourites-btn")
     addToFavouritesButton.classList.add("duplicate_" + hostTab.duplicateNumber )
@@ -168,6 +172,8 @@ function buildSingleUngroupedTab(hostTab, windowId){
         e.stopPropagation();
         handleAddToFavouriteBtnClick(hostTab);
     }
+    tabButtons.appendChild(addToFavouritesButton)
+    
     //DRY END..............
 
     let closeTabButton = document.createElement("button");
@@ -181,8 +187,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
     tabInfo.appendChild(tabFavIcon)
     tabInfo.appendChild(tabTitle)
 
-    tabButtons.appendChild(pinTabBtn)
-    tabButtons.appendChild(addToFavouritesButton)
+    
     tabButtons.appendChild(closeTabButton)
 
     tab.appendChild(tabInfo)

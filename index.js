@@ -7,6 +7,7 @@ import { buildAllUngroupedWindows, initializeUngroupedTabsSelectables } from "./
 import { buildAllGroupedWindows, initializeGroupedTabsSelectables } from "./tabs/GroupedWindows.js"
 import { mapAllOpenTabs, groupUngroupedTabs } from "./tabs/Common.js"
 import { initializeSettings } from "./settings/Settings.js"
+import { createUngroupedOtherwiseGrouped } from "./tabs/Tabs.js"
 
 //..............................................................
 //..................HANDLE TAB CHANGED EVENT....................
@@ -52,34 +53,36 @@ chrome.tabs.onUpdated.addListener(
 
       //.....MUTE BTN CHANGE HANDLING......
 
-      if(tab.mutedInfo.muted){
-        properTab.muted = true;
-      }
-      else{
-        properTab.muted = false;
-      }
-
-      if(tab.audible){
-        targetTab.querySelector(".mute-btn").classList.remove("display-none");
-        properTab.audible = true;
-      }
-      else{
-        if(!tab.mutedInfo.muted){
-          targetTab.querySelector(".mute-btn").classList.add("display-none");
-        }
-        properTab.audible = false;
-      }
-
-      if(global.grouped && !properTab.muted){
-      
-        let muteBtns = targetTab.parentNode.querySelectorAll(".mute-btn")
-        let muteBtnsHidden = targetTab.parentNode.querySelectorAll(".mute-btn.display-none")
-        
-        if (muteBtns.length == muteBtnsHidden.length) {
-          targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.add("display-none")
+      if(global.settings.muteTabOption){
+        if(tab.mutedInfo.muted){
+          properTab.muted = true;
         }
         else{
-          targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.remove("display-none")
+          properTab.muted = false;
+        }
+  
+        if(tab.audible){
+          targetTab.querySelector(".mute-btn").classList.remove("display-none");
+          properTab.audible = true;
+        }
+        else{
+          if(!tab.mutedInfo.muted){
+            targetTab.querySelector(".mute-btn").classList.add("display-none");
+          }
+          properTab.audible = false;
+        }
+  
+        if(global.grouped && !properTab.muted){
+        
+          let muteBtns = targetTab.parentNode.querySelectorAll(".mute-btn")
+          let muteBtnsHidden = targetTab.parentNode.querySelectorAll(".mute-btn.display-none")
+          
+          if (muteBtns.length == muteBtnsHidden.length) {
+            targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.add("display-none")
+          }
+          else{
+            targetTab.closest(".outer-list-item").querySelector("label .mute-btn").classList.remove("display-none")
+          }
         }
       }
     }
@@ -140,18 +143,16 @@ chrome.tabs.onRemoved.addListener(
 //..................PROGRAM INICIALIZATION......................
 //..............................................................
 
-// chrome.storage.sync.set({settings: global.settings})
-
-let x = await chrome.storage.sync.get("asdsad")
-console.log(Object.keys(x).length == 0);
+let x = await chrome.storage.sync.get("settings")
+if(Object.keys(x).length == 0){
+  chrome.storage.sync.set({settings: global.settings})
+}
 
 let favourities = await chrome.storage.sync.get("favourities");
 global.favourities = favourities.favourities != null && favourities.favourities != undefined ? favourities.favourities : [];
 
 let settings = await chrome.storage.sync.get("settings");
 global.settings = settings.settings;
-
-console.log(settings)
 
 let windows = await chrome.windows.getAll();
 
@@ -166,8 +167,15 @@ for(let window of windows){
   global.ungroupedWindows.push(o);
 }
 
-buildAllUngroupedWindows();
-initializeUngroupedTabsSelectables();
+if(global.settings.groupByDefaultOption){
+  createUngroupedOtherwiseGrouped(false)
+}
+else if(global.settings.keepLastGroupingModeOption){
+  createUngroupedOtherwiseGrouped(!global.settings.previouslyGrouped)
+}
+else{
+  createUngroupedOtherwiseGrouped(true);
+}
 
 buildFavourites();
 initializeSettings();
@@ -349,7 +357,7 @@ function updateWindowsContainers(){
 
 //........OPTIONAL........ 
 
-//116. Minimalizacja/maksymalizacja okien + lista zminimalizowanych 
+
 
 
 

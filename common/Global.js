@@ -30,15 +30,16 @@ export let global = {
         openAllInThisWindowOption : true,
         openAllInThisWindowAsGroupOption : true,
         openAllInNewWindowOption : true,
-        openAllInNewWindowAsGroupOption : true,
         openAllIncognitoOption : true,
+        openTabInNewWindowOption : true,
+        openTabIncognitoOption : true,
         rememberExpandedGroupsWebsite : true,
     
         displayAsGroupOption :  true,
         rememberLastDisplayModeOption : true,
-        groupsFunctionalityOption :  true,
-        favouritiesFunctionalityOption : true,
         darkmodeOption :  true,
-        keepLastOpenedSectionOption : false
+        keepLastOpenedSectionOption : false,
+
+        previouslyGrouped : false
     }
 }

@@ -54,14 +54,13 @@ export let settingsHooks = {
     openAllInThisWindowOption : document.getElementById("open-all-in-this-window-option"),
     openAllInThisWindowAsGroupOption : document.getElementById("open-all-in-this-window-as-group-option"),
     openAllInNewWindowOption : document.getElementById("open-all-in-new-window-option"),
-    openAllInNewWindowAsGroupOption : document.getElementById("open-all-in-new-window-as-group-option"),
     openAllIncognitoOption : document.getElementById("open-all-incognito-option"),
+    openTabInNewWindowOption : document.getElementById("open-tab-in-new-window-option"),
+    openTabIncognitoOption : document.getElementById("open-tab-incognito-option"),
     rememberExpandedGroupsWebsite : document.getElementById("remember-expanded-groups-website"),
 
     displayAsGroupOption : document.getElementById("display-as-grid-option"),
     rememberLastDisplayModeOption : document.getElementById("remember-last-display-mode-option"),
-    groupsFunctionalityOption : document.getElementById("groups-functionality-option"),
-    favouritiesFunctionalityOption : document.getElementById("favourities-functionality-option"),
     darkmodeOption : document.getElementById("darkmode-option"),
     keepLastOpenedSectionOption : document.getElementById("keep-last-opened-section-option")
 }
