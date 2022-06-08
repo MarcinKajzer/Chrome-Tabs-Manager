@@ -66,6 +66,7 @@ function buildSingleUngroupedTab(hostTab, windowId){
 
     tab.onclick = () => {
         chrome.tabs.update(hostTab.id, { selected: true });
+        chrome.windows.update(hostTab.windowId, { focused: true });
         tab.parentElement.querySelector(".current-tab").classList.remove("current-tab");
         tab.classList.add("current-tab")
 

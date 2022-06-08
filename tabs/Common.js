@@ -4,7 +4,6 @@ import { createSingeFavourite} from "../favourities/Favourites.js"
 
 export function groupUngroupedTabs(){
 
-    console.log(global.ungroupedWindows)
     global.groupedWindows = [];
     for(let window of global.ungroupedWindows){
   
@@ -24,7 +23,8 @@ export function groupUngroupedTabs(){
           host: tab.host,
           pinned: tab.pinned,
           selected: tab.selected,
-          shownDuplicate: tab.shownDuplicate
+          shownDuplicate: tab.shownDuplicate,
+          windowId: tab.windowId
         }
   
         if(groupedTabs[tab.host] == undefined){
@@ -58,7 +58,7 @@ export function mapAllOpenTabs(tabs){
     let t = [];
 
     for(let tab of tabs){
-
+console.log(tab.windowId)
         let url;
         let domain;
         try{
@@ -80,7 +80,8 @@ export function mapAllOpenTabs(tabs){
             url: url,
             duplicateNumber: global.duplicateNumber,
             host: domain.hostname,
-            pinned: tab.pinned
+            pinned: tab.pinned,
+            windowId: tab.windowId
         }
 
         let duplcatesInAllWindows = global.ungroupedWindows.filter(x => x.tabs.filter(y => y.url == tab.url).length > 0)

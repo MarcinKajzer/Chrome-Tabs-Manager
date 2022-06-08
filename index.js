@@ -345,7 +345,7 @@ function updateWindowsContainers(){
 
 //.........TO DO..........
 
-
+//123. Przejście do innego okna/karty w innym oknie na klik.
 
 
 
@@ -353,7 +353,7 @@ function updateWindowsContainers(){
 
 //107. Nazwa grupy/hosta musi zniknąć/zmienić kolor po zamknięciu/usunięciu kart.
 //9. Unselect jednocześnie hosta i tabów
-
+//124. Wyświetlanie obecnego okna w pierwszej kolejności
 
 //........OPTIONAL........ 
 
@@ -366,7 +366,7 @@ function updateWindowsContainers(){
 
 //.........FOR THE END......
 
-//24. Strona/sekcja do personalizacji wtyczki.
+
 //88. Import/export ustawień/ulubionych/grup. 
 
 
@@ -402,6 +402,7 @@ function updateWindowsContainers(){
 //20. Selected zmniejszajcy się gdy korzysta się z searcha
 //22. Pokazanie, że muzyka gra w danej karcie.
 //23. Otwórz w oknie incognito.
+//24. Strona/sekcja do personalizacji wtyczki.
 //25. Zamiast grafik strzała do rozwijania w css
 //26. Posprzątać w katalogu z projektem - grafiki
 //27. Stworzenie zakładki ulubionych z menu jak w androidzie

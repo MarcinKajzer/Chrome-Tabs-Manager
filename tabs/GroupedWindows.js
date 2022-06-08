@@ -169,6 +169,7 @@ function buildSingleTab(host, hostTab, hostItem, windowId) {
     tab.id = hostTab.id;
     tab.onclick = () => {
         chrome.tabs.update(hostTab.id, { selected: true });
+        chrome.windows.update(hostTab.windowId, { focused: true });
         for(let currTab of tab.closest(".window-list").querySelectorAll(".current-tab")){
             currTab.classList.remove("current-tab")
         }
